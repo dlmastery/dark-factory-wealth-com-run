@@ -1,0 +1,160 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "template_only": false,
+  "contract_id": "GENERATED-META-SKILL-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "attractor_record": "ATTR-WEALTHCOM-001",
+  "product_tailoring_profile": "PRODUCT-TAILORING-WEALTHCOM-001",
+  "sdlc_coverage_matrix": "SDLC-COVERAGE-WEALTHCOM-001",
+  "generated_skill": {
+    "name": "wealthcom-fintech-ai-saas-greenfield-meta-skill",
+    "purpose": "Compile a product-tailored, regulated-fintech-AI-SaaS-greenfield meta-skill for the Wealth.com clone run. This is NOT a generic generated factory; it encodes the archetype, surfaces, risks, methods, artifacts, testing, runtime gates, and refusal rules specific to this workload.",
+    "trigger_conditions": [
+      "Run intent matches: 'regulated fintech AI SaaS greenfield with document intelligence + multi-tenant + scenario-driven calculation engine'.",
+      "Surface flags align with PRODUCT-TAILORING-WEALTHCOM-001 (code/UI/API/data/scenario, regulated, NOT brownfield, NOT production at v0).",
+      "Risk profile high on safety/money/privacy/security/compliance."
+    ],
+    "refusal_rules": [
+      "Refuse to use LLM for tax/estate calculations without deterministic-engine fallback (architectural ADR violation).",
+      "Refuse to emit execution-ready legal documents without attorney-of-record assignment (UPL boundary).",
+      "Refuse to accept any artifact lacking RALPH 5-loop record + ≥2 adversarial critics + 18 artifact-level checks + 15 per-critic-seat checks.",
+      "Refuse to accept any test class with placeholder evidence or template-as-proof.",
+      "Refuse to accept tenant-isolation claims without Postgres RLS test + connection-pool test + audit-log test.",
+      "Refuse to accept Ester extractor claims without holdout-corpus + transfer-test evidence.",
+      "Refuse documents-only completion for any code/UI/scenario/data surface.",
+      "Refuse to lower thresholds <96% per expert without owner-scoped waiver record.",
+      "Refuse to load real PII/PHI test data — synthetic only at v0.",
+      "Refuse to use registered wealth.com marks (Ester®, Family Office Suite™, EstateFlow™, Heritage Map, Plan for Every Tomorrow™); enforce brand substitution.",
+      "Refuse to inject any wealth.com noun into factory-reusable rubrics or templates (anti-overfit).",
+      "Refuse to proceed past stage-exit without Hawkeye conformance audit pass or owner-scoped waiver.",
+      "Refuse to mark a transition accepted without TPM Judge + Evidence Clerk + ≥3 specialist juror pass + Adversarial Prosecutor stand-down (or patch beads)."
+    ],
+    "required_child_skills": [
+      "df-meta-attractor",
+      "df-governance-mayor",
+      "df-intake-spec-lab",
+      "df-methodology-blender",
+      "df-artifact-factory",
+      "df-swarm-coordination",
+      "df-quality-refinery",
+      "df-traceability-evidence",
+      "df-context-memory",
+      "df-human-agent-handoff",
+      "df-feedback-learning"
+    ],
+    "deferred_child_skills": [
+      "df-brownfield-recon (greenfield run)",
+      "df-production-sre-handoff (deferred until production_surface enabled)"
+    ]
+  },
+  "compile_time_outputs": {
+    "product_tailoring_profile": "PRODUCT-TAILORING-WEALTHCOM-001 (this run)",
+    "methodology_blend_record": "MBR-WEALTHCOM-001 (forthcoming at stage-elaboration; RUP+MDA+DDD+TDD/BDD+SRE+SSDF+ISO42001)",
+    "sdlc_stage_coverage_matrix": "SDLC-COVERAGE-WEALTHCOM-001",
+    "artifact_bom_tailoring": "Per PRODUCT-TAILORING-WEALTHCOM-001.mandatory_artifact_ids: 35 mandatory + 4 deferred/scoped-down artifacts.",
+    "testing_strategy": "Per PRODUCT-TAILORING-WEALTHCOM-001.mandatory_testing_classes: 11 classes; 1 scoped-down (perf), 1 conditional (production_drill).",
+    "tasks_md": "runs/wealth-com/TASKS.md (this commit)",
+    "tpm_flow_ledger": "TPM-FLOW-WEALTHCOM-001 (this commit)",
+    "pert_plan": "PERT-WEALTHCOM-001 (this commit)",
+    "knowledge_graph": "KG-WEALTHCOM-001 (this commit, seed)",
+    "execution_kernel_report": "NEXT-ACTION-WEALTHCOM-001-stage0",
+    "ai_judge_jury_policy": "JURY-POLICY-WEALTHCOM-001"
+  },
+  "runtime_gates": {
+    "tasks_md_validator": true,
+    "tpm_flow_validator": true,
+    "knowledge_graph_validator": true,
+    "sdlc_stage_coverage_validator": true,
+    "execution_kernel": true,
+    "quality_refinery": true,
+    "traceability": true,
+    "ester_extraction_holdout_validator": true,
+    "deterministic_calc_separation_validator": true,
+    "tenant_isolation_validator": true,
+    "upl_boundary_validator": true,
+    "synthetic_data_only_validator": true,
+    "brand_substitution_validator": true,
+    "anti_overfit_validator": true,
+    "hawkeye_conformance_validator": true
+  },
+  "surface_gate_mapping": {
+    "code_producing": {
+      "required": true,
+      "gates": [
+        "Implementation Execution Record per slice with build + unit + integration evidence.",
+        "TDD red-green-refactor evidence for any tax/estate calc rule.",
+        "No docs-only completion."
+      ]
+    },
+    "ui_surface": {
+      "required": true,
+      "gates": [
+        "Playwright WYSIWYG records with desktop + mobile screenshots.",
+        "Console + network clean (no errors).",
+        "Viewport + layout + a11y (WCAG 2.1 AA) checks.",
+        "Visual regression baseline + diffs.",
+        "Heritage Map / EstateFlow / Scenario comparison: visual snapshot + interaction test."
+      ]
+    },
+    "api_surface": {
+      "required": true,
+      "gates": [
+        "Contract tests against OpenAPI for every public endpoint.",
+        "Per-integration partner adapter contract tests (mocks + recorded golden responses).",
+        "Tenant-bypass attempt tests must be blocked.",
+        "Auth + IDOR + SSRF tests."
+      ]
+    },
+    "data_surface": {
+      "required": true,
+      "gates": [
+        "Postgres RLS tenant isolation tests.",
+        "Per-tenant KMS key isolation test.",
+        "Audit log immutability test.",
+        "Encryption at rest + in transit verification.",
+        "Synthetic data only at v0 — real-PII gate triggers human boundary approval."
+      ]
+    },
+    "production_surface": {
+      "required": false,
+      "gates": [
+        "DEFERRED at v0. If enabled: release plan, rollback, observability, runbook, incident path, outage drill, operator signoff."
+      ]
+    },
+    "scenario_driven": {
+      "required": true,
+      "gates": [
+        "Scenario test matrix covers GRAT, SLAT, ILIT, CLAT, Dynasty, Revocable, QPRT, IDGT, CRT/CRUT.",
+        "Holdout dataset for Ester extractor from public corpora (NOT PRD examples).",
+        "Transfer test on edge cases: multi-jurisdiction, blended family, non-US-citizen spouse, minor beneficiaries.",
+        "Negative scenarios: malformed document, unsupported jurisdiction, ambiguous beneficiary."
+      ]
+    },
+    "brownfield": {
+      "required": false,
+      "gates": ["n/a (greenfield)."]
+    }
+  },
+  "expert_panel": {
+    "meta_meta_compiler_critic": "System Theorist & Meta-Architecture Critic — protects attractor shape, anti-overfit, transferability, recursion control. Persona-contracted in ATTR-WEALTHCOM-001.",
+    "product_sdlc_tailoring_critic": "Requirements & Governance Architect — protects standards tailoring, customer intent, approval mechanics. Persona-contracted in ATTR-WEALTHCOM-001.",
+    "testing_and_release_assurance_critic": "Standards/Verification/Safety Critic — protects evidence discipline, testing rigor, residual-risk handling. Persona-contracted in ATTR-WEALTHCOM-001.",
+    "adversarial_generic_process_critic": "Adversarial Generic-Process Critic — attempts to prove this generated meta-skill is too generic to be the actual workload's skill. Mandate: if any rule could be cut-and-pasted into a different workload (e.g., a healthcare app or e-commerce app) without modification, that rule is too generic. Findings flow back to df-feedback-learning."
+  },
+  "acceptance": {
+    "compile_time_pass": true,
+    "compile_time_pass_evidence": "All compile-time outputs instantiated this commit: tailoring profile, sdlc matrix, judge/jury policy (forthcoming), tasks_md (forthcoming), kg seed (forthcoming), tpm/pert (forthcoming).",
+    "runtime_instantiation_pass": false,
+    "runtime_instantiation_pass_evidence": "Pending Hawkeye-Stage0 audit and checkpoint-#1 approval.",
+    "residual_risks": [
+      "Anti-overfit critic has not yet adversarially attacked this contract; first attack scheduled at Hawkeye-Stage0.",
+      "Generated meta-skill scope ('regulated-fintech-AI-SaaS') may overfit if used for non-fintech AI SaaS. Transfer-test bead deferred but mandatory before run closure."
+    ],
+    "certificate": "PENDING — issued only after Hawkeye-Stage0 pass + checkpoint-#1 approval."
+  },
+  "template_marker": false
+}

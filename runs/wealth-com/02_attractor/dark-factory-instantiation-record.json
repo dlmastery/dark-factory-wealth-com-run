@@ -1,0 +1,44 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "template_only": false,
+  "instantiation_id": "DF-INSTANTIATION-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "generated_meta_skill_contract": "GENERATED-META-SKILL-WEALTHCOM-001 (runs/wealth-com/02_attractor/generated-meta-skill-contract.json)",
+  "product_tailoring_profile": "PRODUCT-TAILORING-WEALTHCOM-001 (runs/wealth-com/02_attractor/product-tailoring-profile.json)",
+  "instantiated_records": {
+    "attractor_run_record": "runs/wealth-com/02_attractor/meta-attractor-record.json",
+    "tasks_md": "runs/wealth-com/TASKS.md",
+    "tpm_flow_ledger": "runs/wealth-com/02_attractor/tpm-flow-ledger.json",
+    "pert_plan": "runs/wealth-com/02_attractor/factory-pert-plan.json",
+    "knowledge_graph_seed": "runs/wealth-com/09_traceability/knowledge-graph-seed.json",
+    "sdlc_stage_coverage_matrix": "runs/wealth-com/02_attractor/sdlc-stage-coverage-matrix.json",
+    "ai_judge_jury_policy": "runs/wealth-com/02_attractor/ai-judge-jury-policy.json",
+    "execution_kernel_state": "runs/wealth-com/02_attractor/execution-kernel-state.json",
+    "next_action_report": "runs/wealth-com/02_attractor/next-action-report.json",
+    "engagement_governance_record": "runs/wealth-com/03_governance/engagement-governance-record.json (DRAFT, this commit)",
+    "hawkeye_conformance_audit_record": "runs/wealth-com/12_hawkeye/hawkeye-stage0.json (this commit)",
+    "skill_system_survey": "runs/wealth-com/00_recon/skill-system-survey.md",
+    "incident_record_inc_001": "runs/wealth-com/11_feedback/incident-INC-001-prd-agent-slop.json"
+  },
+  "pending_records_in_flight_or_queued": {
+    "prd_atoms": "runs/wealth-com/00_recon/prd-atoms.json (in flight, subagent a9c770a239d1a2f15)",
+    "prd_canonical": "runs/wealth-com/00_recon/prd-canonical.md (in flight)",
+    "prd_extraction_report": "runs/wealth-com/00_recon/prd-extraction-report.json (in flight)",
+    "domain_brief": "runs/wealth-com/01_domain/domain-brief.md (re-dispatch needed after INC-002)"
+  },
+  "current_state": "active",
+  "current_state_rationale": "Stage-0 attractor pack authoring is active. All required Stage-0 records exist; PRD recon and domain recon are in flight or pending re-dispatch; Hawkeye audit will fire after PRD recon completes.",
+  "legal_next_action": "Per NEXT-ACTION-WEALTHCOM-001-stage0: await PRD re-extraction → dispatch Hawkeye-Stage0 → prepare checkpoint-#1.",
+  "missing_or_waived_controls": [
+    {"id": "WAIVER-001", "scope": "production_surface stages (release_transition, operations_sre, production_drill)", "rationale": "v0 demo is local-only Docker Compose per HD-004 default; pending checkpoint-#1 confirmation.", "owner": "client_owner", "expiry_trigger": "HD-004 amended"},
+    {"id": "WAIVER-002", "scope": "performance_reliability test class scoped to single-user microbench", "rationale": "v0 has no multi-tenant production load.", "owner": "client_owner", "expiry_trigger": "production_surface enabled"},
+    {"id": "WAIVER-003", "scope": "maintenance_brownfield stage (n/a)", "rationale": "Greenfield run.", "owner": "df-governance-mayor persona", "expiry_trigger": "future maintenance run"},
+    {"id": "OPEN-1", "scope": "Hawkeye-Stage0 audit not yet executed", "rationale": "Independent persona subagent dispatch is the next concrete step; this Stage-0 commit is pre-audit.", "owner": "claude-orchestrator", "expiry_trigger": "audit completion"},
+    {"id": "OPEN-2", "scope": "Engagement governance not yet client-approved", "rationale": "Pending checkpoint-#1.", "owner": "client_owner", "expiry_trigger": "checkpoint-1"}
+  ],
+  "template_marker": false
+}

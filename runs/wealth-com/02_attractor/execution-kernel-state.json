@@ -1,0 +1,61 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "template_only": false,
+  "kernel_state_id": "KERNEL-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "tasks_md_path": "runs/wealth-com/TASKS.md",
+  "tpm_flow_ledger_path": "runs/wealth-com/02_attractor/tpm-flow-ledger.json",
+  "pert_plan_path": "runs/wealth-com/02_attractor/factory-pert-plan.json",
+  "knowledge_graph_path": "runs/wealth-com/09_traceability/knowledge-graph-seed.json",
+  "judge_jury_records": [],
+  "preflight_status": "pass_with_human_boundary_required",
+  "current": {
+    "bead_id": "TB-WC-2026-0425-001",
+    "step_id": "STEP-S0-ATTRACTOR",
+    "state": "active",
+    "owner": "claude-orchestrator",
+    "token_posture": "within mid-band of CHK-0 self-approval (~25K used / 35K high band)",
+    "boundary_human_required": true,
+    "boundary_human_required_reason": "Run cannot proceed past STEP-S0-CHECKPOINT-1 without client approval of HD-001..HD-009 and ENG-GOV-WEALTHCOM-001. AI panel authority does not include scope/budget/brand/UPL/data-handling decisions."
+  },
+  "consistency_checks": {
+    "tasks_matches_ledger": true,
+    "tasks_matches_ledger_evidence": "TASKS.md active bead TB-WC-2026-0425-001 ↔ TPM-FLOW-WEALTHCOM-001 step STEP-S0-ATTRACTOR (state=active). PERT-WEALTHCOM-001 node STEP-S0-ATTRACTOR also active.",
+    "ledger_matches_pert": true,
+    "ledger_matches_pert_evidence": "All TPM steps appear as PERT nodes with matching predecessors/successors and bead_ids.",
+    "ledger_matches_knowledge_graph": true,
+    "ledger_matches_knowledge_graph_evidence": "KG-WEALTHCOM-001 §nodes contains TB-WC-2026-0425-001..004 task_bead nodes; edges express decomposition + gating + next_bead.",
+    "judge_jury_records_valid": false,
+    "judge_jury_records_valid_evidence": "No judge/jury records yet — TB-001 is still active, awaiting transition. JURY-POLICY-WEALTHCOM-001 defines policy. First record will be JURY-RECORD-S0-ATTRACTOR-PROMOTION when TB-001 transitions to accepted (after Hawkeye-Stage0).",
+    "templates_not_used_as_proof": true,
+    "templates_not_used_as_proof_evidence": "All instantiated records this commit have template_marker:false and contain project-specific content (RUN-WEALTHCOM-001 throughout, wealth.com surfaces named explicitly, Stage-0 records cross-reference each other by ID)."
+  },
+  "legal_next_action": {
+    "status": "pass_pending_subagent_outputs",
+    "step_id": "STEP-S0-RECON-PRD",
+    "bead_id": "TB-WC-2026-0425-002",
+    "action": "Wait for PRD re-extraction subagent (a9c770a239d1a2f15) to complete with self-grep verification. After completion: dispatch Hawkeye-Stage0 audit subagent with independence rule. After Hawkeye pass: dispatch domain-research re-extraction subagent (smaller-scope per-section protocol). After domain brief complete and Hawkeye re-runs: prepare and present checkpoint-#1 prompt to client_owner. STOP at checkpoint-#1.",
+    "why": "TB-001 records authored. TB-002 in flight. Next allowed transitions: (a) await TB-002 outputs; (b) author the remaining Stage-0 records (DF-instantiation, engagement-gov DRAFT, hawkeye-stage0 placeholder, next-action report) in parallel since they don't depend on TB-002. Cannot transition TB-001 to accepted until Hawkeye-Stage0 verdict pass. Cannot enter Stage-1 without checkpoint-#1.",
+    "blocked_by": [],
+    "requires_change_control": false,
+    "requires_human_boundary_approval": "yes_at_checkpoint_1",
+    "evidence_so_far": [
+      "runs/wealth-com/02_attractor/meta-attractor-record.json",
+      "runs/wealth-com/02_attractor/product-tailoring-profile.json",
+      "runs/wealth-com/02_attractor/sdlc-stage-coverage-matrix.json",
+      "runs/wealth-com/02_attractor/generated-meta-skill-contract.json",
+      "runs/wealth-com/02_attractor/tpm-flow-ledger.json",
+      "runs/wealth-com/02_attractor/factory-pert-plan.json",
+      "runs/wealth-com/02_attractor/ai-judge-jury-policy.json",
+      "runs/wealth-com/02_attractor/execution-kernel-state.json (this file)",
+      "runs/wealth-com/09_traceability/knowledge-graph-seed.json",
+      "runs/wealth-com/00_recon/skill-system-survey.md",
+      "runs/wealth-com/11_feedback/incident-INC-001-prd-agent-slop.json",
+      "runs/wealth-com/TASKS.md"
+    ]
+  }
+}

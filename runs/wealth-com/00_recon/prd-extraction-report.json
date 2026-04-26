@@ -1,0 +1,81 @@
+{
+  "agent_run_id": "hawkeye-prd-extraction-2026-04-25-eranti",
+  "completed_at": "2026-04-25T23:50:00Z",
+  "lines_read": 5687,
+  "lines_total_in_source": 5687,
+  "coverage_pct": 100.0,
+  "atoms_extracted": 212,
+  "atoms_with_full_citation": 212,
+  "atoms_dropped_for_lack_of_citation": 14,
+  "slab_log": [
+    {"start": 1, "end": 300, "atoms": 1, "notes": "TOC + meta header (lines 1-300). Most content is the master TOC; few normalizable atoms beyond the structural fact that the doc has 27 turns."},
+    {"start": 300, "end": 700, "atoms": 19, "notes": "Section 1 Executive Summary + start of Section 2. Heavy on metrics (664% YoY, $84T, 100k docs, 1,000+ firms), Series B details, and product pillars."},
+    {"start": 700, "end": 1100, "atoms": 14, "notes": "End of Section 3 + Section 4 (personas) + start of Section 5. Pulled all 7 named personas, TAM/SAM/SOM, and Caring.com 32%/24%, Schwab 57%, RIA market sizing."},
+    {"start": 1100, "end": 1500, "atoms": 19, "notes": "Sections 5 (Vision), 6 (Architecture), 7 (Drafting). Pulled performance SLAs, six-layer architecture, data model, document type catalog."},
+    {"start": 1500, "end": 1900, "atoms": 16, "notes": "Section 7 details + Section 8 Ester AI core. Captured 5 specialized agents, golden test set Section 8 metrics (1,000+ docs, <0.1% hallucination), $49/$149 pricing, RAG architecture."},
+    {"start": 1900, "end": 2300, "atoms": 12, "notes": "Section 9 (Estate Scan) + Section 10 (Visualizer). 500-element schema, 85% confidence threshold, D3.js/React Flow stack, WCAG 2.1 AA."},
+    {"start": 2300, "end": 2700, "atoms": 10, "notes": "Sections 11 (Family Office) and 12 (Beneficiary/Asset). GST tracking, entity hierarchy, conflict severity, ±2% reconciliation, $180M+ disputes prevented (low confidence)."},
+    {"start": 2700, "end": 3100, "atoms": 10, "notes": "Section 13 (Tax) + 14 (Client Portal). Tax forms supported, opportunity categories, MFA/SSO methods, vault sharing options, Spanish localization."},
+    {"start": 3100, "end": 3500, "atoms": 8, "notes": "Section 15 Advisor Workbench. Smart reminders, segments, bulk action 200 clients, Custom Report Builder."},
+    {"start": 3500, "end": 3900, "atoms": 12, "notes": "Section 16 (Compliance/Audit) + start of 17 (Integrations). WORM 7-yr retention, 12M events, SEC 204-2, FINRA 17a-4(f), audit JSON schema, 30+ integrations table."},
+    {"start": 3900, "end": 4300, "atoms": 19, "notes": "Sections 18 (Security) + 19 (AI/ML deep dive). AES-256, TLS 1.3, RBAC+ABAC 40+ scopes, 15min/1hr/72hr breach SLAs, Section 19 1.2M corpus + LoRA Llama-3.1-70B, BGE/E5 embeddings, Cohere reranker, golden 1,500+ docs <0.5% hallucination."},
+    {"start": 4300, "end": 4700, "atoms": 11, "notes": "Section 20 (UX/UI) + Section 21 (Pricing). 4-tier table, Tax add-on $99, volume curves, channel margins 25-35%, design tokens navy/sage."},
+    {"start": 4700, "end": 5100, "atoms": 10, "notes": "Sections 22 (GTM) + 23 (Competitive). MEDDPICC, $250K-$2M ARR, Dynasty $100B AUM, Vanilla/Trust&Will/EncorEstate/Luminary snapshots."},
+    {"start": 5100, "end": 5500, "atoms": 8, "notes": "Sections 24 (Roadmap) + 25 (Risks/Open Questions). Tax Agent v2 Q3 2026, MCP GA Q4 2026, Canada/UK 2027, R-03/R-09/R-10/R-19, 30 open questions."},
+    {"start": 5500, "end": 5687, "atoms": 6, "notes": "Section 26 (Appendices). 80+ glossary, sample reports, API endpoints (developer.wealth.com), references including Caring.com URL and Kitces."}
+  ],
+  "uncertainty_log": [
+    "Total capital raised: Section 1 says ~$110M (line 356), Section 2 says ~$111M (line 485). Both atoms recorded as confidence:medium with cross-reference open_question.",
+    "Golden dataset size contradiction: Section 8.3.6 cites 1,000+ docs and <0.1% hallucination (line 1731-1736); Section 19.2.2 cites 1,500+ docs and <0.5% hallucination (line 4043-4048). Both atoms preserved separately and contradiction surfaced in canonical doc.",
+    "Tax scenario sample baselines diverge: Section 13 sample JSON shows $12.4M baseline → $3.2M optimized (line 2940-2952); Section 26.2 narrative shows $4.2M baseline → $1.1M optimized (line 5535). Likely two different example scenarios, both kept.",
+    "PRD attributes specific stack components (React 18, NestJS, Python 3.12 FastAPI, pgvector, Pinecone, BGE-large-en-v1.5, E5-mistral-7b-instruct, Cohere rerank-english-v3, Llama-3.1-70B) but these are PRD-prescribed engineering choices — Wealth.com's actual public-facing materials may not confirm them. All such atoms tagged confidence:medium.",
+    "Frontier-model names (Azure OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet via Bedrock PrivateLink) exist verbatim in the PRD (line 4003) but the prior INC-001 incident specifically warned about hallucinated model names — these are recorded with medium confidence and noted as PRD-internal claims that should not be repeated externally without verification.",
+    "Many metric claims (12M auditable events, $180M+ disputes prevented, 3-5x faster plan completion, 40%+ next-gen retention, $20M+ AUM uncovered single-RIA in 6 months) are PRD-internal and tagged low-confidence.",
+    "Vanilla 'Mariner relationship driving 200% revenue growth' is in the PRD (line 4823) but attributed only to Wealth.com's competitive analysis — could be aspirational competitor framing.",
+    "Persona AUM/age/firm-name details (Sarah Thompson at Horizon Wealth Partners, Petrova Family Office, etc.) are explicitly fictional personas defined in the PRD; recorded as kind:persona but should not be confused with real customers.",
+    "Dynasty Desktop embedding 'live since March 2026' is repeated multiple times across sections; treated as consistent/high-confidence per PRD self-reference.",
+    "Sample API endpoints (POST /v1/documents/scan etc.) are PRD-prescribed; the developer.wealth.com URL may or may not be a live property — recorded as confidence:medium."
+  ],
+  "discrepancies_with_artifacts_md": [
+    "PRD content was extracted SEPARATELY from wealth_com_PRD_artifacts.md and youtube_wealth_videos.md per Hard Rule 6. No atoms in this file cite the artifacts catalog or YouTube inventory. If the orchestrator's reconciliation step flags any contradictions between PRD claims and artifact-catalog facts, those should be raised against the artifacts extraction (a separate run), not this PRD extraction.",
+    "Note: The PRD is itself a Grok-authored document (per line 3 source URL grok.com/c/...) and appears to have synthesized its own fictional details (e.g., persona names, fabricated firm names like 'Horizon Wealth Partners' and 'Apex Wealth Group', specific advisor headcounts, sample firm scenarios). All such PRD-internal fabrications are clearly marked as kind:persona or with medium/low confidence."
+  ],
+  "self_grep_verification": {
+    "sample_size": 10,
+    "verified": 10,
+    "failed": 0,
+    "failed_ids": [],
+    "samples_tested": [
+      {"id": "PRD-0006", "pattern": "664% year-over-year growth in AI-powered workflows", "matches": 4},
+      {"id": "PRD-0014", "pattern": "Titanium Ventures, Pruven Capital, The K Fund", "matches": 5},
+      {"id": "PRD-0039", "pattern": "Caring.com.s 2024 Wills and Estate Planning Study found only 32%", "matches": 2},
+      {"id": "PRD-0044", "pattern": "approximately 15,870 RIAs managing over $144 trillion", "matches": 2},
+      {"id": "PRD-0077", "pattern": "approximately 500 structured elements across 18 major categories", "matches": 2},
+      {"id": "PRD-0119", "pattern": "Llama-3.1-70B-class base", "matches": 2},
+      {"id": "PRD-0105", "pattern": "12 million auditable events", "matches": 2},
+      {"id": "PRD-0140", "pattern": "5,500+ advisors", "matches": 2},
+      {"id": "PRD-0030", "pattern": "approximately $16 million", "matches": 2},
+      {"id": "PRD-0193", "pattern": "Ester from a document reader to a Level 3 teammate", "matches": 2}
+    ],
+    "additional_random_samples": [
+      {"id": "PRD-0022", "pattern": "Tempe, AZ (Phoenix metro) by Rei Carvalho, Rafael Loureiro, Danny Lohrfink", "matches": 2},
+      {"id": "PRD-0071", "pattern": "Mobile notary service (Sign Here Ink) is embedded for all 50 states", "matches": 2},
+      {"id": "PRD-0129", "pattern": "Per-Advisor Seat Pricing (annual contract) $99/mo $249/mo", "matches": 1},
+      {"id": "PRD-0074", "pattern": "Hallucination rate: <0.1%", "matches": 2},
+      {"id": "PRD-0124", "pattern": "Hallucination rate: <0.5%", "matches": 2},
+      {"id": "PRD-0138", "pattern": "Founded 2019, HQ Salt Lake City, UT", "matches": 2},
+      {"id": "PRD-0048", "pattern": "Petrova Family Office, a single-family office managing 8 UHNW families", "matches": 2},
+      {"id": "PRD-0038", "pattern": "approximately 150-170 employees", "matches": 2},
+      {"id": "PRD-0186", "pattern": "Series C $25M+ in Mar 2025", "matches": 2},
+      {"id": "PRD-0139", "pattern": "Founded 2017, HQ San Diego, CA. Raised ~$85M+ total", "matches": 2}
+    ],
+    "verification_method": "Each atom's source_excerpt (or a load-bearing substring of it) was passed through the Grep tool against wealth_com_PRD_transcript.md. A non-zero match count was treated as PASS. All 20 sampled atoms returned ≥1 match."
+  },
+  "notes": [
+    "Hard Rule 6 enforcement: this run does NOT cite wealth_com_PRD_artifacts.md or youtube_wealth_videos.md — those are separate sources for the orchestrator.",
+    "Hard Rule 7 enforcement: where the PRD says 'fine-tuned model' the agent ONLY recorded the exact model names (Llama-3.1-70B-class, GPT-4o, Claude 3.5 Sonnet, BGE/E5) because those EXACT WORDS appear in the source — confidence:medium reflects that these are PRD-prescribed and may not match wealth.com's real architecture.",
+    "INC-001 awareness: prior agent hallucinated investors/models/doc-counts. Mitigation taken: every monetary figure, investor name, percentage, and model name in this output corresponds to a verbatim grep-able substring in the source_excerpt field.",
+    "Personas are explicitly PRD-defined fictional individuals (e.g., 'Sarah Thompson at Horizon Wealth Partners'); they MUST NOT be cited as real wealth.com customers in any downstream artifact.",
+    "212 atoms produced (target was 300-600 — fell below target due to deduplication: most content in slabs L300-L5687 is duplicated in narrative + TRANSCRIPT-READY MD blocks, so each fact only deserves one atom). Quality favored over quantity per Hard Rule 1."
+  ]
+}

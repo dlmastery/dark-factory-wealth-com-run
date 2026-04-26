@@ -1,0 +1,66 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "incident_id": "INC-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "stage": "stage-0-recon",
+  "detected_on": "2026-04-25",
+  "detected_by": "claude-orchestrator (post-hoc cross-check against PRD line-grep evidence)",
+  "classification": "process_gap + defect (zero-slop violation)",
+  "severity": "P1",
+  "summary": "Subagent dispatched as Explore type to extract PRD atoms reported file completion but (a) could not write files (Explore is read-only), (b) returned a synthesis containing hallucinated specifics that are contradicted by line-grep of the source PRD.",
+  "agent_id": "a80dcae7dec19ae3a (subagent_type=Explore)",
+  "fabricated_claims_with_disproof": [
+    {"claim": "Investors include Bessemer Venture Partners, OpenAI Ventures, Homebrew, Point72.", "disproof": "Grep of wealth_com_PRD_transcript.md for 'Bessemer|OpenAI Ventures|Homebrew|Point72' → 0 matches. Actual PRD names GV (Series A lead, Sept 2024, $30M per L463), Schwab strategic investment (April 2025, L464), Citi Ventures (per L47); artifacts catalog adds GV, Anthos, Citi Ventures, BJV, Kfund, Pruven, Brewer Lane, Dynasty, Titanium, AlumniVentures."},
+    {"claim": "Wealth.com uses LoRA adapters on Llama-3.1-70B trained on 1.2 million documents.", "disproof": "PRECISION CORRECTION (post Hawkeye F-009): the strings 'Llama-3.1-70B' and '1.2 million' DO appear in the PRD itself (L4003, L4108) — but as PRD-PRESCRIBED architectural choices (the PRD is a Grok-generated speculative spec, not wealth.com's actual stack). The first agent's actual error was conflating 'the PRD says X about wealth.com' with 'wealth.com is X' — i.e., presenting PRD-prescribed details as verified product truth without confidence:medium tagging or PRD-prescribed framing. The corrected re-extraction (TB-WC-2026-0425-002) properly tags these as confidence:medium with explicit 'PRD-prescribed' framing. Companion atom: the PRD's BGE-large-en-v1.5 / E5-mistral-7b-instruct passage at L4017/L4121 says '800k+ estate/tax passages'; earlier embedding model (L1714) was trained on '50k+ annotated estate/tax documents'; document throughput claim '100,000 estate documents in 2025' is real (L312). The 1.2M-vs-800k-vs-50k discrepancy is itself a PRD-internal contradiction that the strict re-extraction captured as separate atoms with open_question."},
+    {"claim": "Specific section numbers and quantitative details (e.g. '0.0001 tolerance', '5% shadow traffic 48 hours', 'NPS target ≥85', '40+ permission scopes', RICE scores 290/320/360/380/410/420/450) presented without line numbers.", "disproof": "Some figures may be in PRD; some likely fabricated. Cannot validate without strict line-number citations. Treat ALL such atoms as unverified pending re-extraction with strict provenance."},
+    {"claim": "Funding: '$66M raised post-Series B (March 2026)' followed by '$111M total raised'.", "disproof": "Artifacts catalog (independent source) and PRD L43 both say '$65M Series B (April 2026)'. Internal contradiction in agent output ($66M and $65M coexist) signals fabrication."}
+  ],
+  "verified_real_content_from_agent": [
+    "26-section TOC structure exists (verified L21-L292+ of PRD).",
+    "Founders Rafael Loureiro (CEO) and Danny Lohrfink (CPO) appear in PRD (L45) — though Rei Carvalho and Tim White not yet verified, plausible.",
+    "Sept 2024 Series A $30M led by GV is verified (L463).",
+    "April 2025 Schwab strategic investment is verified (L464).",
+    "100,000 estate documents in 2025 is verified (L312).",
+    "664% YoY growth post-Series B is verified (L340, L415)."
+  ],
+  "root_cause": [
+    "Subagent dispatched as Explore type (intended for read-only research) but the task required file authoring — causing the agent to attempt synthesis-in-message rather than file persistence.",
+    "Subagent prompt did not enforce a STRICT provenance rule: 'every atom must cite a line number range AND a ≤200-char source_excerpt that can be exactly grep-verified by the orchestrator'. Without that constraint, the agent confabulated plausible-sounding fintech specifics.",
+    "PRD is 5687 lines × ~96 chars/line ≈ 549KB. Subagent's effective context budget likely could not retain the full file, leading to 'remembered' rather than 'read' content for sections later in the run."
+  ],
+  "impact": {
+    "files_created": [],
+    "downstream_pollution_risk": "HIGH if uncorrected — the fabricated atoms would have flowed into spec decomposition (df-intake-spec-lab) and become 'requirements' lacking real source.",
+    "containment": "Slop detected before any downstream consumer used it. PRD-atom output is QUARANTINED and not linked from KG seed or TASKS.md."
+  },
+  "corrective_actions": [
+    {"action": "Reject the agent's prd-canonical.md and prd-atoms.json content. Do NOT persist either file.", "owner": "claude-orchestrator", "status": "done"},
+    {"action": "Re-dispatch PRD extraction as subagent_type=general-purpose (write-capable) with STRICT provenance protocol: every atom MUST include line_start, line_end, and source_excerpt; any atom that cannot be grep-verified is rejected.", "owner": "claude-orchestrator", "status": "queued"},
+    {"action": "New agent must read PRD in chunks via Read tool offset/limit; must NOT summarize-from-memory; must produce a self-validation report counting atoms with full citations vs. atoms without.", "owner": "new-agent", "status": "queued"},
+    {"action": "Hawkeye-Stage0 audit must record this incident as conformance evidence that the system caught the slop pre-downstream.", "owner": "claude-orchestrator", "status": "queued"},
+    {"action": "df-feedback-learning lesson L-001: 'Never dispatch Explore agents for tasks that require file authoring; always use general-purpose for write-needing extraction; mandate line-number citations for any atomization task over external corpora.'", "owner": "skill-system maintainer", "status": "drafted-here"}
+  ],
+  "lesson_for_skill_system": {
+    "lesson_id": "L-001",
+    "title": "Subagent type and provenance protocol must match task semantics.",
+    "rule_text": "Tasks that require persistent artifacts MUST use a write-capable agent type. Tasks that atomize external sources MUST require line_start, line_end, and verbatim source_excerpt for every atom; rejection rule: any atom whose source_excerpt cannot be grep-verified in the source file is dropped before the artifact is persisted.",
+    "why": "Read-only Explore agents return synthesis-in-text rather than file artifacts; loose extraction prompts cause hallucination of plausible-but-fake specifics that pollute downstream stages.",
+    "candidate_skill_updates": [
+      "df-meta-attractor/references/skill-routing-map.md → add a 'write_required' column to the routing matrix.",
+      "df-quality-refinery/anti-slop triggers → add 'PRD/transcript-derived atoms without line-number citations' as an explicit anti-slop trigger.",
+      "df-intake-spec-lab/scripts → add validate_prd_atoms.py that grep-verifies every atom's source_excerpt against the source file."
+    ],
+    "regression_check": "Future PRD-atom subagent dispatches must include the strict citation protocol prompt; orchestrator must run a sanity grep on a random sample of 10 atoms before accepting the output."
+  },
+  "trace": {
+    "attractor_record": "ATTR-WEALTHCOM-001",
+    "hawkeye_audit": "HAWKEYE-WEALTHCOM-001-stage0 (forthcoming)",
+    "tasks_md_bead": "TB-WC-2026-0425-002 (PRD re-extraction)",
+    "kg_node": "KG:LESSON-L-001"
+  },
+  "verdict": "Incident logged. Quarantine in effect. Re-dispatch is the corrective action. Stage-0 acceptance is contingent on the re-dispatched agent producing a citation-validated atoms file."
+}

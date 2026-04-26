@@ -1,0 +1,71 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "id": "EVD-RALPH-000",
+  "artifact_id": "",
+  "artifact_name": "",
+  "artifact_path": "",
+  "artifact_review_panel_record": "",
+  "artifact_rubric_path": "",
+  "control_graph_node": "",
+  "work_ledger_item": "",
+  "minimum_required_loops": 5,
+  "quality_priority_statement": "Quality and assurance are the optimization goal. Token use is budgeted transparently, but token savings cannot reduce required RALPH loops or adversarial review depth.",
+  "adversarial_critics": [
+    {
+      "critic_id": "ANTI-SLOP-RED-TEAM",
+      "attack_focus": [
+        "generic filler",
+        "unsupported claims",
+        "template residue",
+        "fictional examples treated as evidence",
+        "false certainty",
+        "missing trace",
+        "weak proof"
+      ]
+    },
+    {
+      "critic_id": "FAILURE-MODE-REALITY-CRITIC",
+      "attack_focus": [
+        "real-world failure modes",
+        "edge cases",
+        "operational breakdown",
+        "human adoption failure",
+        "support ambiguity",
+        "maintenance traps",
+        "embarrassing counterexamples"
+      ]
+    }
+  ],
+  "loops": [
+    {
+      "round": 1,
+      "phase": "Review",
+      "artifact_version_before": "",
+      "review_inputs": [],
+      "primary_critic_findings": [],
+      "adversarial_attacks": [],
+      "root_causes": [],
+      "patches_applied": [],
+      "artifact_version_after": "",
+      "fix_evidence": [],
+      "re_review_evidence": [],
+      "remaining_findings": [],
+      "remaining_risks": [],
+      "verdict": "revise"
+    }
+  ],
+  "final_gate": {
+    "all_minimum_loops_completed": false,
+    "all_p0_p1_findings_resolved": false,
+    "all_failed_rubric_points_resolved_or_accepted": false,
+    "adversarial_critics_stood_down": false,
+    "trace_and_evidence_closed": false,
+    "human_owner_approval_or_waiver": "",
+    "final_verdict": "pending"
+  },
+  "status": "draft"
+}

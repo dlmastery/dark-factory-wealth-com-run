@@ -1,0 +1,61 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.vscode/
+.idea/
+
+# Claude / agent runtime state — not part of the snapshot
+.claude/
+.claude-cache/
+.claude-tasks/
+
+# AppData paths that occasionally leak in
+AppData/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node
+node_modules/
+.npm/
+.yarn/
+dist/
+build/
+.next/
+.turbo/
+
+# Docker / runtime
+*.pid
+*.sock
+
+# Logs
+*.log
+logs/
+
+# Local env / secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+secrets/
+credentials.json
+
+# Database / large data
+*.db
+*.sqlite
+*.sqlite3
+data/local/
+
+# Subagent transcript files (referenced in the run logs but never to be committed)
+tasks/*.output
+*.subagent-transcript.jsonl

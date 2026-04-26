@@ -1,0 +1,127 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "template_only": false,
+  "record_id": "KG-WEALTHCOM-001",
+  "title": "Wealth.com Dark-Factory Run — Knowledge Graph Seed",
+  "project": {
+    "name": "EstateCompass (working title) — Wealth.com clone",
+    "run_id": "RUN-WEALTHCOM-001",
+    "attractor_state": "forming",
+    "control_graph_id": "CG-WEALTHCOM-001 (forthcoming at stage-architecture)",
+    "work_ledger_id": "WL-WEALTHCOM-001",
+    "tasks_md_path": "runs/wealth-com/TASKS.md",
+    "project_book_root": "runs/wealth-com/"
+  },
+  "governance": {
+    "standards_basis": [
+      "ISO/IEC/IEEE 12207:2017",
+      "ISO/IEC/IEEE 15289:2019",
+      "ISO/IEC 42001:2023 (AI Management Systems)",
+      "NIST SSDF 800-218",
+      "OWASP SAMM",
+      "OMG MDA",
+      "OMG UML 2.5.1",
+      "CMMI V3.0",
+      "GLBA",
+      "SEC Rule 204-2",
+      "FINRA Rule 17a-4",
+      "HIPAA (PHI surfaces)",
+      "CCPA/CPRA",
+      "NIST AI RMF 1.0",
+      "NIST CSF 2.0"
+    ],
+    "token_budget_policy": {
+      "required_for_material_work": true,
+      "current_swag_band": "CHK-1 mid ~70K (Stage-0 + recon); CHK-2 mid ~400K full run pending checkpoint-#1",
+      "approval_state": "pending-checkpoint-1",
+      "reapproval_triggers": ["+15% delta", "scope_in/out change", "surface flag change", "threshold reduction", "real-partner integration", "production_surface enabled"]
+    },
+    "change_control_policy": {
+      "required_for_scope_or_budget_change": true,
+      "open_change_requests": []
+    }
+  },
+  "node_type_registry": [
+    "intent", "interrogation_answer", "requirement", "nfr", "assumption", "risk", "decision", "control_graph_node", "work_ledger_item", "task_bead", "artifact", "artifact_template", "rubric", "expert_role", "review_record", "ralph_loop", "evidence", "test", "code_change", "handoff", "certificate", "memory_pack", "lesson", "incident", "checkpoint", "human_decision_point"
+  ],
+  "edge_type_registry": [
+    "derives_from", "decomposes_to", "answers", "satisfies", "implements", "verifies", "mitigates", "raises", "decides", "supersedes", "depends_on", "blocks", "tracked_by", "gated_by", "reviewed_by", "attacked_by", "requires_patch", "patched_by", "hardened_by", "evidenced_by", "certified_by", "waived_by", "hands_off_to", "resumes_from", "learns_from", "next_bead", "audited_by", "conformance_verified_by", "stage_covered_by", "tested_by", "scenario_covers", "browser_verified_by"
+  ],
+  "nodes": [
+    {"id": "INTENT-001", "type": "intent", "title": "User intent: rigorous dark-factory run for wealth.com PRD", "owner": "client", "summary": "User message 2026-04-25 demanding multi-day, conformance-first dark-factory run.", "source": {"kind": "user_message", "reference": "session 2026-04-25"}, "required_for_acceptance": true},
+    {"id": "INTENT-002", "type": "intent", "title": "User intent: validate dark-factory skill system at scale", "owner": "client", "summary": "Implicit second-order intent — running PRD through this much governance is a system test.", "source": {"kind": "user_message", "reference": "session 2026-04-25"}, "required_for_acceptance": true},
+    {"id": "ATTR-WEALTHCOM-001", "type": "artifact", "title": "Attractor Run Record", "owner": "df-meta-attractor persona", "summary": "Foundational attractor pack for the run.", "source": {"kind": "artifact", "reference": "runs/wealth-com/02_attractor/meta-attractor-record.json"}, "required_for_acceptance": true},
+    {"id": "PRODUCT-TAILORING-WEALTHCOM-001", "type": "artifact", "title": "Product Tailoring Profile", "owner": "df-meta-attractor persona", "summary": "regulated-fintech-AI-SaaS archetype with surface flags + risk profile + method blend.", "source": {"kind": "artifact", "reference": "runs/wealth-com/02_attractor/product-tailoring-profile.json"}, "required_for_acceptance": true},
+    {"id": "GENERATED-META-SKILL-WEALTHCOM-001", "type": "artifact", "title": "Generated Meta-Skill Contract", "owner": "df-meta-attractor persona", "summary": "Wealth.com-specific generated factory contract; refusal rules locked.", "source": {"kind": "artifact", "reference": "runs/wealth-com/02_attractor/generated-meta-skill-contract.json"}, "required_for_acceptance": true},
+    {"id": "SDLC-COVERAGE-WEALTHCOM-001", "type": "artifact", "title": "SDLC Stage Coverage Matrix", "owner": "df-governance-mayor persona", "summary": "17 stages declared with status/owner/evidence/gate/waiver.", "source": {"kind": "artifact", "reference": "runs/wealth-com/02_attractor/sdlc-stage-coverage-matrix.json"}, "required_for_acceptance": true},
+    {"id": "ENG-GOV-WEALTHCOM-001", "type": "artifact", "title": "Engagement Governance Record (DRAFT)", "owner": "df-governance-mayor persona", "summary": "Client/delivery owner, scope baseline, token SWAG, checkpoints, change-control. Pending client approval.", "source": {"kind": "artifact", "reference": "runs/wealth-com/03_governance/engagement-governance-record.json"}, "required_for_acceptance": true},
+    {"id": "RSK-001", "type": "risk", "title": "AI extraction hallucination on legal documents → fiduciary harm", "owner": "AI Lead", "summary": "Severity high; mitigated by deterministic-calc separation, citation grounding, holdout, human-review fallback.", "source": {"kind": "artifact", "reference": "ATTR-WEALTHCOM-001 §risks"}, "required_for_acceptance": true},
+    {"id": "RSK-002", "type": "risk", "title": "Tax calculation error → IRS/state penalty exposure", "owner": "Tax Domain Juror", "summary": "Severity high; mitigated by golden-dataset tests, deterministic engine, IRS-form citations.", "source": {"kind": "artifact", "reference": "ATTR-WEALTHCOM-001 §risks"}, "required_for_acceptance": true},
+    {"id": "RSK-003", "type": "risk", "title": "UPL — unauthorized practice of law", "owner": "Legal Juror", "summary": "Severity high; mitigated by 'educational draft for attorney review' framing + attorney-of-record assignment.", "source": {"kind": "artifact", "reference": "ATTR-WEALTHCOM-001 §risks"}, "required_for_acceptance": true},
+    {"id": "RSK-004", "type": "risk", "title": "Multi-tenant data leak between advisor firms", "owner": "Security Juror", "summary": "Severity high; mitigated by Postgres RLS + connection-level + per-tenant KMS + audit log.", "source": {"kind": "artifact", "reference": "ATTR-WEALTHCOM-001 §risks"}, "required_for_acceptance": true},
+    {"id": "RSK-005", "type": "risk", "title": "Factory overfit to wealth.com workload", "owner": "System Theorist persona", "summary": "Severity medium; mitigated by layer_map enforcement + transfer-test bead.", "source": {"kind": "artifact", "reference": "ATTR-WEALTHCOM-001 §risks"}, "required_for_acceptance": true},
+    {"id": "INC-001", "type": "incident", "title": "PRD subagent slop — fabricated investor names, model names, doc counts", "owner": "claude-orchestrator", "summary": "Detected pre-downstream; quarantined; corrective re-dispatch with strict citation protocol; lesson L-001 drafted.", "source": {"kind": "artifact", "reference": "runs/wealth-com/11_feedback/incident-INC-001-prd-agent-slop.json"}, "required_for_acceptance": false},
+    {"id": "INC-002", "type": "incident", "title": "Domain-research subagent stalled at write transition", "owner": "claude-orchestrator", "summary": "Subagent ad2487c326e8732a0 stalled 600s+; will re-dispatch with smaller per-file scope.", "source": {"kind": "task-notification", "reference": "session 2026-04-25"}, "required_for_acceptance": false},
+    {"id": "LESSON-L-001", "type": "lesson", "title": "Subagent type and provenance protocol must match task semantics", "owner": "skill-system maintainer", "summary": "Tasks needing artifacts must use write-capable agents; atomization tasks require line-number citations + grep verification.", "source": {"kind": "artifact", "reference": "INC-001 §lesson_for_skill_system"}, "required_for_acceptance": true},
+    {"id": "TB-WC-2026-0425-001", "type": "task_bead", "title": "Stage-0 attractor pack drafting", "state": "active", "owner": "claude-orchestrator", "control_graph_node": "CG-NODE-S0-ATTRACTOR", "work_ledger_item": "WL-001", "evidence_required": ["all stage-0 records exist", "Hawkeye-Stage0 pass"], "evidence_provided": ["meta-attractor-record.json", "tailoring", "sdlc matrix", "generated meta-skill", "skill-survey", "incident record", "TASKS.md", "KG seed (this)"], "gate": "GATE-ATTRACTOR + GATE-A..E + Hawkeye-Stage0", "next_bead": "TB-WC-2026-0425-002"},
+    {"id": "TB-WC-2026-0425-002", "type": "task_bead", "title": "PRD re-extraction (corrective)", "state": "queued", "owner": "subagent a9c770a239d1a2f15", "control_graph_node": "CG-NODE-S0-RECON", "evidence_required": ["10/10 self-grep verified atoms"], "evidence_provided": [], "gate": "self-grep ≥10/10", "next_bead": "TB-WC-2026-0425-003"},
+    {"id": "TB-WC-2026-0425-003", "type": "task_bead", "title": "Hawkeye-Stage0 conformance audit", "state": "queued", "owner": "hawkeye-auditor-subagent (forthcoming)", "control_graph_node": "CG-NODE-S0-HAWKEYE", "evidence_required": ["independent persona", "all stage-0 records audited", "verdict pass/conditional/fail"], "evidence_provided": [], "gate": "Hawkeye decision rights", "next_bead": "TB-WC-2026-0425-004"},
+    {"id": "TB-WC-2026-0425-004", "type": "task_bead", "title": "Checkpoint-#1 prompt to client", "state": "queued", "owner": "claude-orchestrator", "control_graph_node": "CG-NODE-S0-CHECKPOINT", "evidence_required": ["client decision recorded"], "evidence_provided": [], "gate": "client_owner approval", "next_bead": "TB-WC-2026-0426-005"},
+    {"id": "HD-001", "type": "human_decision_point", "title": "Confirm scope_in/scope_out", "owner": "client_owner", "summary": "ATTR-WEALTHCOM-001 §human_decisions HD-001."},
+    {"id": "HD-002", "type": "human_decision_point", "title": "Brand substitution naming", "owner": "client_owner", "summary": "Avoid registered marks; default 'EstateCompass' / internal AI 'Sage'."},
+    {"id": "HD-003", "type": "human_decision_point", "title": "Tech stack confirmation", "owner": "client_owner", "summary": "Default Node+TS+Postgres+React+Python AI service+Anthropic Claude+Playwright."},
+    {"id": "HD-004", "type": "human_decision_point", "title": "Deployment target", "owner": "client_owner", "summary": "Default Docker Compose local-only at v0; production_surface=false."},
+    {"id": "HD-005", "type": "human_decision_point", "title": "Token budget SWAG approval", "owner": "client_owner", "summary": "low 150K, mid 400K, high 1.2M tokens for full run."},
+    {"id": "HD-006", "type": "human_decision_point", "title": "Integration mock vs real", "owner": "client_owner"},
+    {"id": "HD-007", "type": "human_decision_point", "title": "UPL handling for Document Creation", "owner": "client_owner"},
+    {"id": "HD-008", "type": "human_decision_point", "title": "Synthetic data only", "owner": "client_owner"},
+    {"id": "HD-009", "type": "human_decision_point", "title": "Hawkeye independence rule", "owner": "client_owner"},
+    {"id": "CHECKPOINT-1", "type": "checkpoint", "title": "Stage-0 → Stage-1 client checkpoint", "owner": "client_owner", "summary": "Releases ~150K-1.2M token budget; pending."},
+    {"id": "GATE-A-COHERENCE", "type": "control_graph_node", "title": "Coherence Gate", "summary": "Goal one-sentence; scope explicit; examples labeled; open Q separated; next safe action concrete."},
+    {"id": "GATE-B-RECURSION", "type": "control_graph_node", "title": "Recursion Control Gate"},
+    {"id": "GATE-C-ROUTING", "type": "control_graph_node", "title": "Routing Gate"},
+    {"id": "GATE-D-EVIDENCE", "type": "control_graph_node", "title": "Evidence Gate"},
+    {"id": "GATE-E-ANTI-OVERFIT", "type": "control_graph_node", "title": "Anti-Overfit Gate"}
+  ],
+  "edges": [
+    {"id": "EDGE-001", "type": "decomposes_to", "source": "INTENT-001", "target": "TB-WC-2026-0425-001", "rationale": "Stage-0 bead is the smallest governed first action under user intent."},
+    {"id": "EDGE-002", "type": "derives_from", "source": "ATTR-WEALTHCOM-001", "target": "INTENT-001"},
+    {"id": "EDGE-003", "type": "derives_from", "source": "PRODUCT-TAILORING-WEALTHCOM-001", "target": "ATTR-WEALTHCOM-001"},
+    {"id": "EDGE-004", "type": "derives_from", "source": "GENERATED-META-SKILL-WEALTHCOM-001", "target": "PRODUCT-TAILORING-WEALTHCOM-001"},
+    {"id": "EDGE-005", "type": "derives_from", "source": "SDLC-COVERAGE-WEALTHCOM-001", "target": "PRODUCT-TAILORING-WEALTHCOM-001"},
+    {"id": "EDGE-006", "type": "gated_by", "source": "TB-WC-2026-0425-001", "target": "GATE-A-COHERENCE"},
+    {"id": "EDGE-007", "type": "gated_by", "source": "TB-WC-2026-0425-001", "target": "GATE-B-RECURSION"},
+    {"id": "EDGE-008", "type": "gated_by", "source": "TB-WC-2026-0425-001", "target": "GATE-C-ROUTING"},
+    {"id": "EDGE-009", "type": "gated_by", "source": "TB-WC-2026-0425-001", "target": "GATE-D-EVIDENCE"},
+    {"id": "EDGE-010", "type": "gated_by", "source": "TB-WC-2026-0425-001", "target": "GATE-E-ANTI-OVERFIT"},
+    {"id": "EDGE-011", "type": "raises", "source": "TB-WC-2026-0425-002", "target": "INC-001", "rationale": "TB-002 was created in response to INC-001."},
+    {"id": "EDGE-012", "type": "learns_from", "source": "LESSON-L-001", "target": "INC-001"},
+    {"id": "EDGE-013", "type": "next_bead", "source": "TB-WC-2026-0425-001", "target": "TB-WC-2026-0425-002"},
+    {"id": "EDGE-014", "type": "next_bead", "source": "TB-WC-2026-0425-002", "target": "TB-WC-2026-0425-003"},
+    {"id": "EDGE-015", "type": "next_bead", "source": "TB-WC-2026-0425-003", "target": "TB-WC-2026-0425-004"},
+    {"id": "EDGE-016", "type": "blocks", "source": "CHECKPOINT-1", "target": "TB-WC-2026-0426-005", "rationale": "Stage-1 cannot start until checkpoint-#1 approved."},
+    {"id": "EDGE-017", "type": "answers", "source": "HD-001", "target": "ATTR-WEALTHCOM-001"},
+    {"id": "EDGE-018", "type": "mitigates", "source": "PRODUCT-TAILORING-WEALTHCOM-001", "target": "RSK-001", "rationale": "Tailoring locks deterministic-calc separation as architectural ADR."},
+    {"id": "EDGE-019", "type": "mitigates", "source": "PRODUCT-TAILORING-WEALTHCOM-001", "target": "RSK-002"},
+    {"id": "EDGE-020", "type": "mitigates", "source": "PRODUCT-TAILORING-WEALTHCOM-001", "target": "RSK-003"},
+    {"id": "EDGE-021", "type": "mitigates", "source": "PRODUCT-TAILORING-WEALTHCOM-001", "target": "RSK-004"},
+    {"id": "EDGE-022", "type": "mitigates", "source": "ATTR-WEALTHCOM-001", "target": "RSK-005", "rationale": "Anti-overfit rules + transfer-test bead."},
+    {"id": "EDGE-023", "type": "evidenced_by", "source": "TB-WC-2026-0425-001", "target": "ATTR-WEALTHCOM-001"},
+    {"id": "EDGE-024", "type": "tracked_by", "source": "TB-WC-2026-0425-001", "target": "WL-001"}
+  ],
+  "waivers": [
+    {"id": "WAIVER-001", "scope": "production_surface stages (release_transition, operations_sre, production_drill)", "owner": "client_owner approval at checkpoint-#1", "rationale": "v0 demo is local-only Docker Compose per HD-004 default. Stages defer until production_surface enabled.", "expiry": "checkpoint-N where HD-004 is amended to enable production_surface", "residual_risk": "v0 demo cannot be deployed to real production without re-entering deferred stages."},
+    {"id": "WAIVER-002", "scope": "performance_reliability test class", "owner": "client_owner approval at checkpoint-#1", "rationale": "Scoped down to single-user microbench at v0; full load test not meaningful for local demo.", "expiry": "production_surface enabled", "residual_risk": "Performance behavior under multi-tenant load is unverified at v0."},
+    {"id": "WAIVER-003", "scope": "maintenance_brownfield stage", "owner": "df-governance-mayor persona", "rationale": "Greenfield run; no brownfield code to maintain.", "expiry": "permanent for this run; future maintenance runs will trigger df-brownfield-recon", "residual_risk": "low"}
+  ],
+  "quality_gate": {
+    "status": "self_pass_pending_hawkeye",
+    "validator": "scripts/validate_knowledge_graph.py (forthcoming run by Hawkeye)",
+    "last_run": "2026-04-25 manual self-review",
+    "findings": ["Seed has 30+ nodes and 24 edges; covers intent → bead → gate → risk → evidence → lesson → incident → human-decision relationships. Will expand significantly during stage-1 intake (one node per requirement leaf, per artifact, per test, per code change)."]
+  }
+}

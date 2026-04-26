@@ -1,0 +1,167 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "id": "ENG-GOV-WEALTHCOM-001",
+  "status": "approved",
+  "approval_record": {
+    "approved_by": "client_owner = eranti@gmail.com",
+    "approved_at": "2026-04-26",
+    "approval_message_verbatim": "approve all defaults",
+    "decisions_approved": {
+      "HD-001_scope": "Build to actual current OBBBA law ($15M permanent exemption); NOT the PRD's repealed-TCJA-sunset framing. ASM-003 from meta-attractor-record is hereby INVALIDATED and superseded by FACT-OBBBA-001 (see knowledge-graph update).",
+      "HD-002_brand": "Working title 'EstateCompass'; internal AI 'Sage'. No use of registered wealth.com marks.",
+      "HD-003_stack": "Node 20 + TypeScript + Fastify; React 18 + Vite + Tailwind; Postgres 16 + pgvector; Python 3.12 + FastAPI for AI service; Anthropic Claude for extraction; Playwright; Vitest + Pytest.",
+      "HD-004_deployment": "Docker Compose local-only at v0; production_surface=false; deferred-stage waivers for release/operations/production_drill remain in force.",
+      "HD-005_budget": "Token SWAG approved: low 150K, mid 400K, high 1.2M tokens for full multi-day run. Reapproval triggers active at +15% delta / scope change / threshold reduction / surface-flag change / real-partner integration / brand change / threshold reduction below 96% per expert.",
+      "HD-006_integrations": "Mock 17 of 19 partners; real-shape contract+mock for Plaid-substitute and one Schwab-shape custody adapter.",
+      "HD-007_upl": "AI emits 'educational drafts for attorney review' only; attorney-of-record assignment required before any execution-ready legal document; legal-disclaimer overlay enforced; refusal rule locked in generated-meta-skill-contract.json.",
+      "HD-008_synthetic_data": "Synthetic data only at v0; no real PII or PHI.",
+      "HD-009_hawkeye_independence": "Hawkeye runs as separate subagent given only artifact files (no chat-context handoff). Already enforced for HAWKEYE-WEALTHCOM-001-stage0-independent."
+    },
+    "domain_findings_acknowledged_by_default_acceptance": [
+      "FACT-OBBBA-001 (OBBBA July 4 2025 permanently raised federal estate/gift/GST exemption to $15M; TCJA sunset repealed) — accepted as project context.",
+      "FACT-NYDFS-PART500-2025 (NYDFS Part 500 amendments effective Nov 1 2025; first cert April 15 2026) — added to standards baseline.",
+      "FACT-ADMT-CCPA-2027 (CCPA/CPRA ADMT rules effective Jan 1 2027) — added to compliance scope for AI recommendation transparency.",
+      "FACT-MT-CT-GLBA-2025 (Montana and Connecticut eliminated GLBA entity-level exemption 2025) — added to state-by-state compliance.",
+      "FACT-YODLEE-STG-2025 (Yodlee sold by Envestnet to STG 2025) — adapter context note.",
+      "Lesson L-002 (cross-source reconciliation required even for live-capture artifacts) and L-003 (orchestrator prompts must not invent specifics) accepted into df-feedback-learning."
+    ]
+  },
+  "engagement_model": "client_dark_factory_outsourcing",
+  "client_owner": "eranti@gmail.com (per session env userEmail)",
+  "dark_factory_delivery_owner": "claude-opus-4-7 orchestrator running df-meta-attractor + dark-factory-orchestrator skill chain",
+  "scope_baseline": {
+    "in_scope": [
+      "Wealth.com clone implementation across the 14 surfaces inventoried in wealth_com_PRD_artifacts.md §1 (Homepage / Document Creation / Scenario Builder / Ester AI / Tax Planning / Platform Overview / Integrations / Pricing / For Advisors / For Enterprises / For Attorneys / For Trust Companies / About / Features Overview).",
+      "Core entity model from PRD §9: Household, People & Entities, Holdings & Assets, Financial Accounts, Insurance & Liabilities, Documents & Records, Tax Profile & Forms, Plans & Recommendations, Activity & Audit, Tasks.",
+      "Five core workflows: Estate Drafting, Estate Scan/Extract (Ester), Tax Baseline, Scenario Builder, Reports.",
+      "Trust strategies: GRAT, SLAT, ILIT, CLAT, Dynasty, Revocable Living, QPRT, IDGT, CRT/CRUT.",
+      "19+ integration adapters (per PRD): mocked at v0 except 2 real-shape (Plaid-substitute, Schwab-shape).",
+      "AI capabilities: Ester-substitute extractor (LLM + deterministic-calc layer), executive summarization, tax baseline, scenario projection.",
+      "Compliance posture: SOC 2 Type II controls designed (audit out of scope), GLBA, CCPA/CPRA, multi-tenant isolation, encryption, RBAC, audit log.",
+      "Reporting: Executive Summary, Standalone Visual Report, Estate Report PDF, Form 706/709 worksheet exports.",
+      "Project book: BRD, SRS, NFR catalog, HLD, LLD per bounded context, ADR set, DDD ubiquitous-language map, trace matrix, test plans, runbooks (deferred), quality certificates.",
+      "Hawkeye conformance audits at every stage exit and at run closure.",
+      "Transfer-test bead validating factory generalization to a second workload."
+    ],
+    "out_of_scope": [
+      "Live partner integrations (require contractual agreements).",
+      "SOC 2 audit engagement, third-party pen test, formal legal opinion.",
+      "Live customer onboarding, marketing pages, sales process.",
+      "Mobile native apps (web-only at v0).",
+      "i18n/multi-currency beyond USD.",
+      "Use of registered wealth.com marks (Ester®, Family Office Suite™, EstateFlow™, Heritage Map, Plan for Every Tomorrow™).",
+      "Live regulatory filings or use with real client PII.",
+      "Production deployment (production_surface=false at v0)."
+    ],
+    "assumptions": [
+      "Multi-session run with df-context-memory for resume safety.",
+      "Subagent-driven research and authoring are billed against client token budget.",
+      "AI personas as elite-role contracts substitute for human reviewers per skill-system allowance.",
+      "Synthetic data only at v0; no real PII/PHI."
+    ],
+    "acceptance_definition": "Run accepted when: (a) all surface flags' tests pass per SDLC matrix, (b) all stages exited with Hawkeye conformance audit pass, (c) transfer-test bead closes with factory generalization proven, (d) retrospective + skill-system update PRs drafted, (e) final Hawkeye audit issues run-closure certificate, (f) client_owner acknowledges deliverable."
+  },
+  "standards_baseline": [
+    "ISO/IEC/IEEE 12207:2017",
+    "ISO/IEC/IEEE 15289:2019",
+    "ISO/IEC 42001:2023 (AI Mgmt)",
+    "NIST SSDF 800-218",
+    "NIST AI RMF 1.0",
+    "NIST CSF 2.0",
+    "OWASP SAMM",
+    "OMG MDA + UML 2.5.1",
+    "CMMI V3.0 (selected practices)",
+    "GLBA",
+    "SEC Rule 204-2",
+    "FINRA Rule 17a-4 (WORM evidence pattern)",
+    "HIPAA (PHI surfaces in HCDs)",
+    "CCPA/CPRA",
+    "WCAG 2.1 AA (target AAA for client portal)"
+  ],
+  "token_budget": {
+    "currency": "tokens",
+    "estimate_class": "rough_swag",
+    "swag": {
+      "low": 150000,
+      "mid": 400000,
+      "high": 1200000
+    },
+    "swag_breakdown": {
+      "stage_0_recon_attractor_governance": {"low": 50000, "mid": 90000, "high": 150000, "consumed_so_far_estimate": 60000},
+      "stage_1_intake_decomposition": {"low": 25000, "mid": 50000, "high": 90000},
+      "stage_2_feasibility_options": {"low": 12000, "mid": 25000, "high": 45000},
+      "stage_3_inception_charter": {"low": 30000, "mid": 60000, "high": 110000},
+      "stage_4_architecture_design": {"low": 80000, "mid": 160000, "high": 280000},
+      "stage_5_planning_pert_detail": {"low": 10000, "mid": 20000, "high": 35000},
+      "stage_6_construction_9_slices": {"low": 540000, "mid": 1200000, "high": 1900000, "note": "Heavy band given regulated AI-heavy workload"},
+      "stage_7_vnv_cross_cut": {"low": 40000, "mid": 80000, "high": 150000},
+      "transfer_test": {"low": 30000, "mid": 60000, "high": 110000},
+      "retro": {"low": 10000, "mid": 20000, "high": 35000},
+      "hawkeye_audits_throughout": {"low": 30000, "mid": 60000, "high": 110000}
+    },
+    "swag_breakdown_note": "Per-stage SWAG sum exceeds the overall low/mid/high band because the overall band is the FINAL approved range; per-stage adds parallelism savings via subagent dispatch and assumes ~40% of construction slices proceed without rework. Reconciliation: actual run will reapproval-trigger if cumulative spend approaches mid band overall.",
+    "confidence": "low",
+    "assumptions": [
+      "Subagent dispatches counted in their own budgets and sum into orchestrator total.",
+      "RALPH 5-loop overhead estimated at +30% of artifact-base.",
+      "Each construction slice may require 1-2 RALPH cycles before pass.",
+      "Hawkeye audit per stage runs as separate subagent with bounded budget."
+    ],
+    "exclusions": [
+      "User wall-clock time for checkpoint review.",
+      "Any human-engaged real-partner integration work."
+    ],
+    "approval": {
+      "approver": "client_owner = eranti@gmail.com",
+      "decision": "approved",
+      "at": "2026-04-26 checkpoint-#1"
+    },
+    "reapproval_rules": {
+      "token_delta_percent": 15,
+      "scope_change_requires_approval": true,
+      "iteration_overrun_requires_approval": true,
+      "cumulative_spend_alert_at_pct": 75
+    }
+  },
+  "client_checkpoints": [
+    {"id": "CHK-1", "name": "Stage-0 → Stage-1 release", "after": "STEP-S0-HAWKEYE", "decision_items": ["HD-001 scope", "HD-002 brand", "HD-003 stack", "HD-004 deployment", "HD-005 budget", "HD-006 integrations", "HD-007 UPL", "HD-008 synthetic data", "HD-009 Hawkeye independence"], "blocking": true},
+    {"id": "CHK-2", "name": "Stage-4 → Stage-5/6 architecture release", "after": "STEP-S4-ARCH (HLD/ADRs accepted)", "decision_items": ["confirm architectural deterministic-calc separation", "confirm threat model + mitigations", "approve construction sprint plan"], "blocking": true},
+    {"id": "CHK-3", "name": "Construction mid-point", "after": "Slices 1-5 accepted (MS-CONSTRUCTION-50)", "decision_items": ["confirm slice 4 Ester extractor F1 acceptable", "confirm slice 5 calc engine matches golden dataset"], "blocking": false},
+    {"id": "CHK-4", "name": "Construction complete + VnV", "after": "STEP-S7-VNV", "decision_items": ["accept VnV results", "approve transfer-test workload"], "blocking": true},
+    {"id": "CHK-5", "name": "Run closure + retrospective", "after": "STEP-RETRO", "decision_items": ["accept run-closure certificate", "approve skill-system update PRs"], "blocking": true}
+  ],
+  "iterations": [
+    {"id": "ITER-1", "scope": "Stage-0 + Stage-1 + Stage-2", "checkpoint": "CHK-1 release", "deliverables": ["intake-package", "spec-decomposition", "feasibility-options", "risk-register-v1"]},
+    {"id": "ITER-2", "scope": "Stage-3 + Stage-4 + Stage-5", "checkpoint": "CHK-2 release", "deliverables": ["GOV-001..005", "ARC-001..005", "MDA-001", "DDD-001/002", "PERT detail"]},
+    {"id": "ITER-3a", "scope": "Slices 1-5", "checkpoint": "CHK-3 mid-point", "deliverables": ["Auth + Tenant", "Households", "Documents", "Ester extractor", "Calc engine"]},
+    {"id": "ITER-3b", "scope": "Slices 6-9", "checkpoint": "CHK-4 complete", "deliverables": ["Scenario Builder", "Reports", "Integrations Hub", "UI surfaces"]},
+    {"id": "ITER-4", "scope": "VnV + transfer test + retro", "checkpoint": "CHK-5 closure", "deliverables": ["VNV-001..009", "transfer-test report", "lesson record + skill-system PRs", "final Hawkeye"]}
+  ],
+  "change_control": {
+    "approval_required": true,
+    "required_impact_fields": ["scope", "tokens", "schedule", "quality", "risk"],
+    "rebaseline_trigger": "Any change request that exceeds +15% token forecast OR amends scope_in/scope_out OR changes surface flags OR amends acceptance definition.",
+    "approval": {"approver": "client_owner", "decision": "pending", "at": "per change request"},
+    "change_requests": []
+  },
+  "rasci_summary": {
+    "product_intent": {"R": "df-intake-spec-lab persona", "A": "client_owner", "S": "domain-juror personas", "C": "df-meta-attractor", "I": "delivery team"},
+    "architecture": {"R": "system architect persona (artifact-factory)", "A": "client_owner (technical)", "S": "DDD/MDA/SRE jurors", "C": "security + data jurors", "I": "product"},
+    "code_change": {"R": "construction bead persona", "A": "claude-orchestrator (delivery owner)", "S": "test + security jurors", "C": "architect persona", "I": "product"},
+    "artifact_acceptance": {"R": "artifact author persona", "A": "df-governance-mayor persona", "S": "expert reviewer panel", "C": "client_owner", "I": "project team"},
+    "production_release": {"R": "release manager persona", "A": "client_owner (production)", "S": "SRE + security jurors", "C": "product, support", "I": "stakeholders", "note": "deferred until production_surface enabled"},
+    "incident_response": {"R": "SRE lead persona", "A": "client_owner (production)", "S": "security + maintainer", "C": "product", "I": "stakeholders", "note": "deferred"}
+  },
+  "trace": {
+    "attractor_record": "ATTR-WEALTHCOM-001",
+    "control_graph": "CG-WEALTHCOM-001 (forthcoming at stage-architecture)",
+    "work_ledger": "WL-WEALTHCOM-001",
+    "refinery_gate": "RFG-WEALTHCOM-001 (forthcoming at first artifact acceptance)",
+    "tasks_md": "runs/wealth-com/TASKS.md",
+    "hawkeye_audit": "HAWKEYE-WEALTHCOM-001-stage0"
+  }
+}

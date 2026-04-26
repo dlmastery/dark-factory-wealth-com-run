@@ -1,0 +1,66 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "patch_bead_id": "TB-WC-2026-0426-PATCH-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "responds_to_audit": "HAWKEYE-WEALTHCOM-001-stage0-independent",
+  "verdict_received": "conditional_pass (0 P0, 1 P1, 6 P2, 3 P3)",
+  "patches_applied": [
+    {
+      "finding_id": "F-001 (P2 per Hawkeye scoring)",
+      "title": "Stale placeholder TB-WC-2026-XXXX in product-tailoring-profile.json line 142",
+      "fix": "Replaced with TB-WC-2026-0508-021 (the actual transfer-test bead ID per TASKS.md and PERT-WEALTHCOM-001).",
+      "file": "runs/wealth-com/02_attractor/product-tailoring-profile.json line 142",
+      "evidence": "Edit applied this commit; cross-references TASKS.md §Ready-And-Queued-Beads and PERT §nodes.",
+      "status": "applied"
+    },
+    {
+      "finding_id": "F-009 (P3 per Hawkeye scoring)",
+      "title": "INC-001 disproof phrasing precision overstated for Llama / 1.2 million claim",
+      "fix": "Rewrote the disproof entry to clarify the actual error: the strings DO appear in the PRD as PRD-prescribed architectural choices, but the first agent presented them as verified wealth.com truth without confidence:medium tagging or PRD-prescribed framing. The corrected re-extraction (TB-WC-2026-0425-002) properly tags these.",
+      "file": "runs/wealth-com/11_feedback/incident-INC-001-prd-agent-slop.json §fabricated_claims_with_disproof[1]",
+      "evidence": "Edit applied this commit; preserves Hawkeye's precision concern and improves the lesson record's accuracy.",
+      "status": "applied"
+    }
+  ],
+  "patches_pending": [
+    {
+      "finding_id": "F-002 (P1 per Hawkeye scoring)",
+      "title": "Domain brief still missing (INC-002 stalled subagent)",
+      "remediation": "Domain-research re-dispatch in flight as subagent a32d635dba92a1491. Per-section incremental writes to runs/wealth-com/01_domain/domain-brief.md.",
+      "status": "CLOSED 2026-04-26",
+      "closure_evidence": "runs/wealth-com/01_domain/domain-brief.md (827 lines, 165 citations) + runs/wealth-com/01_domain/critical-findings-summary.md (6 findings, 3 with material scope impact)",
+      "blocks_checkpoint_1_full_informed_approval": false,
+      "post_closure_findings_for_client": [
+        "P0: OBBBA repealed TCJA sunset (July 2025). Federal exemption permanently $15M. ASM-003 invalid. HD-001 scope may want amendment.",
+        "P1: NYDFS Part 500 (Nov 2025) + CCPA/CPRA ADMT (Jan 2027) + state-level GLBA changes — add to standards baseline.",
+        "P1: Wealth.com investor reconciliation — 'Brewer Lane Ventures' in artifacts catalog not substantiated in 2026 sources; verified investor set is GV+Schwab+Citi+53Stations+Anthos+AlumniVentures+Titanium+Pruven+KFund+Dynasty.",
+        "P2: 'Eve (Income Lab)' was misnomer in my prompt; lesson L-003 logged.",
+        "P2: 'Extract→compute→narrate' pattern confirmed canonical — strengthens deterministic-calc-separation ADR.",
+        "P3: Yodlee sold to STG 2025."
+      ]
+    },
+    {
+      "finding_id": "F-006 (P2)",
+      "title": "TPM consolidates Stage-6 to one step while PERT has 9 slice nodes",
+      "remediation": "Tightening deferred to Stage-5 (planning_pert detail).",
+      "status": "deferred_to_stage_5",
+      "blocks_stage_0_exit": false
+    },
+    {
+      "finding_id": "F-011",
+      "title": "Orchestrator's self pre-audit explicitly violated independence rule",
+      "remediation": "Acknowledged in self pre-audit; binding independent audit (this) is the closing record. Loop closed correctly per Hawkeye.",
+      "status": "closed_by_independent_audit",
+      "blocks_stage_0_exit": false
+    }
+  ],
+  "audit_loop_closed": false,
+  "audit_loop_closed_rationale": "F-002 remains pending until domain brief arrives. Other F-* are either applied (F-001, F-009) or deferred-with-rationale (F-006) or closed (F-011). When domain brief arrives, this patch bead transitions to closed and Stage-0 may exit (subject to checkpoint-#1 client approval).",
+  "next_action": "Await domain-research subagent a32d635dba92a1491 completion. After arrival, append F-002 closure to this patch bead. Then Stage-0 exit is gated only on client checkpoint-#1.",
+  "created_at": "2026-04-26",
+  "created_by": "claude-orchestrator"
+}

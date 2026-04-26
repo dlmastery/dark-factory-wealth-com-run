@@ -1,0 +1,80 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "id": "EVD-ARTIFACT-PANEL-000",
+  "artifact_id": "",
+  "artifact_name": "",
+  "artifact_path": "",
+  "control_graph_node": "",
+  "work_ledger_item": "",
+  "panel_source": "references/artifact-critic-panel-matrix.md",
+  "panel_selection_rationale": "",
+  "coverage_model": {
+    "content_authority": false,
+    "governance_and_trace": false,
+    "verification_and_handoff": false
+  },
+  "critics": [
+    {
+      "critic_seat_id": "",
+      "base_persona": "",
+      "persona_summary": "",
+      "seniority_bar": "",
+      "artifact_specific_mandate": "",
+      "decision_rights": [],
+      "primary_lens": "",
+      "non_negotiables": [],
+      "signature_questions": [],
+      "red_flags": [],
+      "artifact_checks": [],
+      "adversarial_challenge": "",
+      "evidence_required_for_pass": [],
+      "independent_review_required": true,
+      "handoff_note": ""
+    }
+  ],
+  "adversarial_critics": [
+    {
+      "critic_id": "ANTI-SLOP-RED-TEAM",
+      "base_persona": "",
+      "persona_summary": "Adversarial critic focused on AI slop, generic filler, unsupported claims, template residue, false confidence, and evidence mismatch.",
+      "seniority_bar": "",
+      "attack_mandate": "",
+      "non_negotiables": [],
+      "attack_questions": [],
+      "red_flags": [],
+      "evidence_required_to_stand_down": [],
+      "independent_review_required": true,
+      "handoff_note": ""
+    },
+    {
+      "critic_id": "FAILURE-MODE-REALITY-CRITIC",
+      "base_persona": "",
+      "persona_summary": "Adversarial critic focused on real-world failure modes, edge cases, operations, adoption, support, maintainability, and embarrassing counterexamples.",
+      "seniority_bar": "",
+      "attack_mandate": "",
+      "non_negotiables": [],
+      "attack_questions": [],
+      "red_flags": [],
+      "evidence_required_to_stand_down": [],
+      "independent_review_required": true,
+      "handoff_note": ""
+    }
+  ],
+  "minimum_adversarial_critics": 2,
+  "minimum_ralph_loops": 5,
+  "ralph_loop_record": "",
+  "specialist_expansion": {
+    "needed": false,
+    "reason": "",
+    "added_critics": []
+  },
+  "cross_critique_required": true,
+  "rubric_score_record": "",
+  "refinery_gate": "",
+  "trace_evidence": [],
+  "status": "draft"
+}

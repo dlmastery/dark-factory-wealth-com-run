@@ -1,0 +1,31 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "template_only": false,
+  "report_id": "NEXT-ACTION-WEALTHCOM-001-stage0",
+  "run_id": "RUN-WEALTHCOM-001",
+  "generated_at": "2026-04-25",
+  "kernel_status": "pass_pending_subagent_and_human_boundary",
+  "current_step_id": "STEP-S0-ATTRACTOR",
+  "current_bead_id": "TB-WC-2026-0425-001",
+  "legal_next_action": "Sequence: (1) await PRD re-extraction subagent a9c770a239d1a2f15 with self-grep verification, (2) author remaining Stage-0 records: dark-factory-instantiation-record, engagement-governance-record DRAFT, hawkeye-stage0 placeholder/audit, (3) re-dispatch domain-research subagent with smaller-scope per-section protocol after INC-002, (4) dispatch Hawkeye-Stage0 audit as independent subagent, (5) prepare checkpoint-#1 prompt to user. STOP at checkpoint-#1 — no Stage-1 work until client approves HD-001..HD-009 and ENG-GOV.",
+  "legal_next_step_id": "STEP-S0-RECON-PRD (in flight) → STEP-S0-RECON-DOMAIN (re-dispatch needed) → STEP-S0-HAWKEYE → STEP-S0-CHECKPOINT-1",
+  "legal_next_bead_id": "TB-WC-2026-0425-002",
+  "blocked_reasons": [],
+  "change_control_required": false,
+  "human_boundary_required": true,
+  "human_boundary_required_at": "STEP-S0-CHECKPOINT-1 (after Hawkeye pass)",
+  "evidence": [
+    "TPM-FLOW-WEALTHCOM-001 §current_step_id=STEP-S0-ATTRACTOR",
+    "PERT-WEALTHCOM-001 §critical_path[0..4] = S0-ATTRACTOR → S0-RECON-PRD → S0-HAWKEYE → S0-CHECKPOINT-1 → S1-INTAKE",
+    "TASKS.md §Active Beads TB-001 active, TB-002 ready/in-flight, TB-003/004 queued, TB-005+ blocked-pending-checkpoint-1",
+    "JURY-POLICY-WEALTHCOM-001 §denied_transitions_require_boundary_human includes scope/budget/surface flags/brand/UPL/data — all of which are decided at checkpoint-#1"
+  ],
+  "validator_results": [
+    {"validator": "manual cross-check", "target": "tasks-tpm-pert-kg consistency", "result": "pass", "evidence": "execution-kernel-state.json §consistency_checks all true except judge_jury_records_valid (correctly false because no transitions have occurred yet)"},
+    {"validator": "manual cross-check", "target": "template_marker:false on all instantiated records", "result": "pass", "evidence": "Each Stage-0 record has template_marker:false and contains project-specific content"}
+  ]
+}

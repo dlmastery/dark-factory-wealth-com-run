@@ -1,0 +1,273 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "ATTR-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "created_on": "2026-04-25",
+  "created_by": "df-meta-attractor invoked by claude-opus-4-7 orchestrator at user request 'multi day dark factory run to implement the wealth.com PRD rigorously'",
+  "source_signals": [
+    {
+      "signal_id": "SRC-001",
+      "kind": "user_message",
+      "reference": "Conversation message 2026-04-25: 'read thru the meta skills and skills - then read thru the wealth_com* prd and you will now do a multi day dark factory run to implement the prd rigorously in dark factory following everything in there without missing. absolute confirmance needed.'",
+      "extract": "User demands rigorous, complete dark-factory conformance for the wealth.com PRD implementation; multi-day run; subagents and deep web research permitted; SDLC discipline required."
+    },
+    {
+      "signal_id": "SRC-002",
+      "kind": "artifact",
+      "reference": "C:\\Users\\abhir\\version2\\wealth_com_PRD_transcript.md (552,386 bytes)",
+      "extract": "Grok deep-research dump that captured wealth.com domain, surfaces, AI/Ester capability, tax/estate flows. Verbose; treated as primary source for PRD atom extraction (in flight via subagent a80dcae7dec19ae3a)."
+    },
+    {
+      "signal_id": "SRC-003",
+      "kind": "artifact",
+      "reference": "C:\\Users\\abhir\\version2\\wealth_com_PRD_artifacts.md (21,335 bytes)",
+      "extract": "Live-capture catalog of wealth.com screens, products (Ester, Extractor, Family Office Suite, EstateFlow, Heritage Map, Ownership Balance Sheet, Estate Tax Projections, Report Builder, Scenario Builder), 19+ integrations, 15-leader org chart, $65M Series B led by Schwab (Apr 14 2026), 2025/2026 stat claims (>100k docs, >1k deterministic calcs/estate). Read in full into context."
+    },
+    {
+      "signal_id": "SRC-004",
+      "kind": "artifact",
+      "reference": "C:\\Users\\abhir\\version2\\youtube_wealth_videos.md (18,543 bytes)",
+      "extract": "Wealth.com YouTube channel inventory: S2 episodes, Practical Planner Podcast, third-party demos with Danny Lohrfink. Domain content: irrevocable trusts, tax-vs-estate, executor role, charitable giving, dynasty trusts."
+    },
+    {
+      "signal_id": "SRC-005",
+      "kind": "standard",
+      "reference": "C:\\Users\\abhir\\version2\\dark-factory-orchestrator\\references\\standards-baseline.md",
+      "extract": "ISO/IEC/IEEE 12207:2017, 15289:2019, 42001:2023, NIST SSDF 800-218, OWASP SAMM, OMG MDA/UML 2.5.1, CMMI V3.0 — accepted as governance spine."
+    },
+    {
+      "signal_id": "SRC-006",
+      "kind": "skill_system",
+      "reference": "14 dark-factory skill bundles in C:\\Users\\abhir\\version2\\ (df-* + dark-factory-orchestrator) read into context",
+      "extract": "Skill system mandates Attractor Run Record + Engagement Governance + KG seed + TASKS.md bead ledger + TPM flow ledger + PERT plan + AI judge/jury policy + execution-kernel preflight + SDLC Stage Coverage Matrix + Product Tailoring Profile + Generated Meta-Skill Contract + Hawkeye Conformance Audit Record before material work."
+    }
+  ],
+  "attractor_state": "stable",
+  "attractor_state_rationale": "[Updated 2026-04-26 post-checkpoint-1] Originally `forming`. Now stable: (1) engagement governance approved at checkpoint-#1 with all 9 HDs accepted via 'approve all defaults', (2) PRD atomization complete with 212 cited atoms (TB-WC-2026-0425-002), (3) domain brief complete with 165 citations + 6 critical findings (TB-WC-2026-0425-002B / agent a32d635dba92a1491), (4) skill survey complete (TB-WC-2026-0425-001), (5) tech stack confirmed via HD-003, (6) deployment target confirmed via HD-004 (local Docker Compose), (7) Hawkeye-Stage0 independent CONDITIONAL_PASS with patches applied. Stage-1 intake unblocked. Original ASM-003 INVALIDATED and superseded by FACT-OBBBA-001 (client accepted via HD-001 default).",
+  "goal": "Build a rigorously-engineered, standards-conformant, evidenced clone of the wealth.com platform — Ester AI extraction, Document Creation, Scenario Builder, Tax Planning, Family Office Suite, integrations hub, dashboards, and reporting — through a governed dark-factory run that produces both a working software system AND a complete project book (BRD, SRS, NFR catalog, HLD, LLD, ADRs, DDD model, traceability matrix, runbooks, certificates, Hawkeye audit) traceable from human intent down to executed tests.",
+  "scope_in": [
+    "All 14 wealth.com surfaces inventoried in wealth_com_PRD_artifacts.md §1: Homepage, Document Creation, Scenario Builder, Ester AI, Tax Planning, Platform Overview, Integrations, Pricing, For Advisors/Enterprises/Attorneys/Trust Companies, About, Features Overview.",
+    "Core entity model from PRD §9 cheat sheet: Household, People & Entities, Holdings & Assets, Financial Accounts, Insurance & Liabilities, Documents & Records, Tax Profile & Forms, Plans & Recommendations, Activity & Audit, Tasks.",
+    "Five core workflows from PRD §9: Estate Drafting, Estate Scan/Extract (Ester), Tax Baseline, Scenario Builder, Reports.",
+    "Trust strategies modeled: GRAT, SLAT, ILIT, CLAT, Dynasty, Revocable Living, QPRT, IDGT, CRT/CRUT (per Scenario Builder evidence in PRD §1.3).",
+    "Integration adapters (mocked or contract-only at v0; real for Plaid-substitute and one custody): Addepar, Schwab, eMoney, Orion, Salesforce, Wealthbox, Carta, Coinbase, Yodlee, Zillow, Zocks, Black Diamond, Microsoft Entra, Microsoft Dynamics, Redtail, Goldman Sachs Custody, Google, Advyzon (19 listed).",
+    "AI capabilities: document extraction (Ester Extractor), executive summarization, deterministic estate calculations (federal/state estate tax, GST, exemptions, marital deduction, step-up basis), tax baseline calc, scenario projection, voice-to-text intake.",
+    "Compliance posture: SOC 2 Type II posture (controls designed; audit out of scope of this run), GLBA, CCPA/CPRA, multi-tenant isolation, encryption at rest/transit, audit log, RBAC.",
+    "Reporting: Executive Summary, Standalone Visual Report, Estate Report PDF, Form 706/709 worksheet exports.",
+    "Project book: BRD, SRS, NFR catalog, HLD, LLD per bounded context, ADR set, DDD ubiquitous-language map, trace matrix, test plan, runbooks, release notes, quality certificates.",
+    "Hawkeye conformance audits at every stage exit and at run closure."
+  ],
+  "scope_out": [
+    "Live partner integrations to Schwab/Addepar/eMoney/etc. — these require contractual agreements out of scope for this run; PRD-level contract specs and mocks are in-scope.",
+    "Actual SOC 2 audit engagement, third-party pen test, formal legal opinion — controls and posture are designed; certification is out of scope.",
+    "Live customer onboarding, marketing pages, sales process — single demo tenant for evidence; production traffic out of scope.",
+    "Mobile native apps — web-only at v0 (UI surface flag = web).",
+    "i18n/multi-currency beyond USD — out of scope at v0 (recorded as deferred risk).",
+    "Trademark/brand assets that are wealth.com property — clone uses generic naming (e.g., 'Estate Compass' or similar) and Ester-substitute internal name; no use of registered marks Ester®, Family Office Suite™, EstateFlow™, Heritage Map, Plan for Every Tomorrow™. Confirm with client.",
+    "Live regulatory filings or use of platform with real client PII — synthetic data only.",
+    "Specific YouTube video transcripts not yet captured (recorded as a deferred research bead)."
+  ],
+  "layer_map": {
+    "product_specific": [
+      "Wealth.com surface inventory and entity model.",
+      "Estate/tax calculation rules and IRS-form mappings.",
+      "Ester AI extraction prompts and deterministic-calc layer.",
+      "Integration adapter catalog (19 named).",
+      "Reporting templates."
+    ],
+    "factory_reusable": [
+      "DDD bounded-context discipline applied to a regulated fintech AI platform.",
+      "AI extraction + deterministic-calc grounding pattern (PRD-extract → JSON schema → calc engine → narrative).",
+      "Multi-tenant SaaS skeleton with audit log, RBAC, SOC 2-aligned controls.",
+      "Scenario-modeling pattern that compares strategies via deterministic projection."
+    ],
+    "meta_meta_governance": [
+      "Validation that the dark-factory skill system handles a regulated, AI-heavy, multi-surface, multi-tenant SaaS without overfitting to the prior benchmark workload.",
+      "Stress test of the Hawkeye conformance audit against a real-sized run.",
+      "Capture lessons that update the skill system (df-feedback-learning) — e.g., add fintech-specific critic personas and tax-rule sourcing rubrics."
+    ]
+  },
+  "selected_mode": "greenfield-with-meta-meta-governance",
+  "selected_mode_rationale": "Greenfield code build (wealth.com clone) operating under meta-meta governance because: the PRD demands full SDLC artifact set; user explicitly demanded 'absolute conformance' with the dark-factory skills; the run will exercise and validate the skill system against a high-risk regulated workload.",
+  "selected_skills": [
+    {"skill": "df-meta-attractor", "reason": "Authors this record, tailoring profile, and generated meta-skill contract.", "load_now": true, "phase": "now"},
+    {"skill": "df-governance-mayor", "reason": "Engagement governance, RASCI, gate policy, change control, validators.", "load_now": true, "phase": "now"},
+    {"skill": "dark-factory-orchestrator", "reason": "Full lifecycle orchestration after attractor stable.", "load_now": false, "phase": "after-checkpoint-1"},
+    {"skill": "df-intake-spec-lab", "reason": "Recursive spec decomposition of the PRD into testable leaves.", "load_now": false, "phase": "stage-intake"},
+    {"skill": "df-methodology-blender", "reason": "Blend RUP+DDD+TDD+SRE+SSDF for a regulated fintech AI SaaS.", "load_now": false, "phase": "stage-elaboration"},
+    {"skill": "df-artifact-factory", "reason": "BRD, SRS, NFR, HLD, LLD, ADR, runbooks, project book.", "load_now": false, "phase": "stages-elaboration-construction"},
+    {"skill": "df-swarm-coordination", "reason": "Three-expert debate per material design; AI judge/jury per state transition.", "load_now": false, "phase": "all-material-decisions"},
+    {"skill": "df-quality-refinery", "reason": "RALPH-loop reviews, rubric scoring, certificates.", "load_now": false, "phase": "every-artifact-and-code-change"},
+    {"skill": "df-traceability-evidence", "reason": "KG, evidence ledger, trace validators.", "load_now": false, "phase": "continuous"},
+    {"skill": "df-context-memory", "reason": "Multi-day session context packs, predecessor recovery.", "load_now": false, "phase": "every-resume-and-handoff"},
+    {"skill": "df-human-agent-handoff", "reason": "Client checkpoints, async review handling, taste gates.", "load_now": false, "phase": "every-checkpoint"},
+    {"skill": "df-production-sre-handoff", "reason": "Release readiness, runbooks, observability, outage drill.", "load_now": false, "phase": "stage-transition-operations"},
+    {"skill": "df-feedback-learning", "reason": "Capture lessons that update skill system after retrospectives, failed gates, and production simulation incidents.", "load_now": false, "phase": "after-each-stage-and-final"},
+    {"skill": "df-brownfield-recon", "reason": "Not applicable v0 (greenfield). Will be needed for future maintenance runs.", "load_now": false, "phase": "n/a-now"}
+  ],
+  "node_contract": {
+    "what": "Build a wealth.com-equivalent, multi-tenant, regulated fintech AI SaaS clone with end-to-end traceability from human intent through production-readiness, while validating the dark-factory skill system at scale.",
+    "why": "User demands rigorous, conformance-first SDLC discipline; user has invested in building the dark-factory skill system; wealth.com is a high-risk, AI-heavy, regulated workload that will stress-test the system; success produces both a software clone and a battle-tested factory.",
+    "how": "Greenfield-with-meta-meta-governance mode: meta-attractor → governance-mayor (engagement) → intake-spec-lab → methodology-blender → artifact-factory (HLD/LLD/ADR) → construction (TDD per vertical slice) → quality-refinery (RALPH) → traceability-evidence → production-sre-handoff. Each stage gated by judge/jury verdict and Hawkeye audit.",
+    "where": "C:\\Users\\abhir\\version2\\runs\\wealth-com\\ for all artifacts; runs/wealth-com/app/ for code; trace ledger at runs/wealth-com/09_traceability/.",
+    "when": "Multi-day, paced by client checkpoints. Stages: now (recon+attractor), Day 1 (governance, intake), Day 2-3 (elaboration, methodology, artifacts), Day 3-N (construction vertical slices), Day N+1 (transition, retrospective, Hawkeye final).",
+    "who": "Accountable: client owner = user (eranti@gmail.com per session env). Delivery owner: dark-factory orchestrator (claude-opus-4-7). Reviewers: AI personas instantiated in df-swarm-coordination per artifact panel matrix. Hawkeye auditor: independent persona (cannot be the same role that authored the audited item).",
+    "how_good": "98% governance compliance, 96%/expert minimum, 100% mandatory traceability, 0 unresolved P0/P1 security findings, all required SDLC stages either accepted/waived/not-applicable with rationale. No documents-only acceptance — code/UI/scenario evidence mandatory."
+  },
+  "expert_debate": {
+    "round_1_independent_framing": {
+      "system_theorist_and_meta_architecture_critic": {
+        "persona_contract": "Senior systems theorist with 25+ years across complex socio-technical systems and meta-cognitive architectures. Lens: attractors, recursion, transferability, anti-overfit, feedback. Decision rights: reject overfit to wealth.com, reject infinite-recursion factory designs, demand transfer-test commitments. Non-negotiables: factory must work for future projects unchanged. Red flags: hard-coding wealth.com nouns in rubrics; treating Series B funding context as durable. Artifact ownership: this record's `layer_map` and `anti_overfit_checks`. Adversarial duty: prove the run is overfitting whenever a wealth.com-only assumption is encoded.",
+        "framing": "Attractor identified: the user wants both a product clone AND a validated factory. Risk: collapse into product-only mode (overfitting) or process-only mode (paper factory). Recommendation: split layer_map explicitly (done), require transfer tests (a fintech-adjacent test workload — e.g., 'Holistiplan-style tax baseline for solo CFP') as a deferred bead. Mark wealth.com noun-vocabulary as product-specific; mark the AI-extract+deterministic-calc pattern as factory-reusable. Stop conditions: if any wealth.com-specific artifact (e.g., 'GRAT') becomes a default rubric in df-artifact-factory's library, escalate.",
+        "rejected_alternatives": ["Run as pure greenfield without meta-meta governance — rejected: skips the user's explicit demand for 'absolute conformance'.", "Run as artifact-only paper exercise — rejected: skill system explicitly forbids documents-only completion for code-producing/UI/data/production surface flags."]
+      },
+      "requirements_governance_architect": {
+        "persona_contract": "Lead requirements engineer / governance architect with deep experience in regulated fintech SDLC. Lens: customer intent, standards tailoring, interrogation, approval. Decision rights: reject runs without engagement governance, reject undocumented assumptions, demand client checkpoints for material spend. Non-negotiables: RASCI signed; threshold reductions blocked without owner waiver. Red flags: PRD treated as final spec without interrogation; wealth.com Series B claims encoded as requirements without source verification. Artifact ownership: scope_in/scope_out, gates list, human_decisions. Adversarial duty: prove that any 'accepted' requirement lacks source.",
+        "framing": "Engagement governance not yet established — material token spend is gated. Need: client owner confirmation, scope baseline (drafted here), token SWAG band, change-control policy, reapproval triggers. Recommend: client checkpoint #1 before stage-intake (ask user to confirm scope_in/out, tech stack preference, deployment target, brand-naming substitution). Standards tailoring: include ISO 42001 (AI management) given Ester is a primary surface. Interrogation must convert PRD claims (e.g., '1,000 deterministic calculations per estate distribution') into testable leaf requirements. Stop conditions: ambiguous ownership for production data; legal scope on 'unauthorized practice of law' boundary for document-creation surface — escalate to user.",
+        "rejected_alternatives": ["Skip engagement governance because user said 'do it' — rejected: skill rules require approved engagement record before material spend.", "Encode PRD verbatim as SRS — rejected: PRD is a research dump, not a validated spec; recursive decomposition required."]
+      },
+      "verification_safety_critic": {
+        "persona_contract": "Senior assurance engineer with regulated software (medical-device + fintech) background. Lens: proof, gates, residual risk, audit. Decision rights: reject template-as-proof, demand evidence for every claim, reject benchmark-only wins without holdout. Non-negotiables: P0/P1 security findings = 0 unresolved; 100% trace coverage. Red flags: 'we'll add tests later'; 'this is just a demo'. Artifact ownership: gates, evidence_commitments, anti_overfit_checks. Adversarial duty: prove every accepted artifact lacks instantiated evidence.",
+        "framing": "This workload has high safety/money/privacy/security/compliance/reliability risk because: (a) financial planning errors carry fiduciary liability, (b) tax calculations carry IRS/state penalty exposure, (c) document creation crosses UPL line, (d) HCD docs contain PHI subject to HIPAA, (e) AI extraction hallucination affects irrevocable client decisions. Required: deterministic-calc audit layer separate from LLM, golden-dataset tests for every tax/estate rule, holdout scenarios per trust strategy, transfer test on edge case (e.g., 'married couple with property in two estate-tax states + minor children + non-US-citizen spouse' → tests portability + QDOT + minor-trust + state nexus). Stop conditions: proceeding to production-surface evidence without outage drill record; certifying any gate without RALPH 5-loop completion.",
+        "rejected_alternatives": ["Use LLM for tax calculations directly — rejected: must be deterministic with LLM only for narrative.", "Lower thresholds for v0 demo — rejected: skill rules require owner-scoped waiver and that defeats the validation purpose."]
+      },
+      "engagement_partner_token_budget": {
+        "persona_contract": "Outsourcing engagement partner accountable for client trust and budget integrity. Lens: rough token SWAG, checkpoint cadence, change control, reapproval. Decision rights: reject material work without an approved budget; require checkpoint-#1 before any spend > low-band SWAG. Non-negotiables: 15% delta or scope change requires reapproval. Red flags: 'just continue' framing without explicit budget approval; over-runs justified by user enthusiasm. Artifact ownership: token_budget block in engagement-governance-record. Adversarial duty: prove the iteration's spend exceeds approved band.",
+        "framing": "User said 'multi day run' and 'invoke subagents whatever' — generous, but not unbounded. Recommend rough SWAG: low ~150K tokens, mid ~400K, high ~1.2M for the full run end-to-end (across multiple sessions, with subagents being the major consumers). Checkpoint-#1: NOW (after attractor pack arrives), confirm budget band and brand-substitution. Checkpoint-#2: end of intake/elaboration before construction begins. Checkpoint-#3: per vertical slice or weekly. Reapproval triggers: any of (scope change, +15% token forecast, threshold reduction, production-surface action, brand or naming change, integration with real partner). Stop conditions: spend approaches mid-band without checkpoint-#2; any irreversible action without explicit approval.",
+        "rejected_alternatives": ["Open-ended budget — rejected: violates engagement-governance policy.", "Skip checkpoint-#1 because user already authorized — rejected: scope, brand, and tech-stack ambiguities make explicit confirmation necessary."]
+      }
+    },
+    "round_2_cross_critique": {
+      "theorist_to_governance": "You correctly demanded engagement governance, but the PRD's '$65M Series B' and '664% growth' framing risks becoming a factory-level rule about hyper-growth fintech. Strip those signals to product-context only.",
+      "governance_to_theorist": "Agreed; layer_map already isolates them. But you must also add a transfer-test bead — abstract attractors are insufficient if they aren't proven against a second workload.",
+      "verification_to_theorist_and_governance": "Both of you are too process-focused; without a deterministic-calc layer mandated as an architectural constraint at HLD time, the construction stage will produce LLM-driven calculations that hallucinate tax outcomes. Encode that as a non-negotiable architectural ADR slot now.",
+      "engagement_to_all": "All three of you are designing the perfect run. Without a token budget approved by the client owner, this becomes an unbounded research project. Demand checkpoint-#1 before any further authored content beyond this attractor pack.",
+      "verification_to_engagement": "Agreed in principle, but the attractor pack itself is necessary to anchor the checkpoint conversation. Authoring it before checkpoint is correct; authoring construction code is not.",
+      "theorist_to_verification": "Add: holdout dataset for AI extraction must be sourced from public estate-document corpora to avoid data-leak from PRD examples. This is a transfer-test concern."
+    },
+    "round_3_synthesis": {
+      "decision": "PROCEED through Stage 0 (recon, attractor pack, engagement governance draft, intake setup) under attractor_state=forming. STOP at the boundary of Stage 1 (intake material work) for client checkpoint-#1 to confirm: (a) scope_in/out as listed, (b) brand-substitution naming, (c) tech-stack preference (default proposed: TypeScript/Node + Postgres + React + Python AI service), (d) deployment target (default proposed: containerized for local demo, no cloud production), (e) token budget band approval, (f) integrations to mock vs. real, (g) UPL/legal-boundary handling for document-creation surface.",
+      "non_negotiable_constraints_locked_in": [
+        "Deterministic calc layer architecturally separated from LLM (ADR at HLD time).",
+        "Golden-dataset tests for every tax/estate calc.",
+        "Holdout dataset for Ester extractor must come from public corpora, not PRD examples.",
+        "Synthetic data only for v0; no real PII or PHI.",
+        "Brand substitution required (no use of registered wealth.com marks).",
+        "RALPH 5-loop minimum on every artifact.",
+        "Hawkeye conformance audit at every stage exit.",
+        "Client checkpoint #1 before stage-intake; #2 before construction; #N per vertical slice.",
+        "Transfer test bead deferred but mandatory before run closure (validates factory generalization)."
+      ],
+      "residual_risks_carried_forward": [
+        "Token budget could be unstable until checkpoint-#1 — mitigated by stopping authoring at end of Stage 0.",
+        "Brand name choice could change once user picks — mitigated by isolating naming in a single config.",
+        "Subagent reports may surface scope additions — handled via change-control beads.",
+        "Multi-day run risks context loss — mitigated by mandatory df-context-memory packs at every resume."
+      ],
+      "rejected_alternatives_archive": [
+        "Run construction in same session — rejected: violates engagement gate.",
+        "Skip transfer test — rejected: violates anti-overfit gate.",
+        "Skip Ester deterministic-calc separation — rejected: violates safety/verification gate."
+      ]
+    }
+  },
+  "gates": [
+    {"gate_id": "GATE-A-COHERENCE", "from": "df-meta-attractor/references/quality-gates.md", "criterion": "Goal one sentence, scope explicit in/out, examples labeled, open questions separated, next safe action concrete.", "evidence": "This record §goal, §scope_in, §scope_out, §human_decisions, §next_safe_action.", "status": "self-pass", "verdict_pending_review": true},
+    {"gate_id": "GATE-B-RECURSION", "from": "same", "criterion": "Distinguishes product/meta-skill/meta-meta layers; no infinite planning; defines stop-and-execute boundary; records re-entry triggers.", "evidence": "§layer_map, §anti_overfit_checks (stop-conditions encoded).", "status": "self-pass", "verdict_pending_review": true},
+    {"gate_id": "GATE-C-ROUTING", "from": "same", "criterion": "Skills selected by need, each with reason, no unnecessary loading, human decision points identified.", "evidence": "§selected_skills (each has phase + reason).", "status": "self-pass", "verdict_pending_review": true},
+    {"gate_id": "GATE-D-EVIDENCE", "from": "same", "criterion": "Requirements have traceable sources, gates have evidence expectations, quality thresholds named, residual risks preserved, fresh reviewer can replay.", "evidence": "§source_signals (every signal has reference); §gates with evidence pointer; §expert_debate.round_3_synthesis.residual_risks_carried_forward.", "status": "self-pass", "verdict_pending_review": true},
+    {"gate_id": "GATE-E-ANTI-OVERFIT", "from": "same", "criterion": "Benchmark details don't become universal rules; transfer tests specified; domain-specific assumptions labeled.", "evidence": "§layer_map (product vs factory_reusable); §anti_overfit_checks; transfer-test bead in TASKS.md (TB-WC-2026-0420).", "status": "self-pass", "verdict_pending_review": true},
+    {"gate_id": "GATE-ATTRACTOR", "from": "dark-factory-orchestrator/SKILL.md operating rules", "criterion": "Attractor Run Record OR explicit waiver before governed work proceeds.", "evidence": "This record (ATTR-WEALTHCOM-001).", "status": "passed", "verdict_pending_review": false},
+    {"gate_id": "GATE-ENGAGEMENT", "criterion": "Approved engagement governance record before material token spend.", "evidence": "ENG-GOV-WEALTHCOM-001 drafted (forthcoming); approval pending checkpoint-#1.", "status": "blocked-pending-checkpoint-1", "verdict_pending_review": false},
+    {"gate_id": "GATE-KG-TASKS-TPM-PERT", "criterion": "KG seed, TASKS.md, TPM flow ledger, PERT plan instantiated.", "evidence": "KG-WEALTHCOM-001, TASKS.md, TPM-FLOW-WEALTHCOM-001, PERT-WEALTHCOM-001 (forthcoming in this commit).", "status": "in-progress", "verdict_pending_review": false},
+    {"gate_id": "GATE-SDLC-COVERAGE", "criterion": "Project-type flags declared; SDLC Stage Coverage Matrix complete.", "evidence": "SDLC-COVERAGE-WEALTHCOM-001 (forthcoming in this commit).", "status": "in-progress", "verdict_pending_review": false},
+    {"gate_id": "GATE-PRODUCT-TAILORING", "criterion": "Product Tailoring Profile + Generated Meta-Skill Contract + Dark Factory Instantiation Record produced.", "evidence": "PRODUCT-TAILORING-WEALTHCOM-001, GENERATED-META-SKILL-WEALTHCOM-001, DF-INSTANTIATION-WEALTHCOM-001 (forthcoming).", "status": "in-progress", "verdict_pending_review": false},
+    {"gate_id": "GATE-HAWKEYE-INITIAL", "criterion": "Initial Hawkeye Conformance Audit Record covering Stage-0 outputs.", "evidence": "HAWKEYE-WEALTHCOM-001-stage0 (forthcoming after this commit; auditor persona must be independent of authoring persona).", "status": "queued", "verdict_pending_review": false},
+    {"gate_id": "GATE-RALPH-5", "criterion": "RALPH 5-loop minimum on every governed artifact before pass.", "evidence": "Per-artifact ralph-loop records under runs/wealth-com/08_refinery/.", "status": "applies-to-future-artifacts", "verdict_pending_review": false},
+    {"gate_id": "GATE-DOCS-ONLY-BLOCK", "criterion": "Code/product/app/UI/scenario/production work cannot pass as documents only.", "evidence": "SDLC matrix flags + implementation-execution-record.json + scenario-test-matrix.json + wysiwyg-browser-test-record.json (per surface flag).", "status": "applies-to-future-stages", "verdict_pending_review": false},
+    {"gate_id": "GATE-THRESHOLDS", "criterion": "98% governance, 96%/expert, 100% trace, 0 P0/P1 security.", "evidence": "Per-stage rubric scorecards.", "status": "applies-throughout", "verdict_pending_review": false}
+  ],
+  "human_decisions": [
+    {"id": "HD-001", "question": "Confirm scope_in/scope_out as drafted in §scope_in/§scope_out (proceed / amend / reject).", "owner": "client_owner = eranti@gmail.com", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-002", "question": "Brand substitution: pick name (default proposal: 'EstateCompass' with internal AI 'Sage'); confirm no use of wealth.com registered marks.", "owner": "client_owner", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-003", "question": "Tech stack confirmation. Default proposal: Node 20 + TypeScript + Fastify; React 18 + Vite + Tailwind; Postgres 16; Python 3.12 FastAPI for AI service; Anthropic Claude for Ester-substitute extraction; OpenTelemetry; Docker Compose for local; Playwright for UI evidence; Vitest+Pytest for unit/integration. Approve or amend.", "owner": "client_owner", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-004", "question": "Deployment target. Default proposal: Docker Compose local-only at v0; production deployment out of scope. Approve.", "owner": "client_owner", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-005", "question": "Token-budget SWAG. Proposal: low 150K, mid 400K, high 1.2M tokens across full multi-day run including subagents. Approve band; reapproval at +15% delta or scope change.", "owner": "client_owner", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-006", "question": "Integration approach: mock 17 of 19, contract+mock for Plaid-substitute and one custody (Schwab-shape). Approve or amend list.", "owner": "client_owner", "blocking": false, "checkpoint": "checkpoint-1"},
+    {"id": "HD-007", "question": "UPL (unauthorized practice of law) handling for Document Creation surface. Default: copy is generated as 'educational draft for attorney review'; no execution-ready legal documents emitted by AI; explicit attorney-of-record assignment required. Approve or amend.", "owner": "client_owner", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-008", "question": "Synthetic data only — no real PII/PHI in test or demo. Approve.", "owner": "client_owner", "blocking": true, "checkpoint": "checkpoint-1"},
+    {"id": "HD-009", "question": "Hawkeye independence: auditor persona must be different from authoring persona. Default proposal: Hawkeye runs as a separate subagent with no read access to authoring transcripts beyond the artifact itself. Approve.", "owner": "client_owner", "blocking": false, "checkpoint": "checkpoint-1"}
+  ],
+  "assumptions": [
+    {"id": "ASM-001", "statement": "User wants this run to proceed multi-session with df-context-memory for resume safety.", "source": "user message", "revalidation_trigger": "user states otherwise"},
+    {"id": "ASM-002", "statement": "Wealth.com PRD is the canonical source; Grok dump may contain hallucinations to be filtered during PRD-atom extraction.", "source": "PRD file size (552KB) and 'deep research output' provenance", "revalidation_trigger": "PRD-atom subagent flags >5% conflict ratio between PRD and external sources"},
+    {"id": "ASM-003", "statement": "[INVALIDATED 2026-04-26 by domain brief] 2025 federal estate tax exemption is ~$13.99M and 2026 reverts to ~$7M unless extended by Congress.", "source": "TCJA sunset provision public knowledge", "revalidation_trigger": "domain-brief subagent reports otherwise", "status": "invalidated", "superseded_by": "FACT-OBBBA-001", "supersession_evidence": "runs/wealth-com/01_domain/domain-brief.md §1 + runs/wealth-com/01_domain/critical-findings-summary.md FINDING #1"},
+    {"id": "FACT-OBBBA-001", "statement": "OBBBA (One Big Beautiful Bill Act) signed July 4, 2025 PERMANENTLY raised federal estate/gift/GST exemption to $15M (2026) with annual inflation adjustment. TCJA sunset that was scheduled for 12/31/2025 did not happen — the law was modified before it triggered. Top federal estate-tax rate remains 40%.", "source": "domain-brief.md §1 with multiple primary citations to IRS and law firm publications", "revalidation_trigger": "future legislative change or IRS guidance amendment", "status": "accepted_by_client_at_checkpoint_1", "client_decision_HD-001": "Build clone to actual current OBBBA law, NOT PRD's repealed-TCJA framing."},
+    {"id": "FACT-NYDFS-PART500-2025", "statement": "NYDFS Cybersecurity Regulation 23 NYCRR Part 500 final amendments effective Nov 1, 2025; first compliance certification due April 15, 2026. Universal MFA mandatory; Asset Inventory Program required.", "source": "domain-brief.md §9", "revalidation_trigger": "NYDFS amends rule", "status": "accepted_added_to_standards_baseline"},
+    {"id": "FACT-ADMT-CCPA-2027", "statement": "CCPA/CPRA July 2025 final regulations add Automated Decision-Making Technology (ADMT) rules effective Jan 1, 2027 — affects AI-driven recommendations including Ester/Sage tax/estate suggestions. Adds consumer-rights handling: transparency, opt-out, human review.", "source": "domain-brief.md §9", "revalidation_trigger": "CPPA amends rule", "status": "accepted_added_to_compliance_scope"},
+    {"id": "FACT-MT-CT-GLBA-2025", "statement": "Montana and Connecticut eliminated GLBA entity-level exemption in 2025; fintechs holding consumer financial data in those states must comply with state privacy laws on top of GLBA.", "source": "domain-brief.md §9", "revalidation_trigger": "state legislature amends", "status": "accepted_added_to_state_compliance"},
+    {"id": "FACT-EXTRACT-COMPUTE-NARRATE-001", "statement": "Industry-canonical pattern for AI on regulated documents: LLM extracts structured facts → deterministic engine executes computations with audit trail → LLM is used only for narration. The PRD's '1,000 deterministic calculations per estate' claim aligns with this pattern.", "source": "domain-brief.md §8 + meta-attractor §non_negotiable_constraints_locked_in", "revalidation_trigger": "industry pattern shift", "status": "accepted_strengthens_deterministic_calc_separation_ADR"},
+    {"id": "ASM-004", "statement": "Wealth.com's Ester is implemented as LLM + retrieval + deterministic calc layer; the '1,000 deterministic calculations per estate' claim implies a code-driven engine, not pure LLM.", "source": "PRD §1, press claims", "revalidation_trigger": "evidence emerges that calculations are LLM-driven"},
+    {"id": "ASM-005", "statement": "User accepts AI personas as elite-role contracts (per skill system) rather than insisting on real human reviewers.", "source": "skill system explicit allowance", "revalidation_trigger": "user requests human reviewer engagement"}
+  ],
+  "risks": [
+    {"id": "RSK-001", "title": "AI extraction hallucination on legal documents leading to fiduciary harm.", "category": "safety/compliance", "severity": "high", "mitigation": "Deterministic-calc layer separation (architectural ADR); citation grounding with span-level provenance; confidence-score thresholds with human-review fallback; holdout test set."},
+    {"id": "RSK-002", "title": "Tax calculation error producing IRS/state penalty exposure.", "category": "safety/money/compliance", "severity": "high", "mitigation": "Golden-dataset tests for every rule; deterministic engine; reviewed by Tax-Domain Juror persona at HLD and code time; explicit disclaimer surfaces."},
+    {"id": "RSK-003", "title": "UPL — generated documents being mistaken for legal advice.", "category": "compliance/legal", "severity": "high", "mitigation": "Per HD-007: 'educational draft for attorney review' framing; attorney-of-record assignment required before execution-ready output; legal-disclaimer overlay."},
+    {"id": "RSK-004", "title": "Multi-tenant data leak between advisor firms.", "category": "security/privacy", "severity": "high", "mitigation": "Tenant isolation at row-level + connection-level (Postgres RLS); per-tenant KMS keys; audit log; OWASP testing; ADR-locked tenant boundary."},
+    {"id": "RSK-005", "title": "Overfit factory to wealth.com workload.", "category": "meta-meta", "severity": "medium", "mitigation": "layer_map enforced; transfer-test bead mandatory; df-feedback-learning record at run end."},
+    {"id": "RSK-006", "title": "Unbounded token spend.", "category": "engagement", "severity": "medium", "mitigation": "Engagement governance + checkpoint cadence; subagent budgets capped per dispatch."},
+    {"id": "RSK-007", "title": "Brand IP infringement.", "category": "legal", "severity": "medium", "mitigation": "Brand substitution per HD-002; no use of registered marks."},
+    {"id": "RSK-008", "title": "Multi-day context loss.", "category": "operational", "severity": "medium", "mitigation": "df-context-memory pack at every resume; TASKS.md authoritative for next bead."},
+    {"id": "RSK-009", "title": "PHI in Advance Health Care Directives — HIPAA implications.", "category": "compliance/privacy", "severity": "medium", "mitigation": "Synthetic data only at v0; encryption at rest with PHI-segregated key; access log; BAA out of scope but architectural posture supports it."},
+    {"id": "RSK-010", "title": "PRD claims unverified (e.g., 664% growth, $65M Series B specifics) become product requirements.", "category": "evidence", "severity": "low", "mitigation": "PRD-atom subagent classifies each claim; only `requirement` and `capability` atoms become spec leaves; growth/funding claims become `context` only."}
+  ],
+  "evidence_commitments": [
+    "Every requirement bead linked to ≥1 PRD atom OR domain-brief citation OR explicit assumption.",
+    "Every artifact gets RALPH 5-loop record + artifact-specific critic panel + ≥2 adversarial critics.",
+    "Every code change linked to ≥1 requirement and includes unit + integration + scenario test evidence per surface flag.",
+    "Every UI change linked to Playwright wysiwyg-browser-test-record + screenshot + console/network logs.",
+    "Every tax/estate calc linked to golden-dataset test record + IRS-form citation.",
+    "Every state transition gated by AI judge/jury record (TPM Judge + Evidence Clerk + 3 specialist jurors + Adversarial Prosecutor + Foreperson).",
+    "Every stage exit gated by Hawkeye Conformance Audit Record (independent persona).",
+    "Every client-facing handoff packaged via df-human-agent-handoff record.",
+    "Every iteration's token spend reported against approved SWAG band; 15% delta triggers reapproval."
+  ],
+  "anti_overfit_checks": [
+    "Stop condition: any wealth.com noun (Ester, GRAT, Heritage Map) being added to a *factory* template or rubric. Allowed only in product-specific runs/wealth-com/* artifacts.",
+    "Stop condition: any reference to '$65M Series B' or '664% growth' surviving into requirements (must be context-only).",
+    "Transfer test: TB-WC-2026-0420 — apply factory to a different fintech surface (e.g., 'Holistiplan-style tax-baseline mini-app for a solo CFP') after wealth.com run closes. Validates factory generalization. Mandatory before run closure.",
+    "Hawkeye independence: auditor persona must not have authored the audited content. Enforced at subagent dispatch time (separate agent IDs).",
+    "PRD-atom traceability: each atom has source_excerpt; if a requirement cannot cite a source_excerpt or a domain-brief citation or an explicit ASM-NNN, it is rejected by Evidence Clerk.",
+    "Holdout dataset for Ester extractor must come from public corpora (e.g., open law-school sample wills), not PRD examples. Prevents data leakage."
+  ],
+  "next_safe_action": "Author the remaining Stage-0 records in this commit: product-tailoring-profile.json, generated-meta-skill-contract.json, sdlc-stage-coverage-matrix.json, knowledge-graph-record.json, TASKS.md, tpm-flow-ledger.json, factory-pert-plan.json, ai-judge-jury-policy.json, execution-kernel-state.json, next-action-report.json, dark-factory-instantiation-record.json, hawkeye-conformance-audit-record-stage0.json, engagement-governance-record.json (DRAFT pending checkpoint-#1). After authoring, prepare client checkpoint-#1 prompt summarizing HD-001..HD-009 for user approval. STOP at checkpoint-#1 boundary; do NOT begin material intake/construction work until approval.",
+  "reentry_triggers": [
+    "Subagent reports arrive (skill-survey, prd-atoms, domain-brief) → integrate into TASKS.md beads and re-run GATE-D-EVIDENCE.",
+    "Client approves checkpoint-#1 → transition attractor_state from forming to stable; release stage-intake bead.",
+    "User amends scope_in/scope_out → re-run GATE-A-COHERENCE and GATE-D-EVIDENCE; update layer_map.",
+    "Token forecast drift +15% → re-run engagement-governance approval.",
+    "Any P0/P1 finding from Hawkeye → re-enter df-feedback-learning and update affected artifacts."
+  ],
+  "verdict": "conditional_pass",
+  "verdict_rationale": "Pass on Gates A/B/C/D/E (self-scored, pending Hawkeye independent audit). Conditional because: (a) engagement governance not yet client-approved (GATE-ENGAGEMENT blocked), (b) initial Hawkeye audit not yet run on this stage-0 pack, (c) subagent reports (skill-survey, prd-atoms, domain-brief) not yet integrated. The pass is conditional pending checkpoint-#1 and Hawkeye-stage0.",
+  "links": {
+    "engagement_governance_record": "runs/wealth-com/03_governance/engagement-governance-record.json",
+    "product_tailoring_profile": "runs/wealth-com/02_attractor/product-tailoring-profile.json",
+    "generated_meta_skill_contract": "runs/wealth-com/02_attractor/generated-meta-skill-contract.json",
+    "dark_factory_instantiation_record": "runs/wealth-com/02_attractor/dark-factory-instantiation-record.json",
+    "sdlc_stage_coverage_matrix": "runs/wealth-com/02_attractor/sdlc-stage-coverage-matrix.json",
+    "knowledge_graph_seed": "runs/wealth-com/09_traceability/knowledge-graph-seed.json",
+    "tasks_md": "runs/wealth-com/TASKS.md",
+    "tpm_flow_ledger": "runs/wealth-com/02_attractor/tpm-flow-ledger.json",
+    "pert_plan": "runs/wealth-com/02_attractor/factory-pert-plan.json",
+    "ai_judge_jury_policy": "runs/wealth-com/02_attractor/ai-judge-jury-policy.json",
+    "execution_kernel_state": "runs/wealth-com/02_attractor/execution-kernel-state.json",
+    "next_action_report": "runs/wealth-com/02_attractor/next-action-report.json",
+    "hawkeye_conformance_audit_record": "runs/wealth-com/12_hawkeye/hawkeye-stage0.json"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "checkpoint_id": "CHK-1",
+  "run_id": "RUN-WEALTHCOM-001",
+  "boundary_human_trigger": "Per JURY-POLICY-WEALTHCOM-001 §denied_transitions_require_boundary_human, the following transitions ALL required client_owner approval before Stage-1 could begin: scope confirmation, brand naming, tech stack, deployment target, token budget, integration approach, UPL handling, synthetic-data-only enforcement, Hawkeye independence rule. Stage-0 → Stage-1 transition is the boundary.",
+  "presented_at": "2026-04-26",
+  "presented_by": "claude-orchestrator",
+  "presentation_evidence": "Conversation message containing 9 HD decisions with default proposals + UPDATED context after domain brief (OBBBA finding) presented to client.",
+  "decision_received_at": "2026-04-26",
+  "decision_received_from": "client_owner = eranti@gmail.com",
+  "decision_verbatim": "approve all defaults",
+  "decisions_recorded": {
+    "HD-001": {"default_proposal": "Build to actual current OBBBA law ($15M permanent), NOT PRD's repealed-TCJA-sunset framing", "client_decision": "approved_default"},
+    "HD-002": {"default_proposal": "'EstateCompass' working title; internal AI 'Sage'", "client_decision": "approved_default"},
+    "HD-003": {"default_proposal": "Node 20+TS+Fastify · React 18+Vite+Tailwind · Postgres 16+pgvector · Python 3.12+FastAPI · Anthropic Claude · Playwright · Vitest+Pytest", "client_decision": "approved_default"},
+    "HD-004": {"default_proposal": "Docker Compose local-only at v0; production_surface=false", "client_decision": "approved_default"},
+    "HD-005": {"default_proposal": "Token SWAG low 150K · mid 400K · high 1.2M; reapproval at +15% delta", "client_decision": "approved_default"},
+    "HD-006": {"default_proposal": "Mock 17 of 19; real-shape contract+mock for Plaid-substitute and one Schwab-shape custody", "client_decision": "approved_default"},
+    "HD-007": {"default_proposal": "AI emits 'educational drafts for attorney review' only; attorney-of-record assignment required; legal-disclaimer overlay", "client_decision": "approved_default"},
+    "HD-008": {"default_proposal": "Synthetic data only at v0; no real PII or PHI", "client_decision": "approved_default"},
+    "HD-009": {"default_proposal": "Hawkeye independence rule: separate subagent given only artifact files (no chat-context handoff)", "client_decision": "approved_default"}
+  },
+  "domain_findings_acknowledged_by_default_acceptance": [
+    "FACT-OBBBA-001: TCJA sunset repealed; federal exemption permanently $15M (2026). Original ASM-003 invalidated.",
+    "FACT-NYDFS-PART500-2025: Effective Nov 1, 2025; added to standards baseline.",
+    "FACT-ADMT-CCPA-2027: ADMT rules effective Jan 1, 2027; added to AI-recommendation transparency scope.",
+    "FACT-MT-CT-GLBA-2025: Added to state-by-state compliance.",
+    "FACT-EXTRACT-COMPUTE-NARRATE-001: Strengthens deterministic-calc-separation ADR.",
+    "FACT-YODLEE-STG-2025: Yodlee adapter context note (low impact at v0)."
+  ],
+  "kernel_state_after_approval": {
+    "preflight_status": "pass_stage_1_unblocked",
+    "current_step_id": "STEP-S1-INTAKE",
+    "current_bead_id": "TB-WC-2026-0426-005",
+    "boundary_human_required": false,
+    "boundary_human_required_reason_resolved": "Checkpoint-#1 approval received. Next boundary-human trigger: CHK-2 (Stage-4 architecture release) per ENG-GOV-WEALTHCOM-001 §client_checkpoints."
+  },
+  "next_immediate_actions": [
+    "Mark TB-WC-2026-0425-001 (Stage-0 attractor pack) → accepted in TASKS.md.",
+    "Mark TB-WC-2026-0425-004 (checkpoint prep) → accepted.",
+    "Mark TB-WC-2026-0426-005 (Stage-1 intake) → ready/active.",
+    "Dispatch Stage-1 intake subagent with deep instructions (PRD atoms + domain brief + tailoring profile + critical findings + meta-attractor as inputs).",
+    "Subagent produces interrogation-record.json + spec-decomposition-record.json under runs/wealth-com/04_intake/.",
+    "Continue authoring downstream Stage-2/3/4 records in parallel where possible (per PERT ready candidates)."
+  ],
+  "stage_0_audit_loop_closed": {
+    "status": "CLOSED",
+    "closure_evidence": "Hawkeye F-001/F-009 patched; F-002 closed by domain brief; F-006/F-011 deferred-with-rationale or closed-by-procedure. patch-bead TB-WC-2026-0426-PATCH-001 records all closures. Independent Hawkeye CONDITIONAL_PASS verdict + client checkpoint approval = Stage-0 fully exited."
+  },
+  "token_consumption_so_far": {
+    "stage_0_estimated": 90000,
+    "swag_low_band": 150000,
+    "swag_mid_band": 400000,
+    "swag_high_band": 1200000,
+    "consumption_pct_of_low_band": 60,
+    "alert_threshold": "75% of mid (300K) triggers spend-pace check"
+  }
+}
