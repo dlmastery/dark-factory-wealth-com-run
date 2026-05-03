@@ -1,0 +1,41 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "lesson_id": "L-003",
+  "title": "Cross-reference comments documenting non-transfer are evidence, not slop",
+  "captured_in": "runs/transfer-test-mini/02_attractor/transfer-test-acceptance-record.json §lessons_for_skill_system",
+  "captured_on": "2026-05-03",
+  "captured_by": "claude-orchestrator while running RUN-TRANSFER-001",
+  "evidence": {
+    "incident": "ADR-T-001 (deterministic-calc separation, transferred to TaxBaseline Mini) and ADR-T-002 (multi-tenant isolation, deliberately NOT transferred) both contain explicit cross-references to wealth.com's parent ADR-001 + ADR-002 and use the parent's vocabulary (GRAT, OBBBA, §7520, multi-tenant) in *contrast tables* that say 'the parent had X; this does NOT'. The forbidden-token grep flagged these mentions.",
+    "source_files": [
+      "runs/transfer-test-mini/05_artifacts/ADR-T-001-deterministic-calc-separation.md (5 matches in contrast table)",
+      "runs/transfer-test-mini/05_artifacts/ADR-T-002-no-multi-tenant-by-design.md (cross-references to ADR-002)"
+    ],
+    "naive_policy_outcome": "If the policy were 'reject any match', the anti-overfit documentation itself would have to be removed — leaving readers unable to verify what the factory deliberately did NOT transfer. This would be self-defeating: the factory's anti-overfit credibility comes precisely from documenting non-transfer, not from pretending the parent run does not exist."
+  },
+  "root_cause": "The anti-overfit policy did not distinguish between 'forbidden token in product code' (true slop) and 'forbidden token in cross-reference / contrast documentation' (anti-overfit evidence).",
+  "skill_system_changes_applied": [
+    {
+      "file": "df-quality-refinery/SKILL.md",
+      "change": "Added explicit anti-slop trigger distinguishing the three match categories (product-code leakage / cross-reference documentation / legitimate domain vocabulary). Rejection criterion is leakage in product code, not raw match count.",
+      "branch": "lessons/L-002-L-003"
+    },
+    {
+      "file": "df-meta-attractor/references/anti-overfit-grep-protocol.md",
+      "change": "Step-4 classification rubric explicitly codifies the three categories with examples and actions (REJECT vs ACCEPT-with-annotation vs ACCEPT-with-allowlist-citation).",
+      "branch": "lessons/L-002-L-003"
+    }
+  ],
+  "regression_check": "Transfer-test acceptance records must include the three-category classification block; verdicts cannot be PASS while category-3 (product-code leakage) > 0, but raw match count > 0 in categories 1 and 2 does not block PASS. This is enforced in the transfer-test-acceptance-record schema and is now reviewable as part of df-quality-refinery's anti-slop triggers.",
+  "broader_principle": "Documentation of negative space (what something is NOT) is a positive signal in governance work. Removing it weakens evidence. The dark-factory's culture of explicit anti-overfit cross-references is a feature, not a bug.",
+  "trace": {
+    "parent_run": "RUN-WEALTHCOM-001",
+    "child_run": "RUN-TRANSFER-001",
+    "related_lesson": "L-002 (companion: grep classification mechanics)",
+    "feeds_into": "Future run-closure retro + skill-system PR"
+  }
+}
