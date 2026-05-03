@@ -31,9 +31,11 @@
 
 ## Active Beads
 
+> **2026-05-03 update — Final Hawkeye F-FN-07 patch:** the Active pointer is refreshed to reflect the run's actual state. Per `runs/wealth-com/12_hawkeye/run-closure-record.json`, the run is **CONDITIONALLY_CLOSED** (binding verdict from HAWKEYE-WEALTHCOM-001-final-independent: `conditional_pass`, 0 P0, 0 P1, 6 P2, 5 P3). The remaining work consists of deferred-bookkeeping patches; the cron loop (CronCreate `ca943b25`) advances them at its own pace.
+
 | Bead ID | State | Objective | Owner | Control Node | KG Node | Gate | Evidence | Next Bead | Token SWAG | Approval |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `TB-WC-2026-0426-005` | `active` | Stage-1 intake interrogation kickoff | df-intake-spec-lab persona (subagent dispatch in progress) | CG-NODE-S1-INTAKE | KG:STEP-S1 | intake quality gate | interrogation-record + spec-decomposition-record | TB-WC-2026-0426-006 | low~25K mid~50K high~90K | unblocked-by-checkpoint-1 |
+| `TB-WC-2026-0503-CLOSURE` | `active` | Run closure cleanup — discharge deferred Hawkeye findings (F-FN-01/02/03/05/06/07/09) | claude-orchestrator (cron loop) | CG-NODE-CLOSURE | KG:CLOSURE | each finding's expiry trigger; or cron expiry | per-finding patch artifacts in 03_governance/ + 05_artifacts/ + 08_refinery/ | RUN-CLOSED | low~30K mid~60K high~120K | conditional_pass already approved by client default |
 
 ## Ready And Queued Beads
 

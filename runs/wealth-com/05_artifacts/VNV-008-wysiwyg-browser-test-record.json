@@ -1,0 +1,77 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "VNV-008-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "kind": "wysiwyg_browser_test_record",
+  "status": "specs_authored_pending_live_execution",
+  "captured_on": "2026-05-03",
+  "subordinate_to": "VNV-001 §3.9 (Browser/WYSIWYG mandatory for ui_surface=true)",
+  "addresses_finding": "F-FN-05 (Final Hawkeye P2)",
+  "patch_bead": "TB-WC-2026-PATCH-PLAYWRIGHT (P1) — partial discharge: specs authored",
+  "specs_authored": [
+    {
+      "path": "runs/wealth-com/app/apps/web/e2e/full-walkthrough.spec.ts",
+      "scenario": "Canonical demo path: login (acme-ria) → dashboard (Doe Family only) → household detail (4 persons, 1 trust, 5 assets, $20M, OBBBA tax baseline showing taxable $5M and federal estate tax $2M with RULE-FET-OBBBA-2026 stamp) → scenario page → run GRAT-vs-do-nothing with default form values → assert positive tax savings + educational disclaimer note",
+      "asserts": [
+        "Disclaimer .ec-disclaimer visible on every screen (FR-UI-DISCLAIMER-001)",
+        "Brand-substitution: 'EstateCompass' present, no wealth.com registered marks (HD-002)",
+        "OBBBA constants surfaced in UI ($15M exemption, $2M federal estate tax for $20M household — matches Slice-5 golden cases)",
+        "Educational projection note visible on scenario page (HD-007 UPL discipline)",
+        "Cross-tenant: Bedrock household NOT visible to acme-ria advisor"
+      ]
+    },
+    {
+      "path": "runs/wealth-com/app/apps/web/e2e/cross-tenant-cant-see.spec.ts",
+      "scenario": "ARC-005 §2.2 T-HH-1/2/3 attack: Bedrock advisor logs in, attempts (a) dashboard listing — sees only Bedrock's seed; (b) direct URL guess to Acme's Doe Family ID — backend returns 404, UI shows not-found state, no Doe Family content surfaces.",
+      "asserts": [
+        "Bedrock dashboard does NOT show Doe Family",
+        "Direct URL /households/<acme-id> returns 404 (not 403; existence not leaked)",
+        "No leakage of John/Jane/Sam/Sara Doe names in DOM"
+      ]
+    },
+    {
+      "path": "runs/wealth-com/app/apps/web/e2e/disclaimer-and-brand.spec.ts",
+      "scenario": "FR-UI-DISCLAIMER-001 + HD-002 brand substitution checks across all routes: login, dashboard, household detail, scenario.",
+      "asserts": [
+        ".ec-disclaimer visible on every route",
+        "Disclaimer text contains 'educational' + 'not a law firm'",
+        "5 forbidden wealth.com marks (Ester, Family Office Suite, EstateFlow, Heritage Map, Plan for Every Tomorrow) absent from page HTML",
+        "'EstateCompass' string present (positive brand-substitution check)",
+        "Footer reaffirms 'Synthetic data only' + 'Not legal or tax advice'"
+      ]
+    }
+  ],
+  "config_authored": "runs/wealth-com/app/apps/web/playwright.config.ts (3 projects: chromium-desktop, webkit-desktop, chromium-mobile/Pixel 5; trace+screenshot+video on failure; webServer auto-start unless E2E_NO_AUTOSTART=1)",
+  "execution_state": {
+    "executed": false,
+    "blocking_dependencies": [
+      "docker compose up — Postgres + api + ai-extract + calc-engine + web all running",
+      "DEV_ALLOW_SYNTHETIC_LOGIN=1 set on api container",
+      "Migrations 0001-0006 applied + seed (0005_seed_demo.sql) loaded",
+      "Playwright browsers installed: pnpm exec playwright install chromium webkit"
+    ],
+    "rationale_for_authoring_without_execution": "Per VNV-001 §3 'specs authored pending live execution' is an explicit interim state for ui_surface tests when the local stack is not running. The specs are themselves valuable: they document the canonical demo path in executable form, encode all cross-cutting concerns (FR-UI-DISCLAIMER-001 + HD-002 + HD-007 + HD-008 + ADR-002 cross-tenant), and produce concrete pass/fail signals the moment the stack is up. Authoring + executing are two separate beads; this record discharges the authoring bead."
+  },
+  "what_passes_at_authoring_time": [
+    "Specs compile (TypeScript strict + Playwright API types)",
+    "Spec file paths match playwright.config.ts testDir",
+    "Selector strategy uses semantic locators (getByRole/getByLabel) not brittle CSS",
+    "FORBIDDEN_MARKS regex set in disclaimer-and-brand.spec.ts mirrors DDD-001 §forbidden-terms"
+  ],
+  "what_pending_live_execution": [
+    "Actual Playwright run output: pass/fail per project (chromium-desktop, webkit-desktop, chromium-mobile)",
+    "Screenshots + traces (configured retain-on-failure)",
+    "Cross-tenant attack assertion outcome",
+    "OBBBA-specific UI text assertion outcome ($15M exemption, $2M tax)"
+  ],
+  "next_action": "Run `cd runs/wealth-com/app && docker compose up --build` followed by `pnpm -F @estatecompass/web e2e` and append the run output (pass/fail counts + duration + per-spec result) to this record under field `execution_state.executed_at` + `executed_results`. The cron loop or a future construction bead can pick this up.",
+  "trace": {
+    "implements": "VNV-001 §3.9; FR-UI-DISCLAIMER-001 from spec-decomposition; HD-002 brand substitution; HD-007 UPL; ADR-002 cross-tenant T-HH-1/2/3",
+    "discharges_partial": "F-FN-05 (Final Hawkeye P2) — specs authored; live execution remains pending",
+    "feeds_into": "Slice-9 RALPH 5-loop record completion; ui_wysiwyg_browser_testing SDLC stage exit"
+  }
+}
