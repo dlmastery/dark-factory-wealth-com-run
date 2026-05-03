@@ -123,6 +123,9 @@ This default is a fallback only for non-catalog work. Any artifact listed in the
 - Security without threat model or risk treatment.
 - Production handoff without owner, rollback, observability, and incident path.
 - Brownfield change without recon and regression evidence.
+- PRD/transcript-derived atoms without verbatim source excerpts and line-number citations (lesson L-001 from RUN-WEALTHCOM-001 INC-001 — a subagent fabricated investor names and model details when the extraction prompt did not require grep-verifiable provenance per atom). Rejection rule: any atom whose `source_excerpt` cannot be grep-confirmed in the cited source file is dropped before the artifact is persisted; orchestrators must run a sanity grep on a random sample of ≥10 atoms before accepting an extraction.
+- Subagent dispatched as a read-only type (e.g., `Explore`) for a task that requires file authoring (lesson L-001 follow-on — a read-only agent will return synthesis-in-message rather than file artifacts; downstream stages cannot consume chat output as evidence). Rejection rule: any extraction or artifact-authoring bead must dispatch a write-capable agent type and verify the expected output files exist on disk before accepting the bead.
+- Atoms or claims that conflate "the source says X about the product" with "the product is X" without confidence:medium tagging or explicit framing such as "PRD-prescribed" / "speculative-source" (lesson L-001 follow-on F-009 from Hawkeye-stage0-independent — even when a string is verbatim in a Grok-authored speculative spec, treating it as verified product truth is slop).
 
 ## Resources
 
