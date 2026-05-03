@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { @apply antialiased; }
+  body {
+    @apply bg-compass-50 text-compass-900 font-display;
+  }
+}
+
+@layer components {
+  .ec-disclaimer {
+    @apply bg-amber-50 border-l-4 border-accent-500 text-compass-700 text-xs px-3 py-2;
+  }
+  .ec-card {
+    @apply bg-white rounded-lg shadow-sm border border-compass-100 p-4;
+  }
+  .ec-btn {
+    @apply inline-flex items-center px-3 py-1.5 rounded-md bg-compass-700 text-white text-sm font-medium hover:bg-compass-900;
+  }
+  .ec-input {
+    @apply block w-full rounded-md border border-compass-100 px-3 py-1.5 text-sm focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500;
+  }
+}
