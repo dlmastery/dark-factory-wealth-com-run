@@ -17,10 +17,12 @@
   },
   "dependencies": {
     "@estatecompass/db": "workspace:*",
+    "@estatecompass/kms": "workspace:*",
     "fastify": "^4.26.0",
     "@fastify/jwt": "^8.0.0",
     "@fastify/cors": "^9.0.0",
     "@fastify/sensible": "^5.5.0",
+    "@fastify/multipart": "^8.2.0",
     "argon2": "^0.40.0",
     "pino": "^8.19.0",
     "pino-pretty": "^11.0.0",

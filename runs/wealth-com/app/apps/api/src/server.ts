@@ -20,6 +20,8 @@ import auditPlugin from "./plugins/audit.js";
 import authRoutes from "./routes/auth.routes.js";
 import meRoutes from "./routes/me.routes.js";
 import householdRoutes from "./routes/households.routes.js";
+import documentRoutes from "./routes/documents.routes.js";
+import documentRoutes from "./routes/documents.routes.js";
 
 export async function buildServer() {
   const cfg = loadConfig();
@@ -50,6 +52,7 @@ export async function buildServer() {
   await app.register(authRoutes);
   await app.register(meRoutes);
   await app.register(householdRoutes);
+  await app.register(documentRoutes);
 
   return app;
 }
