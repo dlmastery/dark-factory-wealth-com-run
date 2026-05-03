@@ -1,0 +1,37 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "lesson_id": "L-002",
+  "title": "Naive forbidden-token grep produces false positives on legitimate domain vocabulary",
+  "captured_in": "runs/transfer-test-mini/02_attractor/transfer-test-acceptance-record.json §lessons_for_skill_system",
+  "captured_on": "2026-05-03",
+  "captured_by": "claude-orchestrator while running RUN-TRANSFER-001 (anti-overfit transfer test)",
+  "evidence": {
+    "incident": "When the transfer-test ran the forbidden-token grep over runs/transfer-test-mini/, the token 'Household' produced a match on the string 'Head of Household' inside the federal income tax golden dataset. 'Head of Household' is IRC §2(b) tax filing status — legitimate domain vocabulary in the income-tax archetype, not wealth.com leakage.",
+    "source_file": "runs/transfer-test-mini/app/apps/tax-mini/tests/golden/federal_income_tax_2026.json:87",
+    "naive_policy_outcome": "If the policy were 'reject any match', this legitimate IRS terminology would have to be removed, breaking the test case."
+  },
+  "root_cause": "The forbidden-token grep used naive substring matching without word boundaries and without a per-archetype allowlist of overlapping legitimate vocabulary.",
+  "skill_system_changes_applied": [
+    {
+      "file": "df-quality-refinery/SKILL.md",
+      "change": "Added explicit anti-slop trigger: 'Anti-overfit forbidden-token grep that uses naive substring matching without a per-archetype allowlist of legitimate domain vocabulary'.",
+      "branch": "lessons/L-002-L-003"
+    },
+    {
+      "file": "df-meta-attractor/references/anti-overfit-grep-protocol.md",
+      "change": "New canonical protocol: Step-1..Step-5 classification rubric (product-code leakage / cross-reference / legitimate-allowlist); word-boundary regex; per-archetype allowlist with citations (IRC, regulatory).",
+      "branch": "lessons/L-002-L-003"
+    }
+  ],
+  "regression_check": "Future transfer tests must classify grep matches into the three categories per the protocol; raw-count rejection is an anti-pattern. The transfer-test-acceptance-record schema codifies the classification structure.",
+  "candidate_validator": "df-meta-attractor/scripts/validate_anti_overfit_grep.py — planned follow-up that automates classification by loading the parent's forbidden-token list + the per-archetype allowlist and exiting non-zero only when category-3 count > 0.",
+  "trace": {
+    "parent_run": "RUN-WEALTHCOM-001",
+    "child_run": "RUN-TRANSFER-001",
+    "feeds_into": "Future run-closure retro + skill-system PR"
+  }
+}
