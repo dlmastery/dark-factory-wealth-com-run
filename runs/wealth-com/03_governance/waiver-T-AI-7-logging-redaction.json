@@ -1,0 +1,25 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "waiver_id": "WAIVER-T-AI-7",
+  "title": "ai-extract logging redaction not yet implemented",
+  "scope": "Slice-4 Sage Extraction: error-path logs in apps/ai-extract/app/main.py + extractors/* may serialize the full document_text payload when an exception is raised. No PII redaction layer is wired into the structlog/Pino pipeline.",
+  "linked_threat": "ARC-005 §2.4 T-AI-7 (inference-side data leak: document plaintext logged in error path). Original severity: medium.",
+  "rationale": "v0 operates on synthetic data only per HD-008 — there is no real PII or PHI that could leak via logs. Production posture would require: (a) DLP scan on log lines, (b) explicit field-level redaction of document_text/extracted_facts before serialization, (c) log retention with same WORM discipline as audit_log. Queued as patch bead TB-WC-2026-PATCH-LOGREDACT per slice-ralph-sweep-record.json §patch_beads_queued.",
+  "owner": "claude-orchestrator (delivery owner) on behalf of construction-bead persona + Privacy Juror persona",
+  "approver": "client_owner via HD-008 default-accept (synthetic-data-only at v0)",
+  "approval_basis": "HD-008 explicitly accepts the synthetic-data-only constraint at v0, which eliminates the PII/PHI leakage scenario. Production-posture transition (production_surface=true) reactivates this requirement automatically.",
+  "approval_date": "2026-04-26 (HD-008 default-accept at checkpoint-#1) / 2026-05-03 (explicit waiver record per Final Hawkeye F-FN-04)",
+  "expiry": "Before any of: (a) production_surface=true transition, (b) loading real PII or PHI into the system, (c) the synthetic-only constraint per HD-008 being amended.",
+  "reactivation_trigger": "Any of: (a) production_surface flag flips true, (b) real PII or PHI in any extraction pipeline input, (c) HD-008 amended.",
+  "residual_risk": "low at v0 (synthetic data; no PII/PHI to leak); medium at any production posture without redaction layer.",
+  "patch_bead": "TB-WC-2026-PATCH-LOGREDACT (P2)",
+  "trace": {
+    "threat_model_source": "runs/wealth-com/05_artifacts/ARC-005-threat-model.md §2.4 T-AI-7",
+    "patch_bead_source": "runs/wealth-com/08_refinery/slice-ralph-sweep-record.json §patch_beads_queued",
+    "implementing_change": "Slice-4 follow-up: structlog redaction processor over (document_text, extracted_facts.value, source_excerpt) fields + Pino redact configuration on the api side + structured-output-only logging discipline (no print()/console.log of payload bodies)."
+  }
+}

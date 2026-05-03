@@ -1,0 +1,25 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "waiver_id": "WAIVER-T-IT-3",
+  "title": "Refresh-token revocation flow not implemented at v0",
+  "scope": "Slice-1 Identity & Tenancy: refresh-token revocation requires a server-side stateful session store (sessions table exists in migration 0001 but is not used by a /v1/auth/refresh route at v0).",
+  "linked_threat": "ARC-005 §2.1 T-IT-3 (replay of stolen JWT after user signs out). Original severity: medium.",
+  "rationale": "v0 ships access-token-only auth with 15-minute TTL (cfg.JWT_ACCESS_TTL_SECONDS=900). The window for replay is small; the demo runs locally with synthetic-data only (HD-008); no real attacker is in the threat model at v0. A full refresh-token revocation flow (server-side session table writes + revocation list + /v1/auth/refresh + /v1/auth/logout) is queued as patch bead TB-WC-2026-PATCH-REFRESH per slice-ralph-sweep-record.json §patch_beads_queued.",
+  "owner": "claude-orchestrator (delivery owner) on behalf of construction-bead persona",
+  "approver": "client_owner via HD-008 default-accept (synthetic-data-only at v0) — refresh-token-flow is implicitly scoped-down by HD-004 default-accept (production_surface=false at v0)",
+  "approval_basis": "Implicit at checkpoint-#1 via HD-004 + HD-008 default-accept; explicit waiver record authored 2026-05-03 per Final Hawkeye F-FN-04 finding",
+  "approval_date": "2026-04-26 (default-accept) / 2026-05-03 (explicit record)",
+  "expiry": "Before production_surface=true transition; OR before adding any non-synthetic user data; whichever comes first",
+  "reactivation_trigger": "Any of: (a) production_surface flag flips true, (b) real user data is loaded into the system, (c) session length is extended beyond 15 minutes without compensating control, (d) HD-008 synthetic-data-only is amended.",
+  "residual_risk": "medium — replay window is bounded by JWT TTL (15 min); local-only demo with synthetic data eliminates real attacker threat model. Acceptable at v0.",
+  "patch_bead": "TB-WC-2026-PATCH-REFRESH (P2)",
+  "trace": {
+    "threat_model_source": "runs/wealth-com/05_artifacts/ARC-005-threat-model.md §2.1 T-IT-3",
+    "patch_bead_source": "runs/wealth-com/08_refinery/slice-ralph-sweep-record.json §patch_beads_queued",
+    "implementing_change": "Slice-1 follow-up: apps/api/src/routes/auth.routes.ts /v1/auth/refresh + /v1/auth/logout handlers + sessions table writes + revocation check on /v1/me preHandler"
+  }
+}
