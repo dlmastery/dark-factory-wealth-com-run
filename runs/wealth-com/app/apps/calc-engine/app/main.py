@@ -31,6 +31,10 @@ from app.rules.federal_estate_tax_obbba import (
     FederalEstateTaxInputs,
     compute_federal_estate_tax,
 )
+from app.rules.grat_vs_donothing_scenario import (
+    GRATScenarioInputs,
+    compute_grat_vs_donothing,
+)
 
 app = FastAPI(
     title="EstateCompass calc-engine",
@@ -130,3 +134,58 @@ def federal_estate_tax(request: FederalEstateTaxRequest) -> FederalEstateTaxResp
         federal_estate_tax=result.federal_estate_tax,
         breakdown=result.breakdown,
     )
+
+
+class GRATScenarioRequest(BaseModel):
+    total_estate_at_year_zero: Decimal = Field(..., gt=0)
+    grat_principal: Decimal = Field(..., gt=0)
+    section_7520_rate: Decimal = Field(..., gt=0, lt=1)
+    projected_growth_rate: Decimal = Field(..., gt=0, lt=1)
+    term_years: int = Field(..., ge=1, le=30)
+    dsue_amount: Decimal = Field(default=Decimal("0"), ge=0)
+
+
+@app.post("/v1/calc/scenario/grat-vs-donothing")
+def grat_vs_donothing(request: GRATScenarioRequest) -> dict[str, Any]:
+    try:
+        result = compute_grat_vs_donothing(
+            GRATScenarioInputs(
+                total_estate_at_year_zero=request.total_estate_at_year_zero,
+                grat_principal=request.grat_principal,
+                section_7520_rate=request.section_7520_rate,
+                projected_growth_rate=request.projected_growth_rate,
+                term_years=request.term_years,
+                dsue_amount=request.dsue_amount,
+            )
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+    def path_to_dict(p: Any) -> dict[str, str]:
+        return {
+            "name": p.name,
+            "gross_estate_at_term": str(p.gross_estate_at_term),
+            "federal_estate_tax": str(p.federal_estate_tax),
+            "transferred_to_beneficiaries_outside_estate": str(
+                p.transferred_to_beneficiaries_outside_estate
+            ),
+            "net_to_beneficiaries": str(p.net_to_beneficiaries),
+        }
+
+    return {
+        "scenario_id": result.scenario_id,
+        "inputs_snapshot": {
+            "total_estate_at_year_zero": str(request.total_estate_at_year_zero),
+            "grat_principal": str(request.grat_principal),
+            "section_7520_rate": str(request.section_7520_rate),
+            "projected_growth_rate": str(request.projected_growth_rate),
+            "term_years": request.term_years,
+            "dsue_amount": str(request.dsue_amount),
+        },
+        "grat_path": path_to_dict(result.grat_path),
+        "do_nothing_path": path_to_dict(result.do_nothing_path),
+        "tax_savings": str(result.tax_savings),
+        "additional_to_beneficiaries": str(result.additional_to_beneficiaries),
+        "grat_failed": result.grat_failed,
+        "notes": result.notes,
+    }

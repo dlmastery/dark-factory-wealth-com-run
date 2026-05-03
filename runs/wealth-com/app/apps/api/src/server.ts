@@ -21,7 +21,7 @@ import authRoutes from "./routes/auth.routes.js";
 import meRoutes from "./routes/me.routes.js";
 import householdRoutes from "./routes/households.routes.js";
 import documentRoutes from "./routes/documents.routes.js";
-import documentRoutes from "./routes/documents.routes.js";
+import scenarioRoutes from "./routes/scenarios.routes.js";
 
 export async function buildServer() {
   const cfg = loadConfig();
@@ -53,6 +53,7 @@ export async function buildServer() {
   await app.register(meRoutes);
   await app.register(householdRoutes);
   await app.register(documentRoutes);
+  await app.register(scenarioRoutes);
 
   return app;
 }
