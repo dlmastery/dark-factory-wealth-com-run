@@ -1,0 +1,181 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "TPM-FLOW-WEALTHCOM-001-STAGE6-EXPANSION",
+  "kind": "tpm_flow_ledger_amendment",
+  "addresses_finding": "F-FN-03 + F-FN-08 (Final Hawkeye P2 — TPM consolidates Stage-6 to one summary step while PERT decomposes to 9 STEP-S6-SLICE-N nodes; deferred from Stage-0 F-006 to Stage-5 detail)",
+  "captured_on": "2026-05-03",
+  "captured_by": "claude-orchestrator",
+  "supersedes_section": "runs/wealth-com/02_attractor/tpm-flow-ledger.json §steps STEP-S6-CONSTRUCT — by amendment, not replacement; original is preserved for audit trail.",
+  "rationale": "Per Hawkeye F-FN-03/F-FN-08: TPM-FLOW-LEDGER had STEP-S6-CONSTRUCT as a single summary step ('TB-WC-2026-0501-011 through TB-WC-2026-0501-019') while PERT-WEALTHCOM-001 decomposed Stage-6 to 9 STEP-S6-SLICE-N nodes. The CC-001 Demo MVP narrowing further reduced the surface (Slice-7 Reports deferred; Slice-8 narrowed to 2 mocks). This amendment expands the TPM ledger to per-slice steps matching PERT, restricted to the CC-001 Demo MVP scope, with closure-state reflecting the slice-ralph-sweep verdicts.",
+  "expanded_stage_6_steps": [
+    {
+      "step_id": "STEP-S6-SLICE-1",
+      "bead_id": "TB-WC-2026-0501-011",
+      "title": "Auth + Tenant + RLS + audit-log lockdown",
+      "state": "accepted",
+      "owner": "construction-bead persona (Slice-1)",
+      "predecessors": ["STEP-S5-PLAN"],
+      "successors": ["STEP-S6-SLICE-2", "STEP-S6-SLICE-3"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-1 verdict=ACCEPTED",
+      "evidence_provided": [
+        "app/apps/api/migrations/0001_init.sql (tenants/users/sessions/audit_log)",
+        "app/apps/api/migrations/0002_rls_policies.sql (ENABLE+FORCE RLS + USING + WITH CHECK)",
+        "app/apps/api/migrations/0003_audit_log_lockdown.sql (REVOKE UPDATE/DELETE)",
+        "app/packages/db/src/index.ts (withTenant + connection-pool wrapper)",
+        "app/packages/db/tests/integration/tenant-isolation.test.ts (5 RLS attacks)",
+        "app/apps/api/src/{config,plugins/auth,plugins/tenant-context,plugins/audit,server}.ts",
+        "app/apps/api/src/routes/{auth,me,households}.routes.ts",
+        "app/apps/api/src/{config.test,plugins/auth.test}.ts (10 unit tests)"
+      ],
+      "closure_rationale": "ACCEPTED — 5 RLS attacks blocked at DB; 10 unit + 5 integration tests; refresh-token revocation deferred via WAIVER-T-IT-3"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-2",
+      "bead_id": "TB-WC-2026-0501-012",
+      "title": "Household aggregate (Person + Entity + Role + Asset)",
+      "state": "accepted",
+      "owner": "construction-bead persona (Slice-2)",
+      "predecessors": ["STEP-S6-SLICE-1"],
+      "successors": ["STEP-S6-SLICE-3", "STEP-S6-SLICE-5"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-2 verdict=ACCEPTED",
+      "evidence_provided": [
+        "app/apps/api/migrations/0004_households.sql (5 tables + 4 enums + RLS policies)",
+        "app/apps/api/migrations/0005_seed_demo.sql (Doe Family $20M synthetic seed)",
+        "app/packages/db/tests/integration/household-aggregate.test.ts (4 integration tests)"
+      ],
+      "closure_rationale": "ACCEPTED — domain model DDD-clean; CHECK constraints + RLS enforced; demo seed validated"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-3",
+      "bead_id": "TB-WC-2026-0501-013",
+      "title": "Document Vault + per-tenant KMS + WORM evidence",
+      "state": "accepted",
+      "owner": "construction-bead persona (Slice-3)",
+      "predecessors": ["STEP-S6-SLICE-1", "STEP-S6-SLICE-2"],
+      "successors": ["STEP-S6-SLICE-4", "STEP-S6-SLICE-7-DEFERRED"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-3 verdict=ACCEPTED",
+      "evidence_provided": [
+        "app/apps/api/migrations/0006_documents.sql (3 tables + 3 enums + RLS)",
+        "app/packages/kms/src/{index,index.test}.ts (envelope encryption + 7 unit tests)",
+        "app/apps/api/src/storage/local-blob-store.ts",
+        "app/apps/api/src/services/{document.service,document.service.test}.ts (4 unit tests)",
+        "app/apps/api/src/routes/documents.routes.ts (multipart upload + list + get)"
+      ],
+      "closure_rationale": "ACCEPTED — ADR-002 layer 3 enforced; tamper detection at 2 layers; cross-tenant DEK isolation"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-4",
+      "bead_id": "TB-WC-2026-0501-014",
+      "title": "Sage extractor + grounding validator (mock at v0)",
+      "state": "accepted_with_patch_beads",
+      "owner": "construction-bead persona (Slice-4)",
+      "predecessors": ["STEP-S6-SLICE-3"],
+      "successors": ["STEP-S6-SLICE-5", "STEP-S6-SLICE-7-DEFERRED"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-4 verdict=ACCEPTED-WITH-PATCH-BEADS",
+      "evidence_provided": [
+        "app/apps/ai-extract/app/{main,validators/grounding,extractors/mock_grounded}.py",
+        "app/apps/ai-extract/tests/test_grounding_validator.py (8 unit tests)",
+        "app/packages/contracts/extraction.json (JSON Schema for ADR-003)"
+      ],
+      "patch_beads": ["TB-WC-2026-PATCH-CLAUDE (real Claude integration)", "TB-WC-2026-PATCH-HOLDOUT (public-corpus dataset, OQ-INTAKE-005)", "TB-WC-2026-PATCH-LOGREDACT (T-AI-7 logging redaction; covered by WAIVER-T-AI-7)"],
+      "closure_rationale": "ACCEPTED-WITH-PATCH-BEADS — ADR-003 architectural enforcement in place; Claude integration deferred to mock-mode at v0; logging redaction waived under HD-008 synthetic-only"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-5",
+      "bead_id": "TB-WC-2026-0501-015",
+      "title": "calc-engine OBBBA federal estate tax",
+      "state": "accepted",
+      "owner": "construction-bead persona (Slice-5)",
+      "predecessors": ["STEP-S6-SLICE-2", "STEP-S6-SLICE-4"],
+      "successors": ["STEP-S6-SLICE-6", "STEP-S6-SLICE-7-DEFERRED"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-5 verdict=ACCEPTED (cleanest slice 18/18)",
+      "evidence_provided": [
+        "app/apps/calc-engine/app/rules/federal_estate_tax_obbba.py (RULE-FET-OBBBA-2026)",
+        "app/apps/calc-engine/tests/golden/obbba_baseline.json (22 cases + 2 negative)",
+        "app/apps/calc-engine/tests/test_federal_estate_tax_obbba.py (parametrized + purity)",
+        "app/apps/calc-engine/app/main.py (FastAPI service)"
+      ],
+      "closure_rationale": "ACCEPTED — ADR-001 enforced by physical separation (no Anthropic SDK in calc-engine pyproject); 24 tests passing; FACT-OBBBA-001 as live constant"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-6",
+      "bead_id": "TB-WC-2026-0501-016",
+      "title": "GRAT vs do-nothing scenario (Walton zeroed-out + scenario composition)",
+      "state": "accepted",
+      "owner": "construction-bead persona (Slice-6)",
+      "predecessors": ["STEP-S6-SLICE-5"],
+      "successors": ["STEP-S6-SLICE-7-DEFERRED", "STEP-S6-SLICE-9"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-6 verdict=ACCEPTED",
+      "evidence_provided": [
+        "app/apps/calc-engine/app/rules/{grat_remainder_7520,grat_vs_donothing_scenario}.py",
+        "app/apps/calc-engine/tests/golden/grat_cases.json (6 + 3 negative)",
+        "app/apps/calc-engine/tests/test_grat_remainder.py (10 + 4 scenario tests including OBBBA-regression alert)",
+        "app/apps/api/src/routes/scenarios.routes.ts + clients/calc-engine.client.{ts,test.ts}"
+      ],
+      "closure_rationale": "ACCEPTED — 14 tests passing; OBBBA regression alert is most valuable test in run; cent-tolerance patch documented"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-7-DEFERRED",
+      "bead_id": "TB-WC-2026-0501-017",
+      "title": "Reports surface (Executive Summary + Visual Report + 706/709 worksheets) — DEFERRED per CC-001",
+      "state": "deferred",
+      "owner": "n/a (out of Demo MVP scope)",
+      "predecessors": ["STEP-S6-SLICE-3", "STEP-S6-SLICE-4", "STEP-S6-SLICE-5"],
+      "successors": ["STEP-S6-SLICE-9"],
+      "judge_jury_record": "n/a — explicitly out of CC-001 Demo MVP scope",
+      "closure_rationale": "DEFERRED via CC-001 §out_of_scope_demo_mvp_deferred; reactivation if scope expands"
+    },
+    {
+      "step_id": "STEP-S6-SLICE-8",
+      "bead_id": "TB-WC-2026-0501-018",
+      "title": "Integration mocks — narrowed to 2 per CC-001 (Plaid-shape + Schwab-shape only)",
+      "state": "deferred_partial",
+      "owner": "n/a at v0; would land at first real-partner integration",
+      "predecessors": ["STEP-S6-SLICE-1", "STEP-S6-SLICE-2", "STEP-S6-SLICE-3"],
+      "successors": ["STEP-S6-SLICE-9"],
+      "judge_jury_record": "n/a — narrowed scope in CC-001",
+      "closure_rationale": "DEFERRED via CC-001 — only 2 of 19 named adapter classes are in scope; concrete adapter implementations are queued patch beads. Full hub deferred."
+    },
+    {
+      "step_id": "STEP-S6-SLICE-9",
+      "bead_id": "TB-WC-2026-0501-019",
+      "title": "Advisor walkable UI (Vite + React + Tailwind + Disclaimer)",
+      "state": "accepted_with_patch_beads",
+      "owner": "construction-bead persona (Slice-9)",
+      "predecessors": ["STEP-S6-SLICE-1", "STEP-S6-SLICE-6"],
+      "successors": ["STEP-S7-VNV"],
+      "judge_jury_record": "implicit via slice-ralph-sweep-record.json §slices.SLICE-9 verdict=ACCEPTED-WITH-PATCH-BEADS",
+      "evidence_provided": [
+        "app/apps/web/{package.json,index.html,vite.config.ts,tsconfig.json,tailwind.config.js,postcss.config.js,Dockerfile}",
+        "app/apps/web/src/{main,App}.tsx + index.css",
+        "app/apps/web/src/lib/api.ts (typed client)",
+        "app/apps/web/src/components/Disclaimer.tsx (FR-UI-DISCLAIMER-001)",
+        "app/apps/web/src/pages/{Login,Dashboard,HouseholdDetail,Scenario}.tsx",
+        "app/apps/web/playwright.config.ts + 3 e2e specs (full-walkthrough, cross-tenant, disclaimer-and-brand)",
+        "runs/wealth-com/05_artifacts/VNV-008-wysiwyg-browser-test-record.json"
+      ],
+      "patch_beads": ["TB-WC-2026-PATCH-PLAYWRIGHT remainder (live execution; needs docker compose)", "TB-WC-2026-PATCH-A11Y", "TB-WC-2026-PATCH-VISREG", "TB-WC-2026-PATCH-BRANDCI"],
+      "closure_rationale": "ACCEPTED-WITH-PATCH-BEADS — UI scaffolding architecturally sound; Playwright specs authored (3 spec files + config); live execution and a11y/visual-regression queued. ui_wysiwyg_browser_testing SDLC stage exit pending live execution."
+    }
+  ],
+  "summary": {
+    "stages_in_demo_mvp_scope": ["SLICE-1", "SLICE-2", "SLICE-3", "SLICE-4", "SLICE-5", "SLICE-6", "SLICE-9"],
+    "stages_deferred_via_CC-001": ["SLICE-7-DEFERRED (Reports)", "SLICE-8 (Integrations Hub narrowed to 2 mocks; concrete adapters queued)"],
+    "accepted_clean": 5,
+    "accepted_with_patch_beads": 2,
+    "deferred": 2,
+    "blocked": 0,
+    "failed": 0
+  },
+  "verdict": "F-FN-03 + F-FN-08 P2 DISCHARGED",
+  "trace": {
+    "supersedes_section_in": "runs/wealth-com/02_attractor/tpm-flow-ledger.json §steps STEP-S6-CONSTRUCT (amendment-style, not replacement)",
+    "consistent_with": "runs/wealth-com/02_attractor/factory-pert-plan.json §nodes STEP-S6-SLICE-N (already at per-slice granularity)",
+    "consistent_with_2": "runs/wealth-com/08_refinery/slice-ralph-sweep-record.json (per-slice RALPH verdicts)",
+    "feeds_into": "runs/wealth-com/12_hawkeye/run-closure-record.json §finding_dispositions F-FN-03 + F-FN-08 update"
+  }
+}

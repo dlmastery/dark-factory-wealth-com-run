@@ -1,0 +1,53 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "lesson_id": "L-001",
+  "title": "PRD/transcript-derived atoms must carry verbatim source excerpts and line citations; subagent dispatched as read-only type for write-required tasks is itself a process bug",
+  "captured_in_originally": "runs/wealth-com/11_feedback/incident-INC-001-prd-agent-slop.json §lesson_for_skill_system",
+  "standalone_record_authored_on": "2026-05-03 (per Final Hawkeye F-FN-06 P3 — standalone file would be cleaner than embedded-in-incident-record)",
+  "captured_by": "claude-orchestrator while running RUN-WEALTHCOM-001 Stage-0 PRD atomization",
+  "evidence": {
+    "incident": "INC-001 (2026-04-25): a subagent dispatched as `Explore` type (read-only) for a task that required file authoring (PRD atomization) returned synthesis-in-message rather than file artifacts. The synthesis contained fabricated specifics: investor names ('Bessemer Venture Partners', 'OpenAI Ventures', 'Homebrew', 'Point72') that DO NOT appear in the source PRD; document count '1.2 million' that conflicts with the PRD's actual 50k+/100k/800k+; Series B amount '$66M' that conflicts with the actual $65M; conflated 'PRD says X about wealth.com' with 'wealth.com is X' without confidence:medium tagging.",
+    "incident_record": "runs/wealth-com/11_feedback/incident-INC-001-prd-agent-slop.json",
+    "naive_outcome_avoided": "If orchestrator had accepted the subagent's synthesis at face value, the fabricated investors and inflated metrics would have flowed into requirements (Stage-1 intake) → architecture (Stage-4 ADRs) → product code as live assumptions. Detection would have happened at Hawkeye stage exit at the earliest, possibly later — by which time the run's audit trail would already be compromised."
+  },
+  "root_cause": [
+    "Subagent dispatched as `Explore` type, which is read-only by design (intended for research). Cannot write files; returns synthesis-in-message instead.",
+    "Extraction prompt did not require grep-verifiable provenance per atom (no `source_excerpt` field, no `line_start`/`line_end`).",
+    "Source PRD is 549KB — likely exceeded the subagent's effective context window, causing it to confabulate plausible specifics for content it could not retain."
+  ],
+  "skill_system_changes_applied_via_PR_1_merged_2026_04_25": [
+    {
+      "file": "df-quality-refinery/SKILL.md",
+      "change": "Added 3 anti-slop rejection triggers: (1) PRD/transcript atoms without verbatim source_excerpt + line citations; (2) Subagent dispatched as read-only type for write-required task; (3) Atoms conflating 'source says X about product' with 'product is X' without confidence:medium tagging.",
+      "pr": "https://github.com/dlmastery/dark-factory-wealth-com-run/pull/1 (merged)"
+    },
+    {
+      "file": "df-meta-attractor/references/skill-routing-map.md",
+      "change": "New Subagent Dispatch Rules section with task-semantic → agent-type matrix; explicit triggers for INC-001 read-only pattern and INC-002 stall pattern.",
+      "pr": "https://github.com/dlmastery/dark-factory-wealth-com-run/pull/1 (merged)"
+    },
+    {
+      "file": "df-intake-spec-lab/references/atom-provenance-protocol.md (new)",
+      "change": "Canonical 5-step protocol: required atom schema (id/kind/statement/source_file/line_start/line_end/source_excerpt/confidence/open_question), orchestrator workflow (subagent self-grep → orchestrator independent grep → Hawkeye sample audit), required reject triggers.",
+      "pr": "https://github.com/dlmastery/dark-factory-wealth-com-run/pull/1 (merged)"
+    },
+    {
+      "file": "df-intake-spec-lab/scripts/validate_prd_atoms.py (new)",
+      "change": "Concrete validator: field presence + line range bounds + random-sample source_excerpt grep verification. Exits non-zero on any failure. Self-tested against the corrective re-extraction (RUN-WEALTHCOM-001 TB-WC-2026-0425-002): 20-sample grep verified PASS.",
+      "pr": "https://github.com/dlmastery/dark-factory-wealth-com-run/pull/1 (merged)"
+    }
+  ],
+  "regression_check": "Future PRD-atom or transcript-atom extraction beads MUST: (1) dispatch a write-capable subagent type (`general-purpose`, not `Explore`), (2) require atoms with verbatim source_excerpt + line_start/line_end, (3) have the subagent run a self-grep on ≥10 random samples and report results, (4) have the orchestrator run an independent-grep on ≥5 fresh samples before accepting the output. The validate_prd_atoms.py script automates step 4. The Final Hawkeye independent audit's adversarial test 1 ('Promise vs evidence on transfer test acceptance') extends this to subagent-produced acceptance records.",
+  "broader_principle": "Subagent type must match task semantics. Read-only subagents are for research; write-capable subagents are for artifacts. Mismatching them produces synthesis-in-message that cannot be promoted to evidence — slop with extra steps. The fix is at dispatch time, not at acceptance time: choose the right agent type and require provenance at the prompt level.",
+  "trace": {
+    "parent_run": "RUN-WEALTHCOM-001",
+    "incident_origin": "INC-001 (2026-04-25)",
+    "skill_system_pr_merged": "PR #1 (lessons/L-001) merged 2026-04-26",
+    "follow_up_lessons": "L-002 + L-003 (transfer-test-derived; lesson-L-002 + lesson-L-003 standalone records authored separately; both addressed via PR #2 lessons/L-002-L-003)",
+    "feeds_into": "runs/wealth-com/12_hawkeye/run-closure-record.json §finding_dispositions F-FN-06 update"
+  }
+}

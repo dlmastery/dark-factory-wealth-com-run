@@ -1,0 +1,70 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "FEASIBILITY-WEALTHCOM-001",
+  "kind": "feasibility_options_record",
+  "addresses_finding": "F-FN-01 (Final Hawkeye P3 — no standalone feasibility-options-record under runs/wealth-com/)",
+  "captured_on": "2026-05-03",
+  "captured_by": "claude-orchestrator (extracted from existing records, not synthesized — feasibility decisions were embedded in CC-001 + GOV-001 + ARC-005 + ATTR; this record consolidates them for audit hygiene)",
+  "scope": "Feasibility decisions made during the run that were originally distributed across CC-001 §rationale + ATTR §expert_debate + GOV-001 §non_negotiable_constraints + ARC-005 §systemic risks. Hawkeye F-FN-01 noted that a dedicated feasibility-options file would be cleaner audit hygiene.",
+  "options_evaluated": [
+    {
+      "option_id": "OPT-1-FULL-CLONE",
+      "name": "Full wealth.com clone — all 14 surfaces",
+      "description": "Build the complete wealth.com clone per the original PRD: Ester AI, Document Creation, Scenario Builder (full strategy library: GRAT/SLAT/ILIT/CLAT/Dynasty), Tax Planning (1040/W-2/look-back/safe-harbor), Family Office Suite, Heritage Map, EstateFlow, Ownership Balance Sheet, Estate Tax Projections, Report Builder, Integrations Hub (19 partners), Advisor Workbench, Client Portal, persona-specific marketing surfaces.",
+      "estimated_cost_tokens_low_mid_high": [1500000, 4000000, 8000000],
+      "estimated_calendar": "weeks-to-months",
+      "risks": [
+        "Token spend overrun (RSK-006)",
+        "Multi-day context loss across many sessions (RSK-008)",
+        "Demo MVP timeline implausible at this scope",
+        "Diluted RALPH discipline if 100+ artifacts each need 5-loop reviews"
+      ],
+      "verdict": "REJECTED",
+      "rejection_rationale": "Per the gap analysis presented to client_owner during the 'legendary product leader' review: full-clone framing would produce theatre rather than substance. The dark-factory's value here is the GOVERNANCE PATTERN, not the complete wealth.com clone. Most of the 14 surfaces are presentation work that adds little to the pattern validation."
+    },
+    {
+      "option_id": "OPT-2-FACTORY-VALIDATION-ONLY",
+      "name": "Factory validation only — skip construction; run intake → architecture → ONE construction slice → transfer test",
+      "description": "Prove the dark-factory pattern by going through every meta-skill once, but only build a single deep slice (e.g., the calc-engine OBBBA rule) plus the transfer test. Maximizes pattern-validation confidence, minimizes construction breadth.",
+      "estimated_cost_tokens_low_mid_high": [120000, 250000, 500000],
+      "estimated_calendar": "2-3 days",
+      "risks": [
+        "Ships no walkable demo (no UI; no docker compose end-to-end)",
+        "Limited evidence at the integration / ui-surface / api-surface layers",
+        "Per-archetype tailoring proof would feel artificial without a real surface to host it"
+      ],
+      "verdict": "REJECTED",
+      "rejection_rationale": "Cleanest proof-of-pattern, but produces nothing demoable. Insufficient to validate the multi-tenant tenant-isolation discipline (ADR-002) or the ai-extract grounding flow (ADR-003) end-to-end."
+    },
+    {
+      "option_id": "OPT-3-DEMO-MVP",
+      "name": "Demo MVP — narrowed to 8 capabilities + transfer test",
+      "description": "Narrow scope to: Auth+Tenant, Households+People+Entities, Documents+WORM, Ester-substitute extractor (architecture + 1 flow), federal estate tax baseline under OBBBA $15M, ONE scenario (GRAT vs do-nothing for $20M household), minimal walkable advisor UI, 2 integration mocks (Plaid-shape + Schwab-shape), transfer test, retro. Defers Family Office Suite, Heritage Map, Ownership Balance Sheet, Estate Tax Projections beyond 1 scenario, full Tax Planning, Document Creation surface, full Scenario Builder library, Reports, full Integrations Hub, mobile, Tasks, Client Portal.",
+      "estimated_cost_tokens_low_mid_high": [250000, 600000, 1000000],
+      "estimated_calendar": "multi-day; 30-45 hr orchestrator + subagent work",
+      "risks": [
+        "Construction breadth still material; could overrun mid-band budget",
+        "UI surface adds Playwright e2e dependency for full conformance"
+      ],
+      "verdict": "ACCEPTED",
+      "acceptance_rationale": "Optimal balance: exercises every meta-skill once, produces a walkable demonstration, runs the transfer test (the actual proof-of-system). Surface deletions chosen to keep the regulated-AI-fintech archetype's most evidence-heavy paths (extraction, deterministic calc, scenario comparison, multi-tenant isolation, audit log) IN SCOPE; non-evidence-heavy presentation surfaces (Reports, Heritage Map, etc.) deferred. RALPH discipline retained; threshold reductions NOT permitted.",
+      "approved_by": "client_owner = eranti@gmail.com via 'A' response 2026-05-03",
+      "filed_as": "CC-001 (runs/wealth-com/03_governance/change-control-CC-001.json)"
+    }
+  ],
+  "decision_rationale_distilled_from_existing_records": [
+    "ATTR-WEALTHCOM-001 §expert_debate.round_3_synthesis decision: factory should validate end-to-end on a serious archetype while staying within engagement-governance budget — directly informs Demo MVP cut.",
+    "CC-001 §rationale: 'Demo MVP exercises every meta-skill at least once... runs the transfer test (the actual proof-of-system). Full clone is months of team work — not appropriate for a multi-day governed run.'",
+    "GOV-001 §non_negotiable_constraints: deterministic-calc separation (ADR-001), three-layer tenant isolation (ADR-002), citation grounding (ADR-003), RALPH 5-loop, ≥2 adversarial critics, Hawkeye conformance, transfer test mandatory before run closure — all of which are realizable at Demo MVP scope.",
+    "ARC-005 §systemic risks: AI-S-1 (model regression), AI-S-2 (provider outage), AI-S-3 (cost runaway) all addressable at Demo MVP scope; only AI-S-4 (prompt-template drift) requires the real Claude integration which Demo MVP keeps as MockGroundedExtractor + queued patch."
+  ],
+  "verdict": "F-FN-01 P3 DISCHARGED",
+  "trace": {
+    "supersedes_implicit_in": ["change-control-CC-001.json", "meta-attractor-record.json §expert_debate", "GOV-001-project-charter.md §scope", "ARC-005 §AI-systemic risks"],
+    "feeds_into": "runs/wealth-com/12_hawkeye/run-closure-record.json §finding_dispositions F-FN-01 update"
+  }
+}
