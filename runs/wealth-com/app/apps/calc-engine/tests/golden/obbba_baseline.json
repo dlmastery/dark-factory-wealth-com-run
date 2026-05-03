@@ -1,0 +1,199 @@
+{
+  "$schema": "https://estatecompass.local/schemas/golden-dataset.json",
+  "rule_id": "RULE-FET-OBBBA-2026",
+  "computation_version": "2026.05.03-OBBBA-baseline",
+  "citation": "IRC §2001; IRC §2010(c); OBBBA (Pub. L. 119-12, July 4, 2025) — permanent $15M exemption (2026)",
+  "description": "Golden dataset for federal estate tax under OBBBA. ≥20 cases (DOD-3). Each case is a (inputs → expected_output) tuple covering: under-exemption, at-exemption, over-exemption, with-DSUE, with-charitable, with-marital, with-debts, edge cases. Authored 2026-05-03; refined as OQ-INTAKE-005-style review surfaces edges.",
+  "cases": [
+    {
+      "id": "GOLD-FET-OBBBA-001",
+      "name": "Single decedent well under exemption",
+      "inputs": {"gross_estate": "5000000"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "$5M gross estate, no deductions, no DSUE. Adjusted = $5M. Exemption = $15M. Taxable = max(0, $5M - $15M) = 0. Tax = $0."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-002",
+      "name": "Single decedent at exemption",
+      "inputs": {"gross_estate": "15000000"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "Exactly $15M. No deductions. Taxable = max(0, $15M - $15M) = 0."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-003",
+      "name": "Single decedent $1M over exemption",
+      "inputs": {"gross_estate": "16000000"},
+      "expected": {"taxable_estate": "1000000", "federal_estate_tax": "400000.00"},
+      "rationale": "$1M taxable × 40% = $400,000."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-004",
+      "name": "Single decedent $10M over exemption",
+      "inputs": {"gross_estate": "25000000"},
+      "expected": {"taxable_estate": "10000000", "federal_estate_tax": "4000000.00"},
+      "rationale": "$10M taxable × 40% = $4M."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-005",
+      "name": "Surviving spouse with full DSUE — at combined exemption",
+      "inputs": {"gross_estate": "30000000", "dsue_amount": "15000000"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "Surviving spouse at $30M with $15M DSUE → $30M effective exemption. Demonstrates portability per IRC §2010(c)."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-006",
+      "name": "Surviving spouse with full DSUE — $5M over combined",
+      "inputs": {"gross_estate": "35000000", "dsue_amount": "15000000"},
+      "expected": {"taxable_estate": "5000000", "federal_estate_tax": "2000000.00"},
+      "rationale": "$35M - ($15M + $15M DSUE) = $5M taxable × 40% = $2M."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-007",
+      "name": "Marital deduction reduces estate to zero",
+      "inputs": {"gross_estate": "50000000", "marital_deduction": "50000000"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "Unlimited marital deduction; whole estate to surviving spouse. Adjusted gross = $0."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-008",
+      "name": "Charitable deduction shelters whole estate",
+      "inputs": {"gross_estate": "20000000", "charitable_deduction": "20000000"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "Full charitable; adjusted gross = $0."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-009",
+      "name": "Mixed deductions reduce taxable to under exemption",
+      "inputs": {
+        "gross_estate": "20000000",
+        "funeral_admin_expenses": "100000",
+        "debts": "500000",
+        "marital_deduction": "3000000",
+        "charitable_deduction": "1000000"
+      },
+      "expected": {"taxable_estate": "400000", "federal_estate_tax": "160000.00"},
+      "rationale": "Adjusted gross = $20M - $100K - $500K - $3M - $1M = $15.4M. Taxable = $15.4M - $15M = $400K. Tax = $160K."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-010",
+      "name": "$100M HNW estate — large taxable",
+      "inputs": {"gross_estate": "100000000"},
+      "expected": {"taxable_estate": "85000000", "federal_estate_tax": "34000000.00"},
+      "rationale": "$100M - $15M = $85M × 40% = $34M."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-011",
+      "name": "Cents handling — rounding half-even",
+      "inputs": {"gross_estate": "15000001.255"},
+      "expected": {"taxable_estate": "1.255", "federal_estate_tax": "0.50"},
+      "rationale": "$1.255 × 40% = $0.502 → rounds half-even at the cent → $0.50. Demonstrates Decimal/ROUND_HALF_EVEN posture; IEEE-754 floats would surprise."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-012",
+      "name": "Boundary: $15M + 1 cent",
+      "inputs": {"gross_estate": "15000000.01"},
+      "expected": {"taxable_estate": "0.01", "federal_estate_tax": "0.00"},
+      "rationale": "$0.01 × 40% = $0.004 → rounds half-even at cent → $0.00."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-013",
+      "name": "Boundary: $15M + 2 cents",
+      "inputs": {"gross_estate": "15000000.02"},
+      "expected": {"taxable_estate": "0.02", "federal_estate_tax": "0.01"},
+      "rationale": "$0.02 × 40% = $0.008 → rounds half-even at cent → $0.01."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-014",
+      "name": "DSUE partial",
+      "inputs": {"gross_estate": "20000000", "dsue_amount": "3000000"},
+      "expected": {"taxable_estate": "2000000", "federal_estate_tax": "800000.00"},
+      "rationale": "Available exemption = $15M + $3M DSUE = $18M. Taxable = $20M - $18M = $2M. Tax = $800K."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-015",
+      "name": "Marital + charitable + DSUE combined",
+      "inputs": {
+        "gross_estate": "60000000",
+        "marital_deduction": "20000000",
+        "charitable_deduction": "10000000",
+        "dsue_amount": "5000000"
+      },
+      "expected": {"taxable_estate": "10000000", "federal_estate_tax": "4000000.00"},
+      "rationale": "Adjusted = $60M - $30M = $30M. Available = $15M + $5M = $20M. Taxable = $10M. Tax = $4M."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-016",
+      "name": "Debts only",
+      "inputs": {"gross_estate": "18000000", "debts": "1000000"},
+      "expected": {"taxable_estate": "2000000", "federal_estate_tax": "800000.00"},
+      "rationale": "Adjusted = $17M. Taxable = $2M × 40% = $800K."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-017",
+      "name": "Funeral and admin expenses",
+      "inputs": {"gross_estate": "16000000", "funeral_admin_expenses": "75000"},
+      "expected": {"taxable_estate": "925000", "federal_estate_tax": "370000.00"},
+      "rationale": "Adjusted = $16M - $75K = $15.925M. Taxable = $925K × 40% = $370K."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-018",
+      "name": "$1B mega estate",
+      "inputs": {"gross_estate": "1000000000"},
+      "expected": {"taxable_estate": "985000000", "federal_estate_tax": "394000000.00"},
+      "rationale": "$1B - $15M = $985M × 40% = $394M. Numerical scale stress test."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-019",
+      "name": "Zero gross estate (degenerate but legal)",
+      "inputs": {"gross_estate": "0"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "Empty estate. Tax = $0."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-020",
+      "name": "Married couple — maximizing portability",
+      "inputs": {"gross_estate": "29999999.99", "dsue_amount": "15000000"},
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "$30M - 1 cent. Combined exemption $30M. Taxable = max(0, -0.01) = 0. Demonstrates the household-level planning value of portability."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-021",
+      "name": "Just-over after deductions and partial DSUE",
+      "inputs": {
+        "gross_estate": "22500000",
+        "debts": "300000",
+        "funeral_admin_expenses": "50000",
+        "dsue_amount": "2000000"
+      },
+      "expected": {"taxable_estate": "5150000", "federal_estate_tax": "2060000.00"},
+      "rationale": "Adjusted = $22.15M. Available = $17M. Taxable = $5.15M × 40% = $2.06M."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-022",
+      "name": "Charitable + marital wipe out tax even at $200M",
+      "inputs": {
+        "gross_estate": "200000000",
+        "marital_deduction": "100000000",
+        "charitable_deduction": "100000000"
+      },
+      "expected": {"taxable_estate": "0", "federal_estate_tax": "0.00"},
+      "rationale": "Demonstrates that unlimited marital + charitable deductions zero out tax irrespective of estate size."
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "GOLD-FET-OBBBA-NEG-001",
+      "name": "Negative gross_estate must raise",
+      "inputs": {"gross_estate": "-1"},
+      "expects_error": "ValueError",
+      "rationale": "Validation rejects negative inputs."
+    },
+    {
+      "id": "GOLD-FET-OBBBA-NEG-002",
+      "name": "Deductions exceeding gross must raise",
+      "inputs": {"gross_estate": "5000000", "marital_deduction": "10000000"},
+      "expects_error": "ValueError",
+      "rationale": "Sum of deductions > gross_estate → invalid."
+    }
+  ]
+}
