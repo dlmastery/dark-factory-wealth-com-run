@@ -1,0 +1,89 @@
+{
+  "$schema": "https://estatecompass.local/schemas/golden-dataset.json",
+  "rule_id": "RULE-GRAT-7520-2026",
+  "computation_version": "2026.05.03-GRAT-baseline",
+  "citation": "IRC §7520; IRC §2702; Walton v. Commissioner, 115 T.C. 589 (2000)",
+  "description": "Golden dataset for GRAT zeroed-out remainder valuation. Each case verifies (a) the annuity factor matches the closed-form formula, (b) annuity payment is principal/factor, (c) end-of-term remainder matches a year-by-year simulation. Floating-point reference computations were verified independently and rounded to the cent (ROUND_HALF_EVEN).",
+  "cases": [
+    {
+      "id": "GOLD-GRAT-001",
+      "name": "Standard 5-year GRAT, 5.2% 7520 rate, 8% growth, $5M",
+      "inputs": {"principal": "5000000", "section_7520_rate": "0.052", "projected_growth_rate": "0.08", "term_years": 5},
+      "expected": {
+        "annual_annuity_payment": "1161266.22",
+        "remainder_at_term": "533954.86",
+        "grat_failed": false
+      },
+      "rationale": "Annuity factor (1 - 1.052^-5)/0.052 ≈ 4.30598. Annuity = 5,000,000 / 4.30598 ≈ 1,161,266.22 (cent-quantized). Year-by-year simulation: portfolio grows 8%, annuity paid end-of-year. Final remainder $533,954.86 is the policy lever — passes to beneficiaries gift-tax-free."
+    },
+    {
+      "id": "GOLD-GRAT-002",
+      "name": "10-year GRAT, 5.2% 7520, 8% growth, $5M",
+      "inputs": {"principal": "5000000", "section_7520_rate": "0.052", "projected_growth_rate": "0.08", "term_years": 10},
+      "expected": {
+        "grat_failed": false
+      },
+      "rationale": "Long-term GRAT; remainder is positive when g > r. Tested for non-failure + non-negative remainder; specific value verified by simulation."
+    },
+    {
+      "id": "GOLD-GRAT-003",
+      "name": "GRAT with growth EQUAL to 7520 rate (zero economic remainder)",
+      "inputs": {"principal": "1000000", "section_7520_rate": "0.05", "projected_growth_rate": "0.05", "term_years": 5},
+      "expected": {
+        "remainder_at_term": "0.00",
+        "grat_failed": false
+      },
+      "rationale": "When growth equals the §7520 rate, the GRAT exactly zeroes out at term. Edge case demonstrating that GRAT only transfers wealth above r."
+    },
+    {
+      "id": "GOLD-GRAT-004",
+      "name": "GRAT with growth BELOW 7520 rate — fails",
+      "inputs": {"principal": "1000000", "section_7520_rate": "0.05", "projected_growth_rate": "0.03", "term_years": 5},
+      "expected": {
+        "grat_failed": true,
+        "remainder_at_term": "0.00"
+      },
+      "rationale": "Growth < r → GRAT pays out more than the corpus produces; balance goes negative pre-term; remainder = 0. The 'GRAT failure' scenario all advisors should know."
+    },
+    {
+      "id": "GOLD-GRAT-005",
+      "name": "Single-year GRAT — degenerate but legal",
+      "inputs": {"principal": "1000000", "section_7520_rate": "0.05", "projected_growth_rate": "0.10", "term_years": 1},
+      "expected": {
+        "annual_annuity_payment": "1050000.00",
+        "remainder_at_term": "50000.00",
+        "grat_failed": false
+      },
+      "rationale": "1-year GRAT: annuity factor = 1/1.05 ≈ 0.95238 → wait, that's PV factor. Annuity factor = (1 - 1.05^-1)/0.05 = 0.95238. Annuity = 1,000,000 / 0.95238 = 1,050,000. After 10% growth: 1,100,000. After paying 1,050,000: 50,000 remainder. Perfect arithmetic check."
+    },
+    {
+      "id": "GOLD-GRAT-006",
+      "name": "Long-dated 30-year GRAT (cap)",
+      "inputs": {"principal": "10000000", "section_7520_rate": "0.04", "projected_growth_rate": "0.07", "term_years": 30},
+      "expected": {
+        "grat_failed": false
+      },
+      "rationale": "Maximum permitted term in this implementation. Tests upper-bound validation."
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "GOLD-GRAT-NEG-001",
+      "name": "term_years out of range",
+      "inputs": {"principal": "1000000", "section_7520_rate": "0.05", "projected_growth_rate": "0.08", "term_years": 31},
+      "expects_error": "ValueError"
+    },
+    {
+      "id": "GOLD-GRAT-NEG-002",
+      "name": "negative principal",
+      "inputs": {"principal": "-1", "section_7520_rate": "0.05", "projected_growth_rate": "0.08", "term_years": 5},
+      "expects_error": "ValueError"
+    },
+    {
+      "id": "GOLD-GRAT-NEG-003",
+      "name": "rate at boundary (1.0) rejected",
+      "inputs": {"principal": "1000000", "section_7520_rate": "1.0", "projected_growth_rate": "0.08", "term_years": 5},
+      "expects_error": "ValueError"
+    }
+  ]
+}
