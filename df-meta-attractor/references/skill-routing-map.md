@@ -40,3 +40,19 @@ Then route to:
 ## Minimal Loading Rule
 
 Load only the child skill needed for the current node. Do not load every skill because the request is ambitious. The meta-attractor should compress the field, then the orchestrator should expand only the next step.
+
+## Subagent Dispatch Rules (lesson L-001)
+
+When a routed step is delegated to a subagent, the dispatcher MUST match agent type to task semantics:
+
+| Task semantic | Required agent capability | Subagent type (Claude Code) |
+| --- | --- | --- |
+| Open-ended research / read-only exploration | Read, Glob, Grep, WebFetch, WebSearch | `Explore` (read-only) — fast, but cannot author files |
+| Atomization of an external corpus into structured artifacts | Read + Write + Grep self-verification | **`general-purpose`** — Explore agents will return synthesis-in-message and stall the pipeline |
+| Drafting governance records, code, tests, runbooks | Read + Write + Edit | **`general-purpose`** |
+| Independent audit (Hawkeye) | Read + Write (no chat-history) | **`general-purpose`** dispatched in a separate invocation with NO chat-context handoff (independence rule) |
+| Long-running incremental work (e.g., per-section research with progressive writes) | Read + Write + Edit + WebSearch | **`general-purpose`** with explicit "write per section, do not batch synthesis" instruction (mitigates INC-002 stall pattern) |
+
+Rejection trigger (enforced by `df-quality-refinery` anti-slop rule): a bead whose acceptance evidence is "subagent reported success" but no expected output files exist on disk. Orchestrators MUST verify file existence and content before transitioning the bead.
+
+Provenance rule for atomization tasks: every atom (PRD claim, transcript fact, requirement leaf) MUST carry `line_start`, `line_end`, and a verbatim `source_excerpt` that the orchestrator can grep-verify against the source file. Random-sample (n≥10) grep verification is mandatory before acceptance.
