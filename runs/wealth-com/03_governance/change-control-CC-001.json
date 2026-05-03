@@ -1,0 +1,84 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "change_request_id": "CC-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "filed_on": "2026-05-03",
+  "filed_by": "claude-orchestrator at client direction (response 'A' = Option A Demo MVP)",
+  "trigger": "Gap-analysis review by client + product-leader perspective revealed original scope (all 14 surfaces) is not multi-day work. Client elected Option A from a 3-option re-cut presented in prior response.",
+  "type": "scope_change_with_reapproval",
+  "reapproval_required": true,
+  "reapproval_received_at": "2026-05-03",
+  "reapproval_message_verbatim": "A",
+  "amendment": {
+    "field": "ATTR-WEALTHCOM-001 §scope_in + ENG-GOV-WEALTHCOM-001 §scope_baseline.in_scope + PRODUCT-TAILORING-WEALTHCOM-001 §mandatory_artifact_ids",
+    "from_state": "Full clone — all 14 wealth.com surfaces, 19 integrations, full Ester, full Tax Planning, all trust strategies (GRAT/SLAT/ILIT/CLAT/Dynasty/Revocable/QPRT/IDGT/CRT/CRUT), Family Office Suite, Heritage Map, Ownership Balance Sheet, Estate Tax Projections.",
+    "to_state": "Demo MVP — narrowed to: Auth+Tenant+Identity (Slice 1), Households+People+Entities (Slice 2), Documents+WORM Audit (Slice 3), Ester-substitute extractor with deterministic-calc layer (Slice 4), ONE estate-tax baseline calc under OBBBA $15M permanent (Slice 5 narrowed), ONE scenario modeled (e.g., GRAT vs do-nothing under $15M permanent — Slice 6 narrowed to 1-of-9 strategies), minimal walkable UI for advisor flow (Slice 9), transfer test on a different fintech surface, retrospective. Slices 7 (Reports) and 8 (Integrations Hub beyond 2 mocks) are pulled out of Demo MVP scope."
+  },
+  "in_scope_demo_mvp": [
+    "Multi-tenant data model with Postgres RLS row-level isolation",
+    "Auth: SSO-stub + RBAC + MFA-stub (real implementation deferred to post-MVP)",
+    "Household → People → Entities (incl. Trust types) with relationships",
+    "Document upload + S3-equivalent storage + WORM audit log (immutable append-only)",
+    "Ester-substitute extractor: layout-aware OCR mock + LLM extraction + deterministic-calc validation layer + citation grounding (architecture as ADR; implementation as one extraction flow on a sample will/trust document)",
+    "Federal estate tax calculation engine for ONE scenario: assets → DSUE → exemption (OBBBA $15M permanent) → taxable estate → 40% top rate → projected tax liability. Golden dataset from public corpora.",
+    "ONE scenario modeled in the Scenario Builder: GRAT vs do-nothing for a $20M household under OBBBA. Side-by-side comparison.",
+    "Minimal advisor UI: login → dashboard → household list → household detail → document upload → extraction review → estate-tax baseline view → ONE scenario comparison view. Playwright-evidenced.",
+    "Transfer test: apply factory to a Holistiplan-style mini-app (single-input tax-baseline calc surface) to validate factory generalization.",
+    "Retrospective + skill-system update PRs (lesson L-001 already drafted; will be applied this iteration).",
+    "Final Hawkeye conformance audit at run closure."
+  ],
+  "out_of_scope_demo_mvp_now_deferred": [
+    "Family Office Suite (multi-entity governance UI)",
+    "Heritage Map (multi-generational visualization)",
+    "Ownership Balance Sheet (entity-level asset accounting)",
+    "Estate Tax Projections (multi-scenario forward modeling beyond 1 scenario)",
+    "Full Tax Planning surface (1040/W-2 ingestion, look-back/forward, prior-year safe harbor)",
+    "Document Creation surface (POA, Revocable Trust, AHCD, Guardian Nomination drafting) — too UPL-sensitive for MVP and adds attorney-of-record workflow complexity. Deferred. ADR will note constraint.",
+    "Full Scenario Builder strategy library (SLAT, ILIT, CLAT, Dynasty, QPRT, IDGT, CRT/CRUT) — only GRAT included.",
+    "Reports surface (Executive Summary, Standalone Visual Report, Form 706/709 worksheets)",
+    "Integrations Hub beyond 2 adapters (only Plaid-shape and Schwab-shape contract+mock; the other 17 named in PRD are pulled out)",
+    "Voice-to-text intake (Tax Planning § 'just say the word')",
+    "Mobile app",
+    "Tasks surface (assignable client tasks)",
+    "Insurance & Liabilities entity sub-model"
+  ],
+  "rationale": "Demo MVP exercises every meta-skill at least once (intake → architecture → construction → V&V → transfer-test → retro), produces a walkable demonstration, and runs the transfer test (the actual proof-of-system). Full clone is months of team work — not appropriate for a multi-day governed run. Surface deletions chosen to keep the regulated-AI-fintech archetype's most evidence-heavy paths (extraction, deterministic calc, scenario comparison, multi-tenant isolation, audit log) IN SCOPE; non-evidence-heavy presentation surfaces (Reports, Heritage Map, etc.) deferred.",
+  "impact_assessment": {
+    "scope": "narrowed by ~70%; surface count 14→4 (Auth+Households-Entities+Documents+UI), feature count ~30→~12, scenario count 9→1, integration count 19→2.",
+    "tokens": "Re-budget revised: low ~250K, mid ~600K, high ~1M. Within the originally approved CHK-2 mid-band (400K) at risk; will trigger CHK-2.5 spend-pace check at 75% of original mid (300K). Reapproval pre-authorized via 'A' but will checkpoint if mid band exceeded.",
+    "schedule": "Multi-day still applies. Estimated 30-45 hr orchestrator + subagent work distributed across multiple sessions.",
+    "quality": "RALPH 5-loop discipline RETAINED for in-scope artifacts. Threshold reductions NOT permitted.",
+    "risk": "Reduced — narrowed scope reduces failure surface area. New risk: 'demo-only sufficient?' — mitigated by transfer-test bead which tests factory generalization independent of demo polish."
+  },
+  "approval": {
+    "approver": "client_owner = eranti@gmail.com",
+    "decision": "approved",
+    "at": "2026-05-03",
+    "notes": "Single-letter 'A' response = Option A acceptance. Reapproval pre-authorized for CC-001."
+  },
+  "reapproval_triggers_after_this_change": [
+    "+15% delta from new revised mid band (600K)",
+    "Adding back any out-of-scope surface",
+    "Surface flag changes (e.g., enabling production_surface)",
+    "Threshold reduction below 96% per expert",
+    "Real partner integration request"
+  ],
+  "child_beads_unblocked_or_created": [
+    "TB-WC-2026-0503-CC-PATCH — apply this CC to meta-attractor + ENG-GOV + product-tailoring + SDLC matrix in a single sweep.",
+    "TB-WC-2026-0503-RETAG — re-tag PRD atoms with OBBBA + Demo-MVP scope status.",
+    "TB-WC-2026-0503-L001 — apply L-001 PRs to skill system.",
+    "TB-WC-2026-0426-005 — Stage-1 intake (now narrowed to Demo-MVP atoms only)."
+  ],
+  "trace": {
+    "supersedes_section_in": "ATTR-WEALTHCOM-001 §scope_in",
+    "evidence_referenced": [
+      "Gap analysis response (this conversation)",
+      "User reply 'A' on 2026-05-03",
+      "ENG-GOV-WEALTHCOM-001 §change_control"
+    ]
+  }
+}
