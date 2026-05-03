@@ -1,0 +1,109 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "ATTR-TRANSFER-001",
+  "run_id": "RUN-TRANSFER-001",
+  "parent_run": "RUN-WEALTHCOM-001",
+  "purpose": "Transfer test (anti-overfit proof) for the dark-factory skill system. See runs/transfer-test-mini/README.md.",
+  "created_on": "2026-05-03",
+  "created_by": "claude-orchestrator at the wealth.com run's PERT bead TB-WC-2026-0508-021",
+  "source_signals": [
+    {"signal_id": "SRC-T-001", "kind": "parent_run_finding", "reference": "RSK-005 in ATTR-WEALTHCOM-001 — factory overfit risk", "extract": "Anti-overfit transfer-test bead is mandatory before wealth.com run closure."},
+    {"signal_id": "SRC-T-002", "kind": "skill_system", "reference": "df-meta-attractor §guardrails 'do not overfit factory to current example app'", "extract": "Skill system's foundational rule that motivates this run."}
+  ],
+  "attractor_state": "stable",
+  "attractor_state_rationale": "Goal is concrete (apply factory to a deliberately different workload and verify it tailors correctly), scope is narrow (one calc rule + golden tests + tailoring artifacts; no UI), tech stack inherits from wealth.com run (Python 3.12 + pytest), no checkpoints required (this is a sub-run of the parent's already-approved budget).",
+  "goal": "Demonstrate that the dark-factory skill system applies cleanly to a workload that shares the regulated-fintech archetype but differs in user model, domain entities, document types, and isolation requirements. Specifically: build a TaxBaseline Mini single-user CPA tool with the same TDD + deterministic-calc + ADR + RALPH patterns, and prove no wealth.com vocabulary leaks into it.",
+  "scope_in": [
+    "Meta-attractor + Product Tailoring Profile + Generated Meta-Skill Contract for TaxBaseline Mini",
+    "ADR-T-001 'deterministic-calc separation' (transferred from ADR-001)",
+    "ADR-T-002 'no multi-tenant by design' (documents deliberate divergence from ADR-002)",
+    "One calc rule: federal_income_tax_2026 (IRC §1 brackets + standard deduction)",
+    "Golden dataset for that rule: ≥10 cases including boundary/negative",
+    "pytest parametrized golden tests",
+    "Adversarial generic-process-critic review confirming no wealth.com leakage"
+  ],
+  "scope_out": [
+    "UI (CLI/library only)",
+    "Multi-user / multi-tenant (single-user is the archetype)",
+    "Real 1040/W-2 PDF parsing (out-of-scope; calc accepts structured input)",
+    "Other tax rules beyond federal income tax baseline",
+    "State income tax",
+    "Real partner integrations",
+    "Any wealth.com-specific noun (Household, Trust, Person, Entity, Asset, GRAT, OBBBA, Sage, etc. — these are not part of the tax baseline domain)"
+  ],
+  "layer_map": {
+    "product_specific": [
+      "TaxBaseline Mini surface and entity model (TaxFiling)",
+      "IRC §1 income tax brackets",
+      "Standard deduction amounts for 2026"
+    ],
+    "factory_reusable": [
+      "Deterministic-calc separation pattern (ADR-001 → ADR-T-001 transfer evidence)",
+      "Citation-grounded extraction pattern (ADR-003 — applies but no extractor in this minimal scope)",
+      "Golden-dataset TDD discipline",
+      "RALPH 5-loop discipline",
+      "Hawkeye independent audit pattern",
+      "Product Tailoring Profile schema with surface_flags + risk_profile + methodology_blend"
+    ],
+    "meta_meta_governance": [
+      "Validation that the skill system distinguishes per-archetype tailoring from one-size-fits-all generation",
+      "Validation that anti-overfit rules in product-tailoring-profile.json (forbidden wealth.com nouns) are enforceable as a CI check"
+    ]
+  },
+  "selected_mode": "greenfield-narrow-scope",
+  "selected_skills": [
+    {"skill": "df-meta-attractor", "reason": "Authors this record + tailoring + generated meta-skill", "load_now": true, "phase": "now"},
+    {"skill": "df-quality-refinery", "reason": "RALPH 5-loop on ADR-T-001 + golden test acceptance", "load_now": false, "phase": "post-construction"},
+    {"skill": "df-feedback-learning", "reason": "Capture lessons that update the wealth.com run's anti-overfit rules", "load_now": false, "phase": "post-acceptance"}
+  ],
+  "node_contract": {
+    "what": "Build TaxBaseline Mini calc rule + tailoring artifacts + ADRs proving the factory transfers without wealth.com vocabulary leakage.",
+    "why": "Without this evidence, RSK-005 (factory overfit) remains open and the wealth.com run cannot pass final Hawkeye conformance.",
+    "how": "Meta-attractor → tailoring → ADR-T-001/002 → calc rule + golden dataset + tests → adversarial review → final Hawkeye notes anti-overfit pass.",
+    "where": "runs/transfer-test-mini/ (sibling to runs/wealth-com/)",
+    "when": "Now; closes before final Hawkeye on parent run.",
+    "who": "claude-orchestrator (parent delivery owner); adversarial generic-process critic for review.",
+    "how_good": "100% wealth.com-noun absence in transfer-test-mini/ (excluding parent_run cross-references and explicit comparison tables); ≥10 golden test cases pass; ADR-T-001 demonstrably mirrors ADR-001's structure with different rule content; ADR-T-002 explicitly documents non-transfer of ADR-002 with rationale."
+  },
+  "expert_debate": {
+    "round_1_independent_framing": {
+      "system_theorist": "The transfer test must use a workload that genuinely differs in archetype dimensions, not a thin renaming of wealth.com. Income-tax-for-solo-CPA is well chosen because it lacks multi-tenant, lacks the household-as-aggregate-root, and operates on different IRS code sections. Risk: making the new workload too small to actually exercise the factory. Mitigation: include enough golden test cases to demonstrate the TDD pattern transfers.",
+      "requirements_governance_architect": "ADR-T-001 must explicitly trace back to ADR-001 to demonstrate the *pattern* transferred, not the rules. ADR-T-002 must explicitly document the deliberate non-transfer of ADR-002 — a factory that applies multi-tenant isolation to a single-user tool would itself be a slop signal. Lessons feed back to df-feedback-learning.",
+      "verification_safety_critic": "Demand a CI-checkable assertion: 'no wealth.com nouns in transfer-test-mini/'. Forbidden tokens: Household, Trust, GRAT, SLAT, ILIT, CLAT, Dynasty, OBBBA, Ester, Sage, Heritage Map, Family Office, EstateFlow, EstateCompass. The test passes if a grep returns zero matches in transfer-test-mini/02_attractor/, /05_artifacts/, and /app/.",
+      "adversarial_generic_process_critic": "Hardest test: try to cut-and-paste the wealth.com run's ADR-001 verbatim into this run. If it 'just works', either ADR-001 is too generic OR the new workload is too similar. Real test: ADR-001 had specific clauses about 'estate tax' and 'GRAT 7520 rate' — those must be replaced; only the *separation pattern* should remain. Verifies ADR is workload-specific."
+    },
+    "round_2_cross_critique": {
+      "theorist_to_governance": "The forbidden-token list should also include wealth.com's bounded-context names. Add: 'Person', 'Entity', 'beneficiary' (in the trust sense), 'distribution rule'. These are wealth.com-specific even though they sound generic.",
+      "governance_to_theorist": "Agreed. But 'audit log' and 'tenant context' are factory-reusable patterns — they shouldn't be on the forbidden list. The line is: forbidden = wealth.com domain vocabulary; allowed = governance/architecture vocabulary that any regulated SaaS would use.",
+      "verification_to_all": "The CI grep should also assert the ADR-T-001 explicitly cites ADR-001 as the parent pattern. Anti-overfit doesn't mean 'pretend they're unrelated' — it means 'show the pattern, not the content, transfers'.",
+      "adversarial_to_verification": "Add a second adversarial test: read ADR-T-001 and ADR-T-002. If a reader can't tell from those documents alone what the workload is (without the README), the ADRs are too generic and the transfer-test is theatre. Test: someone looking at ADR-T-001 should immediately see 'income tax' and 'IRC §1', not 'tax rules in general'."
+    },
+    "round_3_synthesis": {
+      "decision": "PROCEED with TaxBaseline Mini scope. Forbidden-token list locked: 'Household, Trust, GRAT, SLAT, ILIT, CLAT, Dynasty, OBBBA, Ester, Sage, Heritage Map, Family Office, EstateFlow, EstateCompass, distribution_rule, beneficiary' (where beneficiary is in the trust-distribution sense; allow 'beneficiary designation' references in tax-form context as that's IRS terminology). ADR-T-001 must cite ADR-001 explicitly as parent pattern. ADR-T-002 must cite ADR-002 as the rule it deliberately does NOT transfer, with rationale.",
+      "non_negotiable_constraints_locked_in": [
+        "Pattern transfer, not content transfer",
+        "ADR-T-* must be workload-specific enough that a reader knows it's tax-baseline-not-estate",
+        "CI grep for forbidden tokens runs against transfer-test-mini/ tree",
+        "Lessons feed back to df-feedback-learning"
+      ]
+    }
+  },
+  "evidence_commitments": [
+    "ADR-T-001 explicitly cites ADR-001 as the parent transferred pattern + IRC §1 rule content distinguishes it",
+    "ADR-T-002 explicitly cites ADR-002 as the deliberately-NOT-transferred rule + rationale",
+    "≥10 golden test cases for federal_income_tax_2026 rule pass",
+    "Adversarial CI-grep: zero forbidden wealth.com tokens in runs/transfer-test-mini/ (excluding parent_run references in this attractor record)"
+  ],
+  "anti_overfit_checks": [
+    "Forbidden-token grep gate (locked)",
+    "ADR-T-001 + ADR-T-002 reader test: workload identifiable from ADRs alone",
+    "Generic-process-critic adversarial review confirming no wealth.com vocabulary leaks"
+  ],
+  "next_safe_action": "Author product-tailoring-profile.json (different surface flags from wealth.com) and generated-meta-skill-contract.json (different refusal rules from wealth.com — e.g., no 'multi-tenant' rule, but include 'no LLM income-tax-bracket arithmetic' rule). Then ADR-T-001/002. Then calc rule + golden dataset + tests. Then run the CI grep for forbidden tokens.",
+  "verdict": "pass",
+  "verdict_rationale": "Coherent. Goal narrow. Forbidden-token list locked. Lessons mapped to df-feedback-learning. Evidence commitments are CI-checkable. Proceed."
+}

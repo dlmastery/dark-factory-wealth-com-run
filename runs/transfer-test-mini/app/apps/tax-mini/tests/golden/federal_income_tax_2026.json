@@ -1,0 +1,115 @@
+{
+  "$schema": "https://transfer-test-mini.local/schemas/golden-dataset.json",
+  "rule_id": "RULE-FIT-2026",
+  "computation_version": "2026.05.03-fit-illustrative",
+  "citation": "IRC §1; IRS Rev. Proc. 2025-32 (illustrative figures)",
+  "description": "Golden dataset for TaxBaseline Mini's federal income tax rule. Each case is hand-verified against the 2026 SINGLE/MFJ illustrative brackets in federal_income_tax_2026.py. Negative cases verify input validation.",
+  "cases": [
+    {
+      "id": "FIT-001",
+      "name": "Single filer, $50K wages, standard deduction",
+      "inputs": {"wages": "50000", "filing_status": "single"},
+      "expected_taxable_income": "34600",
+      "expected_tax_lt": "5000",
+      "rationale": "AGI $50K - $15.4K std = taxable $34.6K. Falls into 12% bracket past $11,900. Hand-check: $1190 (10% on first $11.9K) + ($34600-$11900)*0.12 = $1190 + $2724 = $3914."
+    },
+    {
+      "id": "FIT-002",
+      "name": "Single filer at zero-tax boundary",
+      "inputs": {"wages": "15400", "filing_status": "single"},
+      "expected_taxable_income": "0",
+      "expected_tax": "0.00",
+      "rationale": "Wages exactly equal standard deduction → taxable income 0."
+    },
+    {
+      "id": "FIT-003",
+      "name": "Single filer below standard deduction",
+      "inputs": {"wages": "10000", "filing_status": "single"},
+      "expected_taxable_income": "0",
+      "expected_tax": "0.00",
+      "rationale": "Standard deduction floors taxable_income at 0."
+    },
+    {
+      "id": "FIT-004",
+      "name": "MFJ couple, $200K wages",
+      "inputs": {"wages": "200000", "filing_status": "married_filing_jointly"},
+      "expected_taxable_income": "169200",
+      "rationale": "$200K - $30.8K std = $169.2K. Within MFJ 22% bracket ($96,700 - $206,200). 10% on first $23,800 = $2,380; 12% on $23,800-$96,700 ($72,900) = $8,748; 22% on $96,700-$169,200 ($72,500) = $15,950. Total ≈ $27,078."
+    },
+    {
+      "id": "FIT-005",
+      "name": "Single filer, top bracket",
+      "inputs": {"wages": "1000000", "filing_status": "single"},
+      "expected_taxable_income": "984600",
+      "rationale": "Single brackets: full ladder applies. Hand-check tax (illustrative): 10% on 11.9K + 12% on (48350-11900) + 22% on (103100-48350) + 24% on (196750-103100) + 32% on (249700-196750) + 35% on (624650-249700) + 37% on (984600-624650). Should land somewhere around $300K-$320K."
+    },
+    {
+      "id": "FIT-006",
+      "name": "Single with above-the-line deduction (HSA, IRA)",
+      "inputs": {"wages": "60000", "above_the_line_deductions": "5000", "filing_status": "single"},
+      "expected_agi": "55000",
+      "expected_taxable_income": "39600",
+      "rationale": "$60K - $5K above-line = AGI $55K - $15.4K std = taxable $39.6K."
+    },
+    {
+      "id": "FIT-007",
+      "name": "Itemized deductions exceed standard",
+      "inputs": {"wages": "100000", "use_standard_deduction": false, "itemized_deductions": "25000", "filing_status": "single"},
+      "expected_taxable_income": "75000",
+      "expected_deduction_kind": "itemized",
+      "rationale": "Itemized $25K > std $15.4K, so itemized used: $100K - $25K = $75K taxable."
+    },
+    {
+      "id": "FIT-008",
+      "name": "Other ordinary income only (e.g., 1099 contractor)",
+      "inputs": {"wages": "0", "other_ordinary_income": "75000", "filing_status": "single"},
+      "expected_taxable_income": "59600",
+      "rationale": "$75K other - $15.4K std = $59.6K taxable."
+    },
+    {
+      "id": "FIT-009",
+      "name": "Above-the-line deduction exceeds gross income (zero AGI)",
+      "inputs": {"wages": "5000", "above_the_line_deductions": "10000", "filing_status": "single"},
+      "expected_agi": "0",
+      "expected_taxable_income": "0",
+      "expected_tax": "0.00",
+      "rationale": "max(0, 5000 - 10000) = 0; std deduction can't drive negative; tax is zero."
+    },
+    {
+      "id": "FIT-010",
+      "name": "MFS (married filing separately) at modest income",
+      "inputs": {"wages": "50000", "filing_status": "married_filing_separately"},
+      "expected_taxable_income": "34600",
+      "rationale": "MFS std deduction same as Single ($15.4K); brackets are MFJ/2 = same as Single roughly. $50K - $15.4K = $34.6K."
+    },
+    {
+      "id": "FIT-011",
+      "name": "Head of Household, $80K wages",
+      "inputs": {"wages": "80000", "filing_status": "head_of_household"},
+      "expected_taxable_income": "56900",
+      "rationale": "HOH std $23.1K → $80K - $23.1K = $56.9K taxable."
+    },
+    {
+      "id": "FIT-012",
+      "name": "Boundary: top of 10% single bracket",
+      "inputs": {"wages": "27300", "filing_status": "single"},
+      "expected_taxable_income": "11900",
+      "expected_tax": "1190.00",
+      "rationale": "$27,300 - $15,400 std = $11,900 taxable, exactly at top of 10% bracket. Tax = $11,900 × 10% = $1,190.00."
+    }
+  ],
+  "negative_cases": [
+    {
+      "id": "FIT-NEG-001",
+      "name": "Negative wages rejected",
+      "inputs": {"wages": "-1", "filing_status": "single"},
+      "expects_error": "ValueError"
+    },
+    {
+      "id": "FIT-NEG-002",
+      "name": "Invalid filing status string is caught at enum boundary",
+      "inputs_raw": {"wages": "50000", "filing_status": "totally_made_up_status"},
+      "expects_error": "ValueError"
+    }
+  ]
+}

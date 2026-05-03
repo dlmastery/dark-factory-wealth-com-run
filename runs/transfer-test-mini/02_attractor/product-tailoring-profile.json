@@ -1,0 +1,90 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "template_only": false,
+  "profile_id": "PRODUCT-TAILORING-TRANSFER-001",
+  "run_id": "RUN-TRANSFER-001",
+  "attractor_record": "ATTR-TRANSFER-001",
+  "product_name": "TaxBaseline Mini",
+  "product_archetype": "regulated-fintech-single-user-desktop-tool-with-document-intelligence",
+  "archetype_rationale": "Differs from wealth.com's 'multi-tenant-AI-fintech-SaaS' archetype on three axes: (1) single-user not multi-tenant, (2) desktop/CLI not browser SaaS, (3) different IRS code section (§1 income, not §2001 estate). Shares: regulated workload, deterministic-calc requirement, citation grounding for any AI extraction, audit-log requirement. The shared bits are factory-reusable; the divergent bits are product-specific tailoring.",
+  "lifecycle_mode": "greenfield-narrow-scope",
+  "surface_flags": {
+    "code_producing": true,
+    "ui_surface": false,
+    "api_surface": false,
+    "data_surface": true,
+    "production_surface": false,
+    "brownfield": false,
+    "scenario_driven": true,
+    "regulated_or_high_assurance": true
+  },
+  "surface_flag_rationale_vs_wealthcom": {
+    "ui_surface": "WEALTH.COM=true (Heritage Map, Scenario Builder UI). HERE=false (CLI/library only). Demonstrates factory tailors UI gates per surface.",
+    "api_surface": "WEALTH.COM=true (REST API for advisor workbench). HERE=false (single-user tool, no API). Demonstrates API contract gates only fire when api_surface=true.",
+    "code_producing": "Both true. Shared factory pattern.",
+    "data_surface": "Both true. Shared.",
+    "production_surface": "Both false at v0. Shared.",
+    "scenario_driven": "Both true. Shared. (Income tax is a deterministic scenario; estate tax + GRAT is a deterministic scenario.)"
+  },
+  "risk_profile": {
+    "safety": "high",
+    "money": "high",
+    "privacy": "medium",
+    "security": "low",
+    "reliability": "low",
+    "compliance": "high",
+    "ux": "low",
+    "migration": "low",
+    "scale": "low"
+  },
+  "risk_profile_rationale_vs_wealthcom": {
+    "safety_high": "Both: tax-calc errors carry IRS exposure. Shared. Deterministic-calc separation transfers.",
+    "money_high": "Both. Shared.",
+    "privacy_medium_vs_high": "Wealth.com=high (multi-tenant, PHI in HCDs). Here=medium (single-user, no PHI, no AHCD documents). The privacy-heavy tailoring (per-tenant KMS, three-layer isolation) is NOT applicable.",
+    "security_low_vs_high": "Wealth.com=high (multi-tenant SaaS, valuable target). Here=low (single-user desktop tool, no SaaS surface). Defense-in-depth is appropriate level for risk; 3-layer tenant isolation would be theatre here.",
+    "compliance_high": "Both: IRS rules + (here) AICPA professional standards for CPAs. Shared.",
+    "scale_low_vs_medium": "Wealth.com=medium at v0 (multi-tenant evolution). Here=low (single user, single machine).",
+    "migration_low": "Both greenfield."
+  },
+  "methodology_blend": {
+    "rup": {"included": false, "reason": "Single-developer narrow scope; phase discipline overhead exceeds value"},
+    "mda": {"included": false, "reason": "No platform-independent vs platform-specific separation needed at this scale"},
+    "ddd": {"included": false, "reason": "Single bounded context (TaxFiling); ubiquitous-language overhead exceeds value"},
+    "tdd_bdd": {"included": true, "reason": "Same as wealth.com run — golden-dataset TDD for deterministic calc rules. SHARED PATTERN."},
+    "sre": {"included": false, "reason": "production_surface=false; single-user tool"},
+    "ssdf_owasp_samm": {"included": false, "reason": "No web-attack surface to defend"}
+  },
+  "methodology_blend_divergence_note": "The wealth.com tailoring blended 6 methods (RUP+MDA+DDD+TDD+SRE+SSDF). The TaxBaseline Mini tailoring blends 1 (TDD/BDD only). This is the factory tailoring per archetype, not blanket-applying a 'serious project blend'. If a future review of the factory's methodology-blender suggests it always blends 6 methods regardless of risk profile, that suggestion is itself a slop signal — caught here.",
+  "mandatory_testing_classes": [
+    {"class": "unit", "rationale": "calc rule pure-function tests"},
+    {"class": "scenario_bdd", "rationale": "tax-baseline scenarios are the product"},
+    {"class": "negative", "rationale": "invalid-input rejection cases"}
+  ],
+  "mandatory_testing_classes_divergence_note": "Wealth.com mandated 11 testing classes. TaxBaseline Mini mandates 3. The factory tailors testing rigor to risk profile + surface flags, not blanket-applies. integration / contract_api / browser_wysiwyg / visual_regression / production_drill / accessibility_ux are all NOT applicable here.",
+  "mandatory_artifact_ids": [
+    "ATTR-TRANSFER-001 (this run's attractor)",
+    "PRODUCT-TAILORING-TRANSFER-001 (this profile)",
+    "GENERATED-META-SKILL-TRANSFER-001",
+    "ADR-T-001 (deterministic-calc separation, transferred from ADR-001)",
+    "ADR-T-002 (no-multi-tenant-by-design, deliberately NOT transferred from ADR-002)",
+    "Golden dataset for federal_income_tax_2026",
+    "pytest test file with parametrized golden cases",
+    "Adversarial review record confirming no wealth.com vocabulary leakage"
+  ],
+  "human_boundary_triggers": [
+    "Any addition of multi-tenant or multi-user concepts (would change archetype)",
+    "Any addition of estate/gift/GST tax (would replicate wealth.com surface)",
+    "Lowering golden-test threshold below 100% pass"
+  ],
+  "anti_overfit_rules_for_factory": [
+    "Forbidden tokens in this run's tree (CI grep): Household, Trust, GRAT, SLAT, ILIT, CLAT, Dynasty, OBBBA, Ester, Sage, Heritage Map, Family Office, EstateFlow, EstateCompass, distribution_rule. Allowed: 'beneficiary' in tax-form context (1099 beneficiary designations) — but flag for review.",
+    "ADR-T-001 must explicitly cite ADR-001 as the parent pattern; the *pattern* transfers, the *content* (estate tax → income tax) does not.",
+    "ADR-T-002 must explicitly cite ADR-002 and document why it is NOT transferred (different archetype: single-user not multi-tenant).",
+    "If any factory-reusable rubric or template *requires* fields that are wealth.com-specific (e.g., 'tenant_id', 'household_id'), that is a factory-overfit signal — surface it to df-feedback-learning."
+  ],
+  "template_marker": false
+}
