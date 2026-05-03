@@ -1,0 +1,482 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "INT-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "attractor_record": "ATTR-WEALTHCOM-001",
+  "change_control": "CC-001 (Demo MVP scope amendment, approved 2026-05-03 by client_owner=eranti@gmail.com)",
+  "persona": "df-intake-spec-lab",
+  "scope_basis": "CC-001 §in_scope_demo_mvp + ATTR §non_negotiable_constraints_locked_in + FACT-OBBBA-001 + product-tailoring-profile §risk_profile + generated-meta-skill-contract §refusal_rules",
+  "filtered_atoms_source": "C:\\Users\\abhir\\version2\\runs\\wealth-com\\00_recon\\prd-atoms.json (filtered file not present; in-scope filter applied inline per CC-001 §in_scope_demo_mvp)",
+  "in_scope_atom_universe_inline_filter": [
+    "Auth/Identity/Tenant: PRD-0097 (MFA/SSO), PRD-0113 (encryption-at-rest), PRD-0114 (TLS 1.3), PRD-0115 (compliance certs incl. SOC 2 + GLBA), PRD-0116 (RBAC+ABAC 40+ scopes), PRD-0117 (breach SLAs), PRD-0184 (white-label domain), PRD-0190 (anonymized prompt log), FACT-NYDFS-PART500-2025, FACT-MT-CT-GLBA-2025",
+    "Households+People+Entities: PRD-0063 (core entity model), PRD-0085 (FOS multi-entity span — capability hint only), PRD-0086 (GST inclusion ratio rule — used only at Trust entity sub-model layer for Demo MVP), PRD-0087 (canonical hierarchy — informs Trust types), PRD-0189 (sample household JSON with allocatedExemption + gstInclusionRatio)",
+    "Documents+WORM Audit: PRD-0080 (channels — drag&drop kept; email-in/batch deferred per CC-001 narrowing), PRD-0104 (WORM 7-year), PRD-0106 (SEC 204-2 + FINRA 17a-4(f)), PRD-0180 (audit log JSON shape with deterministicValidation + citations), PRD-0188 (Vault RBAC 5 roles), PRD-0190 (anonymized prompt log), PRD-0191 (firm-level governance approval chains)",
+    "Ester-substitute extractor: PRD-0072 (5 agents — narrowed to Document Extraction + Q&A only), PRD-0073 (>=98% on standard instruments), PRD-0074 (golden test set + KPIs), PRD-0078 (per-field confidence + 85% HITL routing), PRD-0079 (KPIs incl. <15% review rate), PRD-0124 (Section 19 metrics — flagged contradiction), PRD-0165 (0.0001 numerical grounding), PRD-0166 (<50ms policy engine), PRD-0167 (drift monitoring), PRD-0168 (red-team), PRD-0170 (sample extraction JSON), PRD-0173 (memory scopes — only session memory in-scope for MVP), PRD-0174 (chunking 200-600 tokens), PRD-0182 (disclaimer language), PRD-0193 (Level 3 framing — context only), PRD-0199 (cache hit <80ms — context, not MVP gate), PRD-0200 (US-9.1 acceptance: <20s + ≥98%), FACT-EXTRACT-COMPUTE-NARRATE-001",
+    "Federal estate tax baseline calc: PRD-0042 (TCJA framing — SUPERSEDED by FACT-OBBBA-001), PRD-0043 (married couple — SUPERSEDED), PRD-0094 (forms incl. 706/709), PRD-0181 (Section 7520 rate), PRD-0195 (state estate/inheritance taxes — context; OUT for MVP single scenario), PRD-0207 (deterministic recompute within 0.0001), PRD-0208 (sample scenario — uses repealed TCJA $7M; recomputed to $15M for MVP), FACT-OBBBA-001",
+    "Scenario Builder (1 scenario — GRAT vs do-nothing $20M): PRD-0069 (GRAT among irrevocable structures — only GRAT included per CC-001), PRD-0096 (Tax Planning opportunities — GRAT laddering kept; rest deferred), PRD-0157 (sample SLAT+GRAT scenario — used as analog with OBBBA correction), PRD-0181 (Section 7520 slider), PRD-0207 (GRAT remainder validation 0.0001 tolerance), PRD-0208 (scenario JSON shape — recomputed for OBBBA), FACT-OBBBA-001",
+    "Advisor walkable UI: PRD-0046 (Sarah Thompson advisor archetype), PRD-0049 (Jake Harlan paraplanner), PRD-0083 (advisor view mode — only this mode kept; client view deferred for MVP), PRD-0084 (WCAG 2.1 AA — required), PRD-0126 (Tailwind+Radix design tokens), PRD-0127 (desktop-first advisor; mobile companion deferred), PRD-0128 (AI-Trust heuristics: Transparency, Control, Emotional Safety, Consistency), PRD-0182 (disclaimer overlay)",
+    "Integration adapter mocks (Plaid-shape + Schwab-shape ONLY): PRD-0091 (Carta/Coinbase/Zillow — context, not in MVP), PRD-0107 (30+ live — context), PRD-0110 (Schwab Custodial OAuth2+API key, bidirectional — Schwab-shape adapter), PRD-0155 (OpenAPI 3.1 + OAuth2 Bearer/mTLS — internal API contract), PRD-0156 (POST /v1/documents/scan endpoint shape), PRD-Plaid (line 3683 in canonical = Plaid live OAuth2 inbound real-time — Plaid-shape adapter)",
+    "Cross-cutting compliance/UPL: PRD-0148 (UPL R-09 risk), PRD-0169 (output blocking when construed as practicing law), PRD-0182 (disclaimer), HD-007 (educational draft framing — OUT of MVP per CC-001 deferring Document Creation surface)"
+  ],
+  "out_of_scope_atom_classes_excluded": [
+    "Family Office Suite UI (PRD-0085 reduced to entity model only)",
+    "Heritage Map / Visualizer multi-generational rendering (PRD-0081, PRD-0082, PRD-0205)",
+    "Ownership Balance Sheet death-sequence simulation (PRD-0088, PRD-0089, PRD-0090)",
+    "Document Creation surface — drafting, e-sign, RON (PRD-0067, PRD-0068, PRD-0069, PRD-0070, PRD-0071, PRD-0161, PRD-0162, PRD-0163, PRD-0164, PRD-0178, PRD-0188 mostly deferred; only Vault-storage portion kept)",
+    "Full Tax Planning surface beyond one estate-tax baseline (PRD-0093 launch context only; PRD-0094 only 706/709 surface used; PRD-0095 accuracy claim deferred to OBBBA-corrected golden set; PRD-0096 opportunity engine only GRAT)",
+    "Reports surface (PRD-0103)",
+    "Client Portal (PRD-0097 minus auth-stub portion; PRD-0099, PRD-0100)",
+    "Mobile / international / voice (PRD-0127 mobile companion, PRD-0144 voice, PRD-0146 international, PRD-0206)",
+    "Advisor Workbench Task Center / smart reminders / book-of-business (PRD-0101, PRD-0102, PRD-0176)",
+    "Marketing / pricing / GTM atoms (PRD-0001..0057 metrics, PRD-0129..0142, PRD-0185..0187)",
+    "Internal AI implementation specifics not relevant to substitute architecture (PRD-0118, PRD-0119, PRD-0120, PRD-0122, PRD-0123 — used for ADR context only)"
+  ],
+  "rounds": [
+    {
+      "round_id": "R1-CONTEXT",
+      "round_name": "Context",
+      "purpose": "Establish what the Demo MVP is for, who uses it, what success looks like.",
+      "questions": [
+        {
+          "answer_id": "ANS-0001",
+          "question_text": "What is the Demo MVP for and what is its primary purpose?",
+          "answer_text": "The Demo MVP is a walkable demonstration of an estate-and-tax-planning platform clone (working title 'EstateCompass') that exercises the dark-factory factory end-to-end across the regulated-fintech-AI-SaaS archetype. Its primary purpose is twofold: (a) produce a credible advisor-walkable demo of the highest-evidence-density vertical slice (auth → tenant → household → document upload → extraction → estate-tax baseline → one scenario), and (b) generate evidence to validate the dark-factory skill system against a high-risk regulated workload. It is NOT a full clone of Wealth.com — that was descoped via CC-001 from 14 surfaces to 4 in-scope plus 2 integration mocks.",
+          "source_atoms_or_files": ["CC-001 §amendment.to_state", "CC-001 §rationale", "ATTR-WEALTHCOM-001 §goal", "PRODUCT-TAILORING-WEALTHCOM-001 §archetype_rationale"],
+          "confidence": "high",
+          "affected_requirement_ids": ["VISION-001"],
+          "revalidation_trigger": "Client amends scope_in beyond CC-001 §in_scope_demo_mvp"
+        },
+        {
+          "answer_id": "ANS-0002",
+          "question_text": "Who are the named users for the Demo MVP and which are PRD-fictional vs real?",
+          "answer_text": "Two roles are in-scope for Demo MVP: (1) ADVISOR — archetype Sarah Thompson, Senior Wealth Advisor (PRD-0046; PRD-fictional persona, not a real customer). (2) PARAPLANNER — archetype Jake Harlan (PRD-0049; PRD-fictional). End-Client persona David Ellison (PRD-0050) is OUT for MVP because Client Portal is descoped. Compliance persona Marcus Rivera (PRD-0047) is OUT because no compliance surface in MVP. ALL personas are explicitly flagged as PRD-internal/illustrative — 'callers should treat as illustrative' per prd-canonical.md §Personas. Synthetic data only, no real PII, per FACT-SYNTH-001 / RSK-009.",
+          "source_atoms_or_files": ["PRD-0046", "PRD-0049", "prd-canonical.md §Personas", "ATTR §scope_out (synthetic data only)", "HD-008"],
+          "confidence": "high",
+          "affected_requirement_ids": ["CAP-AUTH-MULTITENANT", "CAP-ADVISOR-UI"],
+          "revalidation_trigger": "Client requests Client Portal back in scope"
+        },
+        {
+          "answer_id": "ANS-0003",
+          "question_text": "What does success look like for the Demo MVP?",
+          "answer_text": "Success criteria: (i) advisor (Sarah-archetype) logs in via SSO-stub on tenant A, sees only tenant A households, uploads a sample will/trust PDF; (ii) Ester-substitute extractor returns ≥98% confidence on core fields with citations and deterministic-calc validation flag; (iii) federal estate tax baseline computed for ONE scenario under OBBBA $15M permanent (40% top rate) within 0.0001 tolerance vs golden dataset; (iv) GRAT-vs-do-nothing scenario rendered side-by-side for $20M household; (v) WORM audit log captures every state-changing event with promptHash + modelVersion + deterministicValidation; (vi) tenant-isolation test proves zero cross-tenant data leakage; (vii) Playwright wysiwyg evidence captures the entire flow on desktop viewport with WCAG-AA pass; (viii) transfer test on Holistiplan-style mini-app passes; (ix) Hawkeye conformance audit at run closure issues PASS or CONDITIONAL_PASS. Documents-only completion is REFUSED per generated-meta-skill-contract §refusal_rules.",
+          "source_atoms_or_files": ["CC-001 §in_scope_demo_mvp", "ATTR §node_contract.how_good", "PRD-0073", "PRD-0078", "PRD-0165", "PRD-0180", "PRD-0200", "PRD-0207", "FACT-OBBBA-001"],
+          "confidence": "high",
+          "affected_requirement_ids": ["VISION-001", "CAP-EXTRACTION", "CAP-ESTATE-TAX-CALC", "CAP-SCENARIO-MODELING", "CAP-AUTH-MULTITENANT", "CAP-ADVISOR-UI", "CAP-DOCUMENT-VAULT"],
+          "revalidation_trigger": "Threshold reduction request or scope change"
+        },
+        {
+          "answer_id": "ANS-0004",
+          "question_text": "What is the deployment context for the demo?",
+          "answer_text": "Local Docker Compose, single host, no public internet exposure. production_surface=false per product-tailoring-profile.json §surface_flags. HD-004 default approved: 'Docker Compose local-only at v0; production deployment out of scope.' Two demo tenants seeded: tenant A 'Horizon Wealth Partners' (Sarah's firm) and tenant B 'Apex Wealth Group' (Marcus's firm — used only for tenant-isolation negative tests).",
+          "source_atoms_or_files": ["HD-004", "ATTR §scope_out", "product-tailoring-profile.json §surface_flag_rationale.production_surface"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-OPS-001", "NFR-AUTH-001"],
+          "revalidation_trigger": "HD-004 amended"
+        },
+        {
+          "answer_id": "ANS-0005",
+          "question_text": "What is the brand-substitution name and what wealth.com marks must NOT appear?",
+          "answer_text": "Working title 'EstateCompass' with internal AI-substitute name 'Sage' (HD-002 default proposal pending final confirmation). Forbidden registered marks per ATTR §scope_out and generated-meta-skill-contract §refusal_rules: Ester®, Family Office Suite™, EstateFlow™, Heritage Map, Plan for Every Tomorrow™. Brand substitution validator is a runtime gate. ASM: 'EstateCompass'/'Sage' will be used in all artifacts unless client overrides at checkpoint-#1.",
+          "source_atoms_or_files": ["HD-002", "ATTR §scope_out", "generated-meta-skill-contract §refusal_rules"],
+          "confidence": "medium",
+          "affected_requirement_ids": ["RULE-BRAND-001"],
+          "revalidation_trigger": "Client picks different name at checkpoint-#1"
+        }
+      ],
+      "branch_completeness_score": 92,
+      "branch_validation_readiness_score": 90
+    },
+    {
+      "round_id": "R2-OUTCOMES",
+      "round_name": "Outcomes",
+      "purpose": "Define what the advisor sees at the end of the demo flow and what counts as a successful demo run.",
+      "questions": [
+        {
+          "answer_id": "ANS-0010",
+          "question_text": "Walk through the demo flow chronologically — what does the advisor experience?",
+          "answer_text": "Demo flow (single seat, single tenant): (1) Advisor lands on /login, enters seed credential, completes MFA-stub, lands on /dashboard. (2) Dashboard shows 3 sample households for tenant A (zero from tenant B); advisor selects 'Ellison Household' ($20M synthetic). (3) Household detail view shows people (4 synthetic), entities (1 Revocable Trust placeholder, 1 GRAT placeholder, 1 Dynasty Trust placeholder), assets ($20M synthetic). (4) Advisor uploads sample-will.pdf via drag-drop; system shows progress, then extraction-review screen with 12 fields, per-field confidence, citations to source spans, and deterministic-validation badge. (5) Advisor confirms; system writes WORM audit event. (6) Advisor opens Estate-Tax view: shows assets $20M, OBBBA 2026 exemption $15M, taxable estate $5M, 40% top rate, projected federal tax $2.0M, with full deterministic-calc trace. (7) Advisor opens Scenario view: GRAT-vs-do-nothing side-by-side over 5-year horizon with Section 7520 slider; shows projected estate-tax delta at GRAT term-end vs do-nothing. (8) Each transition is logged in WORM audit with promptHash + modelVersion + citations + deterministicValidation:true.",
+          "source_atoms_or_files": ["CC-001 §in_scope_demo_mvp", "PRD-0080 (drag-drop)", "PRD-0078 (per-field confidence)", "PRD-0170 (sample extraction JSON)", "PRD-0180 (audit JSON)", "PRD-0181 (Section 7520 slider)", "PRD-0207 (GRAT recompute)", "FACT-OBBBA-001 ($15M exemption)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["CAP-ADVISOR-UI", "CAP-DOCUMENT-VAULT", "CAP-EXTRACTION", "CAP-ESTATE-TAX-CALC", "CAP-SCENARIO-MODELING", "CAP-HOUSEHOLD-MODEL"],
+          "revalidation_trigger": "Scenario set changes"
+        },
+        {
+          "answer_id": "ANS-0011",
+          "question_text": "What evidence proves the demo flow worked?",
+          "answer_text": "Per generated-meta-skill-contract §surface_gate_mapping: (a) Playwright WYSIWYG record per surface step with desktop screenshot, console+network capture (clean, zero errors), viewport check, WCAG-AA axe-core scan; (b) deterministic-calc test run record showing recomputed value within 0.0001 tolerance for both estate-tax baseline and GRAT remainder; (c) Postgres RLS tenant-isolation test record showing tenant B request returns 0 households when seed credential is for tenant A; (d) WORM audit retrieval test showing the demo flow's events all present, append-only, with full promptHash + modelVersion + deterministicValidation; (e) extraction holdout test on a public-corpus will document not in training set; (f) transfer-test record for Holistiplan-style mini-app pass.",
+          "source_atoms_or_files": ["generated-meta-skill-contract §surface_gate_mapping", "PRD-0078", "PRD-0104", "PRD-0165", "PRD-0180", "PRD-0207", "ATTR §evidence_commitments"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-EVD-001", "NFR-AUTH-001", "FR-AUDIT-001", "FR-CALC-001", "FR-EXTRACT-002"],
+          "revalidation_trigger": "Threshold reduction"
+        },
+        {
+          "answer_id": "ANS-0012",
+          "question_text": "What is explicitly NOT shown in the demo?",
+          "answer_text": "Per CC-001 §out_of_scope_demo_mvp_now_deferred: NO document creation/drafting (no POA/Trust drafting, no DocuSign integration, no RON), NO Heritage Map / multi-generational visualization, NO Ownership Balance Sheet death-sequence sim, NO Family Office Suite UI, NO multi-scenario library beyond 1 (only GRAT-vs-do-nothing), NO Reports export surface, NO Tax Planning beyond estate-tax baseline, NO Client Portal, NO mobile, NO Tasks, NO Insurance/Liabilities, NO real partner integrations (Plaid+Schwab are mocks), NO i18n, NO voice intake.",
+          "source_atoms_or_files": ["CC-001 §out_of_scope_demo_mvp_now_deferred"],
+          "confidence": "high",
+          "affected_requirement_ids": [],
+          "revalidation_trigger": "Client adds back any deferred surface (triggers reapproval per CC-001)"
+        }
+      ],
+      "branch_completeness_score": 90,
+      "branch_validation_readiness_score": 92
+    },
+    {
+      "round_id": "R3-CONSTRAINTS",
+      "round_name": "Constraints",
+      "purpose": "Capture tech-stack, regulatory, ethical, and data constraints that bind the spec.",
+      "questions": [
+        {
+          "answer_id": "ANS-0020",
+          "question_text": "What is the locked tech stack?",
+          "answer_text": "HD-003 default approved: Node 20 + TypeScript + Fastify (backend services); React 18 + Vite + Tailwind (web UI); Postgres 16 with pgvector + Row-Level Security (database, single-cluster, multi-tenant via RLS); Python 3.12 + FastAPI (Ester-substitute AI service); Anthropic Claude API (frontier-model substitute for extraction; PRD-0120 mentions GPT-4o + Claude 3.5 — we use Claude only); OpenTelemetry (observability); Docker Compose (local dev/demo); Playwright (UI evidence); Vitest (TS) + Pytest (Py) for unit/integration; pgvector for embeddings (no Pinecone at v0). Diverges from PRD-0059/0060/0061 (NestJS/LangChain/Bedrock) — those are PRD-prescribed and flagged 'verify'; HD-003 takes precedence for the clone.",
+          "source_atoms_or_files": ["HD-003", "ATTR §human_decisions", "PRD-0059", "PRD-0060", "PRD-0061", "PRD-0062"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-ARCH-001", "FR-AUTH-002"],
+          "revalidation_trigger": "HD-003 amended"
+        },
+        {
+          "answer_id": "ANS-0021",
+          "question_text": "What is the multi-tenant isolation model?",
+          "answer_text": "Postgres Row-Level Security on every tenant-owned table (tenants, users, households, persons, entities, documents, audit_events, extractions, scenarios, calc_runs). All app connections SET LOCAL app.current_tenant per request; all SELECT/INSERT/UPDATE/DELETE policies pin to current_tenant. Negative test: connection forged with tenant B current_tenant must NOT see tenant A rows even when querying by id. Per RSK-004 + product-tailoring-profile.json §risk_profile.security=high. ATTR locks this in §non_negotiable_constraints_locked_in.",
+          "source_atoms_or_files": ["RSK-004", "ATTR §non_negotiable_constraints_locked_in", "CC-001 §in_scope_demo_mvp item 1", "PRD-0116 (RBAC+ABAC)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-AUTH-001", "FR-AUTH-003", "RULE-DATA-001"],
+          "revalidation_trigger": "Architectural change to multi-tenancy"
+        },
+        {
+          "answer_id": "ANS-0022",
+          "question_text": "How does FACT-OBBBA-001 affect tax calculations and how should the spec handle TCJA-framed atoms?",
+          "answer_text": "FACT-OBBBA-001 is authoritative: federal estate/gift/GST exemption is permanently $15M (2026), inflation-adjusted; top federal estate-tax rate remains 40%. PRD-0042/0043 (TCJA halving framing) and PRD-0208 (sample showing $7M exemption) are SUPERSEDED. The Demo MVP estate-tax calc uses $15M per individual (not married-couple stacking for MVP). Golden-dataset test cases must be authored with OBBBA values. Any in-scope leaf citing PRD-0042/0043/0208 carries an explicit `obbba_correction_applied: true` flag. ASM-003 was invalidated and replaced by FACT-OBBBA-001 at checkpoint-#1 HD-001.",
+          "source_atoms_or_files": ["FACT-OBBBA-001", "ATTR §assumptions", "critical-findings-summary.md FINDING #1", "PRD-0042 superseded", "PRD-0043 superseded", "PRD-0208 superseded"],
+          "confidence": "high",
+          "affected_requirement_ids": ["RULE-CALC-001", "RULE-CALC-002", "FR-CALC-001"],
+          "revalidation_trigger": "Future legislative change"
+        },
+        {
+          "answer_id": "ANS-0023",
+          "question_text": "What is the UPL (unauthorized practice of law) boundary for the MVP?",
+          "answer_text": "HD-007 default: NO execution-ready legal documents emitted by AI. CC-001 explicitly defers Document Creation surface entirely from MVP. The extraction flow processes existing documents (read-only); the calc engine computes numbers; the scenario view shows projections. NO drafting outputs, NO clauses generated, NO 'first draft' workflow. PRD-0182 disclaimer 'This is not legal or tax advice; consult your licensed professional' must appear on every advisor view (calc, scenario, extraction review). PRD-0169 jurisdiction-specific output blocking: out-of-scope at MVP because we only ship one extraction flow on a sample document, but disclaimer is mandatory.",
+          "source_atoms_or_files": ["HD-007", "CC-001 §out_of_scope (Document Creation deferred)", "PRD-0148 (R-09 UPL)", "PRD-0169", "PRD-0182", "RSK-003"],
+          "confidence": "high",
+          "affected_requirement_ids": ["RULE-UPL-001", "FR-UI-DISCLAIMER-001"],
+          "revalidation_trigger": "Document creation surface added back"
+        },
+        {
+          "answer_id": "ANS-0024",
+          "question_text": "What data may be used? Real PII/PHI?",
+          "answer_text": "Synthetic data only. HD-008 default approved. No real names, SSNs, addresses, account numbers, or PHI. Holdout dataset for extractor must come from PUBLIC corpora (e.g., open law-school sample wills) NOT from PRD examples — per ATTR §anti_overfit_checks. Sample household 'Ellison' is synthetic. Sample will is a public-domain or fabricated specimen. RSK-009 (PHI in HCDs) is moot at MVP because Document Creation is out of scope.",
+          "source_atoms_or_files": ["HD-008", "ATTR §anti_overfit_checks", "RSK-009", "FACT-EXTRACT-COMPUTE-NARRATE-001"],
+          "confidence": "high",
+          "affected_requirement_ids": ["RULE-DATA-002", "DATA-EXTRACT-001"],
+          "revalidation_trigger": "Real-data request"
+        },
+        {
+          "answer_id": "ANS-0025",
+          "question_text": "What standards/regulations apply to the MVP per the gate matrix?",
+          "answer_text": "Per ENG-GOV §standards_baseline + product-tailoring-profile.json §methodology_blend + critical-findings: ISO/IEC/IEEE 12207, 15289, 42001 (AI mgmt — applies to extractor); NIST SSDF 800-218; OWASP SAMM; SEC Rule 204-2 (records, 5-year minimum — addressed via WORM 7-year); FINRA 17a-4(f) WORM; GLBA + state-level (CA CCPA/CPRA, MT and CT post-2025 GLBA-exemption-removal); WCAG 2.1 AA (UI surface). NYDFS Part 500 added per FACT-NYDFS-PART500-2025. ADMT (CCPA/CPRA Jan 1, 2027) flagged as forward risk. Synthetic-data-only at MVP defers HIPAA materiality. SOC 2 Type II posture is designed (controls), not certified.",
+          "source_atoms_or_files": ["FACT-NYDFS-PART500-2025", "FACT-ADMT-CCPA-2027", "FACT-MT-CT-GLBA-2025", "PRD-0104", "PRD-0106", "PRD-0115", "PRD-0084 (WCAG)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-COMPLIANCE-001", "NFR-COMPLIANCE-002", "RULE-AUDIT-001", "NFR-UI-001"],
+          "revalidation_trigger": "New regulation or production_surface enabled"
+        }
+      ],
+      "branch_completeness_score": 90,
+      "branch_validation_readiness_score": 88
+    },
+    {
+      "round_id": "R4-FUNCTIONAL-SCENARIOS",
+      "round_name": "Functional scenarios",
+      "purpose": "Walk through demo as numbered, testable scenarios.",
+      "questions": [
+        {
+          "answer_id": "ANS-0030",
+          "question_text": "Scenario S-1: Multi-tenant login + dashboard tenant isolation.",
+          "answer_text": "GIVEN tenant A seeded with 3 households and tenant B seeded with 2 households, WHEN advisor Sarah (tenant A) logs in via SSO-stub and lands on /dashboard, THEN exactly 3 households visible in list AND a forged request with tenant=B in URL/header returns 403 (or empty list if RLS-only) — verified by Postgres RLS test + API integration test. Validation: integration test + scenario_bdd + playwright wysiwyg.",
+          "source_atoms_or_files": ["PRD-0097 (MFA/SSO)", "PRD-0116 (RBAC+ABAC)", "RSK-004", "ANS-0021"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-AUTH-001", "FR-AUTH-003", "FR-HH-001"],
+          "revalidation_trigger": "Architectural change"
+        },
+        {
+          "answer_id": "ANS-0031",
+          "question_text": "Scenario S-2: Document upload + WORM audit immutability.",
+          "answer_text": "GIVEN advisor Sarah on Ellison Household detail, WHEN she drag-drops sample-will.pdf, THEN system stores raw PDF in object store with per-document encryption key, creates a documents row with tenant_id=A and audit_events row with action='document.uploaded' + actorUserId + sha256 of file. Append-only audit: any UPDATE/DELETE on audit_events is rejected at the DB constraint level. Verification: integration test asserting UPDATE audit_events RAISES exception; retention check sets audit retention to 7 years (PRD-0104).",
+          "source_atoms_or_files": ["PRD-0080 (drag-drop)", "PRD-0104 (WORM 7-year)", "PRD-0106 (SEC 204-2 + FINRA 17a-4)", "PRD-0113 (per-doc keys)", "PRD-0180 (audit shape)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-DOC-001", "FR-AUDIT-001", "RULE-AUDIT-001", "RULE-DATA-003"],
+          "revalidation_trigger": "Audit shape changes"
+        },
+        {
+          "answer_id": "ANS-0032",
+          "question_text": "Scenario S-3: Ester-substitute extraction with citations + deterministic-calc grounding.",
+          "answer_text": "GIVEN sample-will.pdf uploaded, WHEN extraction service runs, THEN within 20 seconds (PRD-0200 envelope; for MVP we relax to 60s as ASM-EXTRACT-LATENCY-001 because we use real Claude API not optimized internal model) the system returns a structured JSON with ≥10 fields each having: value, confidence (0-100), citation (page+span coordinates pointing to source PDF region), deterministicValidation flag. Fields with confidence <85 are flagged for human-in-the-loop review (PRD-0078). Numerical fields (e.g., dollar amounts) are recomputed from the source span and accepted only if within 0.0001 tolerance (PRD-0165, PRD-0207). Validation: holdout test against public corpus will + integration test against fabricated golden specimen.",
+          "source_atoms_or_files": ["PRD-0073", "PRD-0074", "PRD-0078", "PRD-0165", "PRD-0170", "PRD-0173", "PRD-0174", "PRD-0200", "PRD-0207", "FACT-EXTRACT-COMPUTE-NARRATE-001"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-EXTRACT-001", "FR-EXTRACT-002", "FR-EXTRACT-003", "RULE-EXTRACT-001", "NFR-EXTRACT-001"],
+          "revalidation_trigger": "Latency relaxation accepted; threshold change"
+        },
+        {
+          "answer_id": "ANS-0033",
+          "question_text": "Scenario S-4: Federal estate tax baseline calc under OBBBA $15M.",
+          "answer_text": "GIVEN Ellison Household with totalAssets=$20,000,000, WHEN advisor opens Estate-Tax view, THEN deterministic engine computes: exemption=$15,000,000 (OBBBA 2026), taxableEstate=$5,000,000, federalTax=$5,000,000 × 0.40 = $2,000,000 (top rate; bracket fully simplified for one-scenario MVP per CC-001), netToHeirs=$18,000,000. Result must match golden-dataset entry for case 'OBBBA-15M-baseline-20M' within 0.0001 tolerance. Output JSON includes deterministicValidation:true + citation to OBBBA fact (FACT-OBBBA-001) + disclaimer (PRD-0182). Validation: golden-dataset test + integration test + playwright assertion on rendered values.",
+          "source_atoms_or_files": ["FACT-OBBBA-001", "PRD-0094 (Forms 706/709 noted)", "PRD-0165 (0.0001 tolerance)", "PRD-0182 (disclaimer)", "PRD-0207 (deterministic recompute)", "CC-001 §in_scope item 6 (one scenario)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-CALC-001", "RULE-CALC-001", "RULE-CALC-002", "DATA-CALC-001", "NFR-CALC-001"],
+          "revalidation_trigger": "Bracket-simplification challenged or married-stacking added"
+        },
+        {
+          "answer_id": "ANS-0034",
+          "question_text": "Scenario S-5: GRAT vs do-nothing comparison for $20M household.",
+          "answer_text": "GIVEN Ellison Household ($20M) and a GRAT entity placeholder, WHEN advisor opens Scenario view with Section 7520 rate slider (default 4.8% per PRD-0157), term 5 years (per PRD-0157), and asset growth 7% (per PRD-0157), THEN system renders side-by-side projection: Path A (do-nothing) — estate-tax projected at term-end if death occurs then; Path B (fund $5M GRAT, qualified annuity payments returned to grantor, remainder passes to beneficiary tax-free if grantor outlives term). System shows projected estate-tax delta. GRAT remainder value computed using IRS Section 7520 annuity formula and validated within 0.0001 tolerance per PRD-0207. NO advice generated; only quantitative comparison + disclaimer. Validation: golden-dataset test for GRAT remainder formula + scenario_bdd test for UI render + playwright.",
+          "source_atoms_or_files": ["PRD-0069 (GRAT among supported)", "PRD-0096 (GRAT laddering)", "PRD-0157 (sample SLAT+GRAT scenario inputs)", "PRD-0181 (Section 7520 slider)", "PRD-0207 (GRAT remainder 0.0001 validation)", "PRD-0208 (scenario JSON shape — OBBBA-corrected)", "FACT-OBBBA-001", "CC-001 §in_scope item 7"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-SCEN-001", "FR-SCEN-002", "RULE-SCEN-001", "DATA-SCEN-001", "NFR-SCEN-001"],
+          "revalidation_trigger": "Additional strategy added or scenario inputs change"
+        },
+        {
+          "answer_id": "ANS-0035",
+          "question_text": "Scenario S-6: Plaid-shape and Schwab-shape integration adapter mocks.",
+          "answer_text": "GIVEN configured mock partner endpoints, WHEN demo run invokes adapter.fetchAccounts(tenant=A, householdId=Ellison) on Plaid-shape OR adapter.fetchHoldings(tenant=A, householdId=Ellison) on Schwab-shape, THEN adapter returns a recorded golden response shaped to the partner's published OpenAPI/contract (synthetic accounts/holdings only). Verification: contract test against the partner-shaped JSON Schema; integration test asserts adapter never calls the real partner endpoint (mock URL only); tenant-isolation test asserts adapter cannot fetch for tenant B with tenant A's seed token.",
+          "source_atoms_or_files": ["CC-001 §in_scope item 9", "HD-006 (mock 17, contract+mock 2)", "PRD-0110 (Schwab Custodial)", "prd-canonical.md table line 'Plaid Live OAuth2 Inbound real-time'", "PRD-0155 (OpenAPI 3.1)", "PRD-0156 (POST /v1/documents/scan example shape)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-INT-001", "FR-INT-002", "RULE-INT-001", "NFR-INT-001"],
+          "revalidation_trigger": "Real partner integration requested"
+        }
+      ],
+      "branch_completeness_score": 92,
+      "branch_validation_readiness_score": 90
+    },
+    {
+      "round_id": "R5-NFRS",
+      "round_name": "Non-functional requirements",
+      "purpose": "Latency, accuracy, accessibility, security baseline.",
+      "questions": [
+        {
+          "answer_id": "ANS-0040",
+          "question_text": "What latency budgets apply to the MVP and where do they relax from PRD?",
+          "answer_text": "PRD baselines: Ester Q&A P95 <2s (PRD-0064), Estate Scan <30s for 20-page (PRD-0065), uptime 99.95% (PRD-0066). For MVP we apply: (a) NFR-EXTRACT-001 — extraction end-to-end on a typical 5-page sample will <60s p95 (relaxed from PRD-0200 <20s/PRD-0065 <30s; ASM-EXTRACT-LATENCY-001: justified because we use third-party Claude API not optimized internal pipeline; client must accept relaxation; if rejected, raise to checkpoint); (b) NFR-CALC-001 — estate-tax baseline calc deterministic <500ms p95; (c) NFR-SCEN-001 — scenario render <1.5s p95 for slider change; (d) NFR-OPS-001 — uptime not measured at v0 (local Docker Compose only).",
+          "source_atoms_or_files": ["PRD-0064", "PRD-0065", "PRD-0066", "PRD-0200", "ASM-EXTRACT-LATENCY-001 (new)"],
+          "confidence": "medium",
+          "affected_requirement_ids": ["NFR-EXTRACT-001", "NFR-CALC-001", "NFR-SCEN-001", "NFR-OPS-001"],
+          "revalidation_trigger": "Client rejects extraction latency relaxation"
+        },
+        {
+          "answer_id": "ANS-0041",
+          "question_text": "What accuracy thresholds apply to extraction and calc?",
+          "answer_text": "Extraction: ≥95% field-level accuracy on the public-corpus holdout (PRD-0079 KPI; relaxed slightly from PRD-0073 >98% which applies to Wealth.com production internal model). Hallucination rate <0.5% on holdout (PRD-0124). Calc: 100% determinism — deterministic engine output matches golden dataset within 0.0001 tolerance (PRD-0165, PRD-0207). Confidence routing: <85% per-field routes to HITL queue (PRD-0078) — for MVP we render a 'review needed' badge but no HITL workflow is built; queue is a placeholder.",
+          "source_atoms_or_files": ["PRD-0073", "PRD-0074", "PRD-0078", "PRD-0079", "PRD-0124", "PRD-0165", "PRD-0207"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-EXTRACT-002", "NFR-EXTRACT-003", "NFR-CALC-001", "NFR-CALC-002", "RULE-EXTRACT-002"],
+          "revalidation_trigger": "Threshold reduction request"
+        },
+        {
+          "answer_id": "ANS-0042",
+          "question_text": "What accessibility level is required for the advisor UI?",
+          "answer_text": "WCAG 2.1 AA per PRD-0084 (originally for Visualizer; we extend to all in-scope advisor screens because product-tailoring-profile.json mandates accessibility_ux test class for ui_surface=true). Verification: axe-core scan on each Playwright route, zero AA violations. Keyboard navigation, ARIA labels, color contrast 4.5:1 minimum.",
+          "source_atoms_or_files": ["PRD-0084", "product-tailoring-profile.json §mandatory_testing_classes accessibility_ux"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-UI-001", "NFR-UI-002"],
+          "revalidation_trigger": "WCAG version update"
+        },
+        {
+          "answer_id": "ANS-0043",
+          "question_text": "What security baseline applies?",
+          "answer_text": "Encryption-at-rest: AES-256 (PRD-0113); per-document keys deferred at MVP (single tenant-level KMS key acceptable per ASM-SEC-001) — flagged because product-tailoring profile labels security=high. Encryption-in-transit: TLS 1.3 within Docker network is impractical for local-only demo; ASM-SEC-002 — TLS terminated at proxy in compose, plaintext between services on internal docker network. Auth: SSO-stub (OIDC mock issuer) + MFA-stub (TOTP-style stub). RBAC: minimum roles {advisor, paraplanner, admin} for MVP; full ABAC with 40+ scopes (PRD-0116) deferred. Audit: WORM 7-year append-only audit_events table with bcrypt-style integrity hash chain. Breach SLAs (PRD-0117) deferred — production_surface=false.",
+          "source_atoms_or_files": ["PRD-0113", "PRD-0114", "PRD-0115", "PRD-0116", "PRD-0117", "PRD-0097", "ASM-SEC-001 (new)", "ASM-SEC-002 (new)"],
+          "confidence": "medium",
+          "affected_requirement_ids": ["NFR-SEC-001", "NFR-SEC-002", "NFR-SEC-003", "FR-AUTH-002", "RULE-DATA-003"],
+          "revalidation_trigger": "production_surface enabled"
+        },
+        {
+          "answer_id": "ANS-0044",
+          "question_text": "What observability is required at MVP?",
+          "answer_text": "OpenTelemetry traces on every API call + extraction job + calc run + scenario run. Logs include tenant_id, user_id, request_id. Audit log table (separate from app logs) captures state-changing events with promptHash + modelVersion (extraction) + deterministicValidation + citations[] per PRD-0180 audit shape. NO metrics dashboards required at MVP (deferred with production_surface).",
+          "source_atoms_or_files": ["PRD-0180", "HD-003 (OTel locked)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-OBS-001", "FR-AUDIT-001", "RULE-AUDIT-001"],
+          "revalidation_trigger": "Production deployment"
+        }
+      ],
+      "branch_completeness_score": 88,
+      "branch_validation_readiness_score": 86
+    },
+    {
+      "round_id": "R6-HANDOFF-OPS",
+      "round_name": "Handoff & operations",
+      "purpose": "Define how the demo is run and handed off.",
+      "questions": [
+        {
+          "answer_id": "ANS-0050",
+          "question_text": "How does the advisor run the demo?",
+          "answer_text": "(1) Operator runs `docker compose up` from runs/wealth-com/app/. (2) Compose seeds Postgres with tenant A + tenant B seed data including 5 synthetic households and 1 sample will PDF in object store. (3) Compose seeds two SSO-stub seed credentials: sarah@horizon.test / paraplanner@horizon.test (tenant A) and marcus@apex.test (tenant B, used for negative tenant-isolation test only). (4) Operator opens http://localhost:3000, advisor logs in as Sarah, follows the demo flow described in ANS-0010. (5) `docker compose logs` exposes OTel traces and audit log dump. Runbook artifact deferred (production_surface=false) but README.md must include the docker compose commands.",
+          "source_atoms_or_files": ["HD-004 (Docker Compose local)", "ANS-0010", "ASM-OPS-001 (operator role exists)"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-OPS-001", "FR-OPS-001"],
+          "revalidation_trigger": "Deployment target changes"
+        },
+        {
+          "answer_id": "ANS-0051",
+          "question_text": "What is the seed data baseline?",
+          "answer_text": "Tenant A 'Horizon Wealth Partners': 3 households (Ellison $20M, Sharma $5M, Kline $22M — synthetic), 2 advisors (sarah, jake), 1 admin. Each household has 3-5 people, 2-3 entities (incl. one Revocable Trust placeholder; Ellison also has GRAT and Dynasty Trust placeholders), 5-10 assets. Tenant B 'Apex Wealth Group': 2 households (synthetic), 1 advisor (marcus). One sample-will.pdf in /seed/sample-will.pdf — fabricated specimen NOT containing any real PII; 5-page revocable trust style. Holdout dataset: 5 public-corpus will/trust documents in /seed/holdout/ used for extraction test only.",
+          "source_atoms_or_files": ["ATTR §anti_overfit_checks (public corpora)", "ANS-0050", "PRD-0046", "PRD-0049", "PRD-0050", "PRD-0051", "PRD-0052"],
+          "confidence": "high",
+          "affected_requirement_ids": ["DATA-SEED-001", "FR-OPS-001"],
+          "revalidation_trigger": "Real-data swap requested"
+        },
+        {
+          "answer_id": "ANS-0052",
+          "question_text": "How is the demo torn down and reset?",
+          "answer_text": "`docker compose down -v` removes all data + volumes. Re-running `docker compose up` rebuilds seed. No external dependencies. Audit log is reset on tear-down (acceptable at MVP because production_surface=false).",
+          "source_atoms_or_files": ["HD-004", "ANS-0050"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-OPS-001"],
+          "revalidation_trigger": "Persistent demo requested"
+        },
+        {
+          "answer_id": "ANS-0053",
+          "question_text": "How is the transfer test run?",
+          "answer_text": "Per CC-001 item 10 + ATTR §anti_overfit_checks transfer test: a Holistiplan-style mini-app with single-input tax-baseline calc surface is implemented as a separate slice using the SAME factory artifacts pattern (ADR layout, deterministic-calc separation, tenant-isolation pattern, WORM audit, golden-dataset test). Transfer test passes if the mini-app builds + tests green using factory-reusable scaffolding only (no wealth.com nouns leaking into reusable rubrics). Validation method: holdout test + factory-rubric inspection.",
+          "source_atoms_or_files": ["CC-001 §in_scope item 10", "ATTR §anti_overfit_checks", "RSK-005"],
+          "confidence": "high",
+          "affected_requirement_ids": ["FR-TRANSFER-001"],
+          "revalidation_trigger": "Transfer test scope changed"
+        }
+      ],
+      "branch_completeness_score": 86,
+      "branch_validation_readiness_score": 86
+    },
+    {
+      "round_id": "R7-CONTRADICTIONS",
+      "round_name": "Contradictions",
+      "purpose": "Surface contradictions across PRD/domain/CC-001 and resolve, defer, or escalate.",
+      "questions": [
+        {
+          "answer_id": "ANS-0060",
+          "question_text": "C-1: TCJA $7M (PRD-0042/0043/0208) vs OBBBA $15M (FACT-OBBBA-001).",
+          "answer_text": "RESOLVED. FACT-OBBBA-001 supersedes per HD-001 client decision at checkpoint-#1. All in-scope leaves use $15M permanent. PRD-0042/0043/0208 atoms still cited but with `obbba_correction_applied:true` annotation in trace_to_atom_ids. PRD-0153 assumption (TCJA sunset occurs as legislated) is also superseded.",
+          "source_atoms_or_files": ["FACT-OBBBA-001", "PRD-0042", "PRD-0043", "PRD-0208", "PRD-0153", "ATTR §assumptions ASM-003"],
+          "confidence": "high",
+          "affected_requirement_ids": ["RULE-CALC-001", "RULE-SCEN-001", "DATA-CALC-001"],
+          "revalidation_trigger": "Legislative change"
+        },
+        {
+          "answer_id": "ANS-0061",
+          "question_text": "C-2: Golden-set size: PRD-0074 says 1,000+ docs / <0.1% hallucination; PRD-0124 says 1,500+ docs / <0.5%.",
+          "answer_text": "DEFERRED. Both atoms are PRD-internal product KPIs that don't apply to the substitute extractor at MVP. We define our own MVP threshold: ≥95% field-level on a 5-document public-corpus holdout, hallucination rate <0.5% (the looser PRD-0124 figure). Owner: ai-engineer. Revalidation: when MVP holdout dataset is built, re-pin threshold.",
+          "source_atoms_or_files": ["PRD-0074", "PRD-0124", "ATTR §anti_overfit_checks", "prd-canonical.md §AI/ML Capabilities"],
+          "confidence": "medium",
+          "affected_requirement_ids": ["NFR-EXTRACT-002", "NFR-EXTRACT-003"],
+          "revalidation_trigger": "Holdout dataset built"
+        },
+        {
+          "answer_id": "ANS-0062",
+          "question_text": "C-3: Tax scenario sample baselines diverge — PRD-0208 ($12.4M baseline → $3.2M) vs PRD-0157 ($4.2M baseline → $1.1M).",
+          "answer_text": "DEFERRED-NOT-MATERIAL. Both are PRD example illustrations, not requirements. Our MVP uses our own scenario: $20M household → $2.0M baseline tax (OBBBA $15M exemption × 40% on $5M taxable estate). PRD-0157 inputs (7% growth, 5-year GRAT, 7520 rate 4.8%) are reused as scenario defaults but with OBBBA exemption.",
+          "source_atoms_or_files": ["PRD-0157", "PRD-0208", "FACT-OBBBA-001"],
+          "confidence": "high",
+          "affected_requirement_ids": ["DATA-SCEN-001", "FR-SCEN-001"],
+          "revalidation_trigger": "n/a"
+        },
+        {
+          "answer_id": "ANS-0063",
+          "question_text": "C-4: Tech stack PRD says NestJS+LangChain+Bedrock vs HD-003 says Fastify+Anthropic Claude direct.",
+          "answer_text": "RESOLVED. HD-003 takes precedence per checkpoint-#1 approval. PRD-0059/0060/0061 atoms have confidence='medium' and explicit 'verify' open_questions, so HD-003 supersession is consistent with PRD's own caveats.",
+          "source_atoms_or_files": ["HD-003", "PRD-0059", "PRD-0060", "PRD-0061"],
+          "confidence": "high",
+          "affected_requirement_ids": ["NFR-ARCH-001"],
+          "revalidation_trigger": "HD-003 amended"
+        },
+        {
+          "answer_id": "ANS-0064",
+          "question_text": "C-5: Scope conflict — does CC-001 narrowing conflict with ATTR §scope_in (which lists all 14 surfaces)?",
+          "answer_text": "RESOLVED. CC-001 explicitly amends ATTR §scope_in via approved scope_change_with_reapproval. ATTR §scope_in is now superseded for this run; CC-001 §in_scope_demo_mvp is authoritative. Tracking: ATTR record annotates the supersession in §source_signals or §human_decisions; explicit verification required at next checkpoint.",
+          "source_atoms_or_files": ["CC-001", "ATTR §scope_in", "ATTR §human_decisions HD-001"],
+          "confidence": "high",
+          "affected_requirement_ids": [],
+          "revalidation_trigger": "Scope_in further amended"
+        },
+        {
+          "answer_id": "ANS-0065",
+          "question_text": "C-6: PRD-0073 (>98% accuracy on standard instruments) vs PRD-0079 (>=95% field-level KPI).",
+          "answer_text": "DEFERRED-NOT-MATERIAL. PRD-0073 is the marketing-level claim for Wealth.com production model on 'standard instruments'; PRD-0079 is the operational KPI threshold. We adopt the operational threshold (≥95%) for MVP holdout because (a) it's the tighter operational target, (b) the marketing >98% claim isn't testable on a public corpus with our substitute model.",
+          "source_atoms_or_files": ["PRD-0073", "PRD-0079"],
+          "confidence": "medium",
+          "affected_requirement_ids": ["NFR-EXTRACT-002"],
+          "revalidation_trigger": "Threshold change"
+        }
+      ],
+      "branch_completeness_score": 90,
+      "branch_validation_readiness_score": 88
+    },
+    {
+      "round_id": "R8-APPROVAL",
+      "round_name": "Approval / Acceptance criteria for 'Demo MVP done'",
+      "purpose": "Define done.",
+      "questions": [
+        {
+          "answer_id": "ANS-0070",
+          "question_text": "What are the acceptance criteria for 'Demo MVP done'?",
+          "answer_text": "Demo MVP is DONE when ALL of: (1) all 8 capabilities (CAP-AUTH-MULTITENANT, CAP-HOUSEHOLD-MODEL, CAP-DOCUMENT-VAULT, CAP-EXTRACTION, CAP-ESTATE-TAX-CALC, CAP-SCENARIO-MODELING, CAP-ADVISOR-UI, CAP-INTEGRATION-MOCKS) have ≥1 leaf at validation_method=playwright OR scenario_bdd that passes; (2) golden-dataset tests for estate-tax and GRAT remainder pass within 0.0001 tolerance; (3) Postgres RLS tenant-isolation test passes (zero cross-tenant rows visible); (4) WORM audit immutability test passes (UPDATE rejected); (5) Playwright UI flow S-1→S-5 passes with WCAG-AA scan zero AA violations; (6) extraction holdout achieves ≥95% field-level on public corpus; (7) transfer-test on Holistiplan-style mini-app passes; (8) Hawkeye Stage-1 audit issues PASS or CONDITIONAL_PASS; (9) all 'Must' priority leaves have evidence; ≥80% of MVP leaves are 'Must'.",
+          "source_atoms_or_files": ["CC-001 §in_scope_demo_mvp", "ATTR §node_contract.how_good", "product-tailoring-profile.json §mandatory_testing_classes", "generated-meta-skill-contract §refusal_rules"],
+          "confidence": "high",
+          "affected_requirement_ids": ["VISION-001"],
+          "revalidation_trigger": "Threshold reduction or scope change"
+        },
+        {
+          "answer_id": "ANS-0071",
+          "question_text": "Who approves 'Demo MVP done'?",
+          "answer_text": "client_owner=eranti@gmail.com per ATTR §node_contract.who and CC-001 §approval. Hawkeye independent audit must precede client signoff. Approval recorded as a CC-NNN if any deviation from spec is required.",
+          "source_atoms_or_files": ["ATTR §node_contract.who", "CC-001 §approval", "engagement-governance-record.json §change_control"],
+          "confidence": "high",
+          "affected_requirement_ids": [],
+          "revalidation_trigger": "Owner change"
+        },
+        {
+          "answer_id": "ANS-0072",
+          "question_text": "What does NOT count as 'Demo MVP done'?",
+          "answer_text": "(per refusal_rules + product-tailoring-profile §combined_or_deferred): documents-only completion (e.g., spec written but no code/UI/test evidence); LLM-driven tax/estate calculations without deterministic engine; execution-ready legal documents emitted; any threshold reduction below 96% per expert without owner-scoped waiver; any tenant-isolation claim without RLS+connection-pool+audit-log tests; any extraction claim without holdout-corpus + transfer-test evidence.",
+          "source_atoms_or_files": ["generated-meta-skill-contract §refusal_rules", "product-tailoring-profile.json §human_boundary_triggers"],
+          "confidence": "high",
+          "affected_requirement_ids": [],
+          "revalidation_trigger": "Refusal rules change"
+        }
+      ],
+      "branch_completeness_score": 92,
+      "branch_validation_readiness_score": 92
+    }
+  ],
+  "open_questions": [
+    {"oq_id": "OQ-INTAKE-001", "question": "Confirm extraction latency relaxation from PRD-0200 <20s to MVP <60s p95 (ASM-EXTRACT-LATENCY-001).", "owner": "client_owner / ai-engineer", "revalidation_trigger": "Client checkpoint or threshold benchmark", "blocking": false},
+    {"oq_id": "OQ-INTAKE-002", "question": "Confirm bracket-simplification of federal estate tax to flat 40% top rate for the single MVP scenario (vs full graduated bracket).", "owner": "tax-domain-juror", "revalidation_trigger": "Tax-domain juror review at HLD time", "blocking": false},
+    {"oq_id": "OQ-INTAKE-003", "question": "Confirm MFA-stub depth: TOTP-style stub vs OIDC-only? HD-005-style detail not yet pinned.", "owner": "security-juror", "revalidation_trigger": "HLD review", "blocking": false},
+    {"oq_id": "OQ-INTAKE-004", "question": "Confirm Plaid-shape adapter scope — AccountsAPI only or AccountsAPI+TransactionsAPI?", "owner": "backend-engineer", "revalidation_trigger": "Adapter design review", "blocking": false},
+    {"oq_id": "OQ-INTAKE-005", "question": "Confirm public-corpus holdout selection (which open law-school sample wills) — list pending.", "owner": "ai-engineer", "revalidation_trigger": "Extractor implementation", "blocking": true},
+    {"oq_id": "OQ-INTAKE-006", "question": "Confirm whether Schwab-shape adapter mock follows OAuth2+API key authentication (PRD-0110) or simplified mock-only auth.", "owner": "backend-engineer", "revalidation_trigger": "Adapter design review", "blocking": false}
+  ],
+  "new_assumptions_recorded": [
+    {"id": "ASM-EXTRACT-LATENCY-001", "statement": "MVP extraction latency relaxed to <60s p95 from PRD-0200 <20s because we use third-party Claude API not internal optimized model.", "owner": "ai-engineer", "revalidation_trigger": "Client checkpoint"},
+    {"id": "ASM-SEC-001", "statement": "MVP uses tenant-level KMS key (not per-document keys per PRD-0113) — flagged for production_surface upgrade.", "owner": "security-juror", "revalidation_trigger": "production_surface enabled"},
+    {"id": "ASM-SEC-002", "statement": "MVP tolerates plaintext between services on internal Docker network; TLS 1.3 only at proxy.", "owner": "security-juror", "revalidation_trigger": "production_surface enabled"},
+    {"id": "ASM-OPS-001", "statement": "An operator role (separate from advisor) exists to run docker compose up/down for the demo.", "owner": "platform-engineer", "revalidation_trigger": "n/a"},
+    {"id": "ASM-CALC-001", "statement": "MVP uses simplified flat 40% top rate on taxable estate above $15M exemption (one-scenario scope per CC-001); full graduated bracket deferred.", "owner": "tax-domain-juror", "revalidation_trigger": "Tax-domain juror review"},
+    {"id": "ASM-RBAC-001", "statement": "MVP RBAC is reduced to {advisor, paraplanner, admin} roles; full ABAC with 40+ scopes (PRD-0116) deferred to post-MVP.", "owner": "security-juror", "revalidation_trigger": "Post-MVP planning"}
+  ],
+  "interrogation_summary": {
+    "total_rounds": 8,
+    "total_answers": 38,
+    "total_open_questions": 6,
+    "total_new_assumptions": 6,
+    "branch_score_average_completeness": 90,
+    "branch_score_average_validation_readiness": 89,
+    "all_branch_scores_meet_80_threshold": true,
+    "no_re_interrogation_required": true
+  },
+  "verdict": "ready_for_decomposition",
+  "verdict_rationale": "All 8 rounds completed with ≥80 on completeness and validation_readiness. Contradictions: 6 found, 4 resolved + 2 deferred-not-material. New assumptions: 6 recorded with revalidation triggers. Open questions: 6, only OQ-INTAKE-005 blocking (public-corpus holdout selection) — to be resolved during construction stage, not blocking spec decomposition."
+}

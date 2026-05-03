@@ -1,0 +1,183 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "report_id": "INTAKE-VAL-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "produced_at": "2026-04-25",
+  "validated_files": [
+    "runs/wealth-com/04_intake/interrogation-record.json (INT-WEALTHCOM-001)",
+    "runs/wealth-com/04_intake/spec-decomposition-record.json (SPEC-DECOMP-WEALTHCOM-001)"
+  ],
+  "decomposition_summary": {
+    "total_capabilities": 8,
+    "plus_cross_cutting": 1,
+    "total_user_journeys": 8,
+    "total_features": 26,
+    "total_leaves": 97
+  },
+  "priority_distribution": {
+    "M_must": {"count": 84, "percent": 86.6, "threshold_check": "PASS (>=80% Must required for Demo MVP)"},
+    "S_should": {"count": 13, "percent": 13.4},
+    "C_could": {"count": 0, "percent": 0.0}
+  },
+  "surface_tag_distribution": {
+    "Cross-cutting": 13,
+    "Ester": 13,
+    "UI": 13,
+    "Auth": 11,
+    "Documents": 10,
+    "Scenario": 10,
+    "Households": 9,
+    "Calc": 9,
+    "Integrations": 9
+  },
+  "kind_distribution": {
+    "FR": 31,
+    "Rule": 28,
+    "NFR": 20,
+    "Data": 13,
+    "Event": 5
+  },
+  "validation_method_distribution": {
+    "integration": 28,
+    "manual_review": 20,
+    "unit": 17,
+    "playwright": 13,
+    "performance_reliability": 5,
+    "holdout": 4,
+    "contract_api": 4,
+    "golden_dataset": 3,
+    "security_abuse": 2,
+    "scenario_bdd": 1
+  },
+  "branch_completeness_scores_table": [
+    {"capability": "CAP-AUTH-MULTITENANT", "completeness": 90, "validation_readiness": 92, "contradiction": 5, "owner_clarity": 95, "status": "PASS"},
+    {"capability": "CAP-HOUSEHOLD-MODEL", "completeness": 88, "validation_readiness": 88, "contradiction": 5, "owner_clarity": 95, "status": "PASS"},
+    {"capability": "CAP-DOCUMENT-VAULT", "completeness": 90, "validation_readiness": 92, "contradiction": 0, "owner_clarity": 95, "status": "PASS"},
+    {"capability": "CAP-EXTRACTION", "completeness": 88, "validation_readiness": 86, "contradiction": 10, "owner_clarity": 90, "status": "PASS"},
+    {"capability": "CAP-ESTATE-TAX-CALC", "completeness": 92, "validation_readiness": 95, "contradiction": 0, "owner_clarity": 95, "status": "PASS"},
+    {"capability": "CAP-SCENARIO-MODELING", "completeness": 88, "validation_readiness": 90, "contradiction": 0, "owner_clarity": 95, "status": "PASS"},
+    {"capability": "CAP-ADVISOR-UI", "completeness": 88, "validation_readiness": 90, "contradiction": 0, "owner_clarity": 92, "status": "PASS"},
+    {"capability": "CAP-INTEGRATION-MOCKS", "completeness": 86, "validation_readiness": 88, "contradiction": 0, "owner_clarity": 92, "status": "PASS"},
+    {"capability": "CAP-CROSS-CUTTING", "completeness": 86, "validation_readiness": 88, "contradiction": 0, "owner_clarity": 90, "status": "PASS"}
+  ],
+  "branch_threshold_check": {
+    "all_completeness_ge_80": true,
+    "all_validation_readiness_ge_80": true,
+    "no_re_interrogation_required": true,
+    "average_completeness": 88.4,
+    "average_validation_readiness": 89.9
+  },
+  "contradictions_found": [
+    {"id": "C-1", "description": "PRD TCJA $7M framing (PRD-0042/0043/0208) vs OBBBA $15M permanent (FACT-OBBBA-001).", "resolution": "RESOLVED — FACT-OBBBA-001 supersedes per HD-001; all in-scope tax leaves use $15M; obbba_correction_applied:true marker."},
+    {"id": "C-2", "description": "Golden test set size mismatch — PRD-0074 says 1,000+ docs / <0.1% hallucination; PRD-0124 says 1,500+ / <0.5%.", "resolution": "DEFERRED — both are PRD-internal KPIs that don't apply to substitute extractor; MVP threshold ≥95% field-level on 5-doc public-corpus holdout, hallucination <0.5% (looser PRD-0124)."},
+    {"id": "C-3", "description": "Tax scenario sample baselines diverge — PRD-0157 ($4.2M baseline) vs PRD-0208 ($12.4M baseline).", "resolution": "DEFERRED-NOT-MATERIAL — both are PRD examples; MVP defines its own scenario ($20M household, $2M tax under OBBBA)."},
+    {"id": "C-4", "description": "Tech stack — PRD-0059/0060/0061 says NestJS+LangChain+Bedrock vs HD-003 says Fastify+Anthropic Claude.", "resolution": "RESOLVED — HD-003 supersedes; PRD atoms have confidence=medium with explicit verify open_questions."},
+    {"id": "C-5", "description": "Scope conflict — CC-001 narrowing vs ATTR §scope_in original 14 surfaces.", "resolution": "RESOLVED — CC-001 is approved scope_change_with_reapproval; ATTR §scope_in superseded for this run."},
+    {"id": "C-6", "description": "PRD-0073 (>98% accuracy on standard instruments) vs PRD-0079 (≥95% field-level KPI).", "resolution": "DEFERRED-NOT-MATERIAL — adopt operational PRD-0079 ≥95% as MVP threshold; PRD-0073 is marketing claim for production model."}
+  ],
+  "contradictions_resolved_or_deferred": "6 found; 4 RESOLVED + 2 DEFERRED-NOT-MATERIAL; 0 ESCALATED",
+  "open_questions": [
+    {"oq_id": "OQ-INTAKE-001", "question": "Confirm extraction latency relaxation from PRD-0200 <20s to MVP <60s p95 (ASM-EXTRACT-LATENCY-001).", "owner": "client_owner / ai-engineer", "revalidation_trigger": "Client checkpoint or threshold benchmark", "blocking": false},
+    {"oq_id": "OQ-INTAKE-002", "question": "Confirm bracket-simplification of federal estate tax to flat 40% top rate for the single MVP scenario (vs full graduated bracket).", "owner": "tax-domain-juror", "revalidation_trigger": "Tax-domain juror review at HLD time", "blocking": false},
+    {"oq_id": "OQ-INTAKE-003", "question": "Confirm MFA-stub depth: TOTP-style stub vs OIDC-only?", "owner": "security-juror", "revalidation_trigger": "HLD review", "blocking": false},
+    {"oq_id": "OQ-INTAKE-004", "question": "Confirm Plaid-shape adapter scope — AccountsAPI only or AccountsAPI+TransactionsAPI?", "owner": "backend-engineer", "revalidation_trigger": "Adapter design review", "blocking": false},
+    {"oq_id": "OQ-INTAKE-005", "question": "Confirm public-corpus holdout selection (which open law-school sample wills) — list pending.", "owner": "ai-engineer", "revalidation_trigger": "Extractor implementation", "blocking": true},
+    {"oq_id": "OQ-INTAKE-006", "question": "Confirm whether Schwab-shape adapter mock follows OAuth2+API key authentication (PRD-0110) or simplified mock-only auth.", "owner": "backend-engineer", "revalidation_trigger": "Adapter design review", "blocking": false}
+  ],
+  "new_assumptions_recorded": [
+    {"id": "ASM-EXTRACT-LATENCY-001", "summary": "MVP extraction latency relaxed to <60s p95 from PRD-0200 <20s (substitute model)."},
+    {"id": "ASM-SEC-001", "summary": "MVP uses tenant-level KMS key (per-document keys deferred)."},
+    {"id": "ASM-SEC-002", "summary": "MVP plaintext between services on internal Docker network; TLS 1.3 only at proxy."},
+    {"id": "ASM-OPS-001", "summary": "Operator role separate from advisor for docker compose lifecycle."},
+    {"id": "ASM-CALC-001", "summary": "MVP uses simplified flat 40% top rate (full graduated bracket deferred)."},
+    {"id": "ASM-RBAC-001", "summary": "MVP RBAC reduced to {advisor, paraplanner, admin} (full ABAC 40+ scopes deferred)."}
+  ],
+  "trace_coverage": {
+    "in_scope_atom_universe_total": 70,
+    "in_scope_atoms_cited_by_at_least_1_leaf": 56,
+    "percent_in_scope_atoms_covered": 80.0,
+    "in_scope_atoms_uncovered_with_rationale": [
+      {"atom": "PRD-0046", "rationale": "Persona Sarah Thompson — context only; UI demo flow uses archetype implicitly via seed user; no testable leaf attaches to her PII"},
+      {"atom": "PRD-0049", "rationale": "Persona Jake Harlan paraplanner — covered implicitly via paraplanner role in FR-AUTH-003 RBAC"},
+      {"atom": "PRD-0085", "rationale": "Family Office Suite multi-entity span — entity model leaves cover the entity hierarchy; FOS UI itself is out-of-scope per CC-001"},
+      {"atom": "PRD-0091", "rationale": "Carta/Coinbase/Zillow asset integrations — out-of-scope (only Plaid-shape + Schwab-shape adapters in MVP); kept as context"},
+      {"atom": "PRD-0094", "rationale": "Forms 1040+706+709+K-1 — only 706 (federal estate) implicitly used; explicit form-mapping deferred to post-MVP"},
+      {"atom": "PRD-0114", "rationale": "TLS 1.3 — superseded by ASM-SEC-002 for MVP local-only; deferred to production_surface"},
+      {"atom": "PRD-0127", "rationale": "Mobile companion / responsive client portal — mobile out-of-scope per CC-001; advisor desktop-first"},
+      {"atom": "PRD-0166", "rationale": "Policy engine <50ms — out-of-scope at MVP (no policy engine surface; refusal handled by RULE-UPL-001)"},
+      {"atom": "PRD-0167", "rationale": "Drift monitoring — out-of-scope at MVP (single extraction flow; no production model serving)"},
+      {"atom": "PRD-0168", "rationale": "AI red-team — out-of-scope at MVP (covered in stage-4 architecture / threat model)"},
+      {"atom": "PRD-0174", "rationale": "RAG chunking 200-600 tokens — internal extractor implementation detail, design-time guidance not testable leaf at MVP"},
+      {"atom": "PRD-0191", "rationale": "Firm-level governance four-eyes review for irrevocable trusts — out-of-scope at MVP (Document Creation deferred)"},
+      {"atom": "PRD-0193", "rationale": "Level 3 teammate framing — context only, marketing positioning"},
+      {"atom": "PRD-0199", "rationale": "Cache hit <80ms — out-of-scope at MVP (no prompt caching surface in single-flow extractor)"}
+    ],
+    "leaves_with_at_least_1_atom_citation": 78,
+    "leaves_with_at_least_1_atom_or_answer_citation": 97,
+    "percent_leaves_with_atom_citation": 80.4,
+    "percent_leaves_with_atom_or_answer_citation": 100.0,
+    "leaves_with_zero_trace": 0,
+    "trace_coverage_check": "PASS — every leaf has at least one trace; in-scope atom coverage 80% (uncovered atoms documented as out-of-scope-deferred or context-only)"
+  },
+  "self_grep_verification": {
+    "method": "5 random leaves selected (random.seed=42); for each, every cited atom looked up in prd-atoms.json; FACT/ASM/CC IDs matched against meta-attractor + change-control",
+    "sample": [
+      {"leaf_id": "DATA-INT-001", "atoms_cited": ["PRD-0107", "PRD-0155"], "all_resolved": true, "result": "PASS"},
+      {"leaf_id": "DATA-HH-002", "atoms_cited": ["PRD-0063"], "all_resolved": true, "result": "PASS"},
+      {"leaf_id": "RULE-AUTH-001", "atoms_cited": ["PRD-0097"], "all_resolved": true, "result": "PASS"},
+      {"leaf_id": "RULE-OVERFIT-001", "atoms_cited": [], "answer_cited": ["ANS-0053"], "all_resolved": true, "result": "PASS (answer-trace only; meta-skill anti-overfit rule has no PRD atom by design)"},
+      {"leaf_id": "RULE-EXTRACT-002", "atoms_cited": ["PRD-0073", "PRD-0079", "PRD-0124"], "all_resolved": true, "result": "PASS"}
+    ],
+    "result": "PASS — all sampled atoms exist in source; the one leaf with empty atom array (RULE-OVERFIT-001) cites an answer instead, satisfying the trace rule"
+  },
+  "intake_quality_gate_checklist": {
+    "goal_concrete": true,
+    "scope_explicit_via_CC_001": true,
+    "users_named_with_PRD_fictional_flag": true,
+    "functional_vs_NFR_separated": true,
+    "standards_visible_per_ATTR_gates": true,
+    "acceptance_criteria_testable": true,
+    "material_answers_have_IDs_and_trace_links": true,
+    "spec_recursively_decomposed_to_atomic_leaves": true,
+    "every_leaf_has_required_fields": true,
+    "branch_level_scores_meet_80_threshold": true,
+    "contradictions_resolved_or_deferred_or_escalated": true,
+    "open_assumptions_and_risks_recorded": true,
+    "obbba_correction_applied_to_tax_leaves": true,
+    "synthetic_data_only_rule_enforced": true,
+    "upl_boundary_enforced_no_drafting_leaves": true,
+    "anti_overfit_rule_enforced": true,
+    "brand_substitution_rule_enforced": true
+  },
+  "refusal_rules_check": {
+    "no_LLM_for_tax_calc_without_deterministic_engine": "PASS — RULE-ARCH-001 + RULE-CALC-001 + RULE-CALC-002 + NFR-EXTRACT-004 enforce deterministic-calc layer separation",
+    "no_execution_ready_legal_documents": "PASS — Document Creation deferred per CC-001; RULE-UPL-001 + FR-UI-DISCLAIMER-001 enforce disclaimer; no drafting leaves present",
+    "no_documents_only_completion": "PASS — every Must leaf has validation_method∈{unit, integration, scenario_bdd, holdout, golden_dataset, playwright, contract_api, security_abuse, performance_reliability, manual_review} with concrete acceptance criteria",
+    "tenant_isolation_with_RLS_test": "PASS — RULE-DATA-001 + FR-AUTH-005 + NFR-SEC-001 cover RLS + scenario_bdd + IDOR security_abuse",
+    "ester_extractor_holdout_corpus": "PASS — NFR-EXTRACT-002 + NFR-EXTRACT-003 require holdout from public corpora (anti-overfit per ATTR)",
+    "synthetic_data_only": "PASS — RULE-DATA-002 + DATA-SEED-001 enforce; OQ-INTAKE-005 blocks until public-corpus holdout selected",
+    "brand_substitution": "PASS — RULE-UI-003 + RULE-BRAND-001 enforce CI brand-validator gate",
+    "anti_overfit_no_wealthcom_nouns_in_factory_rubrics": "PASS — RULE-OVERFIT-001 + FR-TRANSFER-001 (transfer test) enforce"
+  },
+  "completeness_against_CC_001_in_scope_items": [
+    {"cc_001_item": "Multi-tenant data model with Postgres RLS row-level isolation", "covered_by": "CAP-AUTH-MULTITENANT (FEAT-AUTH-TENANT-ISO leaves RULE-DATA-001, FR-AUTH-004, FR-AUTH-005, NFR-SEC-001)", "status": "PASS"},
+    {"cc_001_item": "Auth: SSO-stub + RBAC + MFA-stub", "covered_by": "FR-AUTH-001, FR-AUTH-002, FR-AUTH-003, RULE-AUTH-001, RULE-AUTH-002, EVENT-AUTH-001", "status": "PASS"},
+    {"cc_001_item": "Household + People + Entities (incl. Trust types) with relationships", "covered_by": "CAP-HOUSEHOLD-MODEL (DATA-HH-001..004, FR-HH-001/002, RULE-HH-001)", "status": "PASS"},
+    {"cc_001_item": "Document upload + S3-equivalent storage + WORM audit log", "covered_by": "CAP-DOCUMENT-VAULT (FR-DOC-001, DATA-DOC-001, NFR-SEC-002, FR-AUDIT-001, RULE-AUDIT-001/002)", "status": "PASS"},
+    {"cc_001_item": "Ester-substitute extractor: layout-aware OCR + LLM + deterministic-calc + citation", "covered_by": "CAP-EXTRACTION (FR-EXTRACT-001..004, RULE-EXTRACT-001/002, RULE-ARCH-001/002, NFR-EXTRACT-001..004, RULE-UPL-001)", "status": "PASS"},
+    {"cc_001_item": "Federal estate tax baseline calc — ONE scenario under OBBBA $15M permanent", "covered_by": "CAP-ESTATE-TAX-CALC (FR-CALC-001/002, RULE-CALC-001/002, DATA-CALC-001/002, NFR-CALC-001/002, EVENT-CALC-001)", "status": "PASS"},
+    {"cc_001_item": "ONE scenario in Scenario Builder — GRAT vs do-nothing for $20M", "covered_by": "CAP-SCENARIO-MODELING (FR-SCEN-001..003, RULE-SCEN-001/002, DATA-SCEN-001/002, NFR-SCEN-001/002, EVENT-SCEN-001)", "status": "PASS"},
+    {"cc_001_item": "Minimal advisor UI — Playwright-evidenced", "covered_by": "CAP-ADVISOR-UI (FR-UI-001..008, FR-UI-DISCLAIMER-001, NFR-UI-001/002, RULE-UI-001/002/003, RULE-BRAND-001)", "status": "PASS"},
+    {"cc_001_item": "2 integration adapter mocks (Plaid-shape + Schwab-shape)", "covered_by": "CAP-INTEGRATION-MOCKS (FR-INT-001/002, RULE-INT-001/002/003, DATA-INT-001/002, NFR-INT-001/002)", "status": "PASS"},
+    {"cc_001_item": "Transfer test on a different fintech surface", "covered_by": "FR-TRANSFER-001 + RULE-OVERFIT-001", "status": "PASS"},
+    {"cc_001_item": "Retrospective + skill-system update PRs", "covered_by": "Stage-out artifacts (df-feedback-learning) — out of intake stage scope", "status": "DEFERRED-TO-LATER-STAGE"},
+    {"cc_001_item": "Final Hawkeye conformance audit at run closure", "covered_by": "Stage-out artifacts — out of intake stage scope", "status": "DEFERRED-TO-LATER-STAGE"}
+  ],
+  "verdict": "PASS",
+  "verdict_rationale": "All 8 in-scope capabilities decomposed to 97 atomic, testable leaves. Branch-level completeness 86-92, validation_readiness 86-95 — all >=80 threshold. 86.6% Must priority (>=80% required for Demo MVP). 100% leaves have >=1 atom or answer trace; 80% in-scope atom coverage with documented rationale for each uncovered atom. 6 contradictions (4 resolved, 2 deferred-not-material, 0 escalated). 6 open questions (1 blocking — public-corpus holdout selection — to be resolved during construction). All refusal rules from generated-meta-skill-contract enforced. Intake quality gate: PASS. Ready for next stage (df-methodology-blender).",
+  "next_action": "Hand off to df-methodology-blender (stage-elaboration) with this decomposition + interrogation record + validation report. Schedule Hawkeye Stage-1 audit with independent persona before stage exit."
+}

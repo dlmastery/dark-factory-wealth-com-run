@@ -1,0 +1,33 @@
+{
+  "name": "estatecompass-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "description": "EstateCompass Demo MVP — RUN-WEALTHCOM-001 (Demo MVP per CC-001). Working title; not 'wealth.com'.",
+  "license": "UNLICENSED",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "docker compose up --build",
+    "test": "pnpm -r test",
+    "test:unit": "pnpm -r test:unit",
+    "test:integration": "pnpm -r test:integration",
+    "test:e2e": "pnpm -F @estatecompass/web e2e",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "format": "prettier --write .",
+    "validate:atoms": "python ../../df-intake-spec-lab/scripts/validate_prd_atoms.py ../00_recon/prd-atoms.json --source ../../wealth_com_PRD_transcript.md --sample 20"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.4.0"
+  }
+}

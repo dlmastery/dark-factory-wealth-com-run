@@ -1,0 +1,529 @@
+{
+  "zero_slop_policy": {
+    "statement": "NO AI SLOP ALLOWED AT ALL - ZERO TOLERANCE TO SLOP AND HALLUCINATIONS",
+    "strict_compliance": "Mandatory. Every claim must be project-specific, evidence-backed, trace-linked, reviewer-challenged, and free of unsupported invention.",
+    "missing_evidence_rule": "If evidence is missing, mark it as an assumption, risk, open question, or failure."
+  },
+  "record_id": "SPEC-DECOMP-WEALTHCOM-001",
+  "run_id": "RUN-WEALTHCOM-001",
+  "interrogation_record": "INT-WEALTHCOM-001",
+  "scope_basis": "CC-001 §in_scope_demo_mvp",
+  "obbba_correction_applied_to_all_tax_leaves": true,
+  "vision": {
+    "node_id": "VISION-001",
+    "statement": "Deliver a walkable, Hawkeye-auditable Demo MVP of an estate-and-tax-planning platform clone (working title 'EstateCompass') that exercises Auth+Tenant+Identity, Households+People+Entities, Documents+WORM Audit, an Ester-substitute extractor, federal estate-tax baseline calc under OBBBA $15M permanent for ONE scenario, GRAT-vs-do-nothing scenario for $20M household, a minimal advisor walkable UI, and 2 integration adapter mocks (Plaid-shape + Schwab-shape) — with deterministic-calc separation, multi-tenant isolation, and synthetic data only.",
+    "trace_to_atom_ids": ["CC-001", "FACT-OBBBA-001", "ATTR §goal", "PRD-0072", "PRD-0078", "PRD-0104", "PRD-0116", "PRD-0165", "PRD-0207"],
+    "trace_to_answer_ids": ["ANS-0001", "ANS-0003", "ANS-0070"]
+  },
+  "capabilities": [
+    {
+      "node_id": "CAP-AUTH-MULTITENANT",
+      "name": "Multi-Tenant Identity, RBAC, and Audit-Log Isolation",
+      "statement": "Multi-tenant identity service with SSO-stub login, MFA-stub, RBAC (advisor/paraplanner/admin), and Postgres Row-Level Security ensuring zero cross-tenant data visibility.",
+      "owner_role": "backend-engineer + security-juror",
+      "trace_to_atom_ids": ["PRD-0097", "PRD-0113", "PRD-0114", "PRD-0115", "PRD-0116", "PRD-0117", "FACT-NYDFS-PART500-2025"],
+      "trace_to_answer_ids": ["ANS-0020", "ANS-0021", "ANS-0030", "ANS-0043"],
+      "completeness_score": 90,
+      "contradiction_score": 5,
+      "validation_readiness_score": 92,
+      "owner_clarity_score": 95,
+      "user_journeys": [
+        {
+          "node_id": "UJ-AUTH-001",
+          "name": "Advisor Login + Tenant-Scoped Dashboard",
+          "statement": "Advisor authenticates via SSO-stub, completes MFA-stub, lands on a dashboard scoped to their tenant only.",
+          "completeness_score": 90,
+          "validation_readiness_score": 90,
+          "features": [
+            {
+              "node_id": "FEAT-AUTH-LOGIN",
+              "name": "SSO-stub Login",
+              "leaves": [
+                {"leaf_id": "FR-AUTH-001", "kind": "FR", "parent_node_id": "FEAT-AUTH-LOGIN", "statement": "System provides /login route accepting OIDC-mock issuer credentials (email + password) and issues a session JWT with claims {user_id, tenant_id, roles[]}.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Given seed user sarah@horizon.test/seedpassword on tenant A, when POST /api/auth/login, then 200 with JWT containing tenant_id='A' and roles=['advisor']; given wrong password, then 401.", "validation_method": "integration", "dependencies": [], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0097"], "trace_to_answer_ids": ["ANS-0020", "ANS-0050"], "surface_tag": "Auth"},
+                {"leaf_id": "FR-AUTH-002", "kind": "FR", "parent_node_id": "FEAT-AUTH-LOGIN", "statement": "System enforces TOTP-style MFA-stub on login: after password, prompt for 6-digit code; seed users have static seed code '123456'.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Given valid password, when login flow proceeds, then /api/auth/mfa-verify endpoint required; with wrong code 401; with seed code 200 + JWT.", "validation_method": "integration", "dependencies": ["FR-AUTH-001"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0097"], "trace_to_answer_ids": ["ANS-0020", "ANS-0043"], "surface_tag": "Auth"},
+                {"leaf_id": "NFR-AUTH-001", "kind": "NFR", "parent_node_id": "FEAT-AUTH-LOGIN", "statement": "Login + MFA round-trip p95 latency <800ms on local Docker Compose.", "priority": "S", "owner_role": "backend-engineer", "acceptance_criteria": "k6 or Vitest perf harness records p95<800ms over 100 sequential logins.", "validation_method": "performance_reliability", "dependencies": ["FR-AUTH-001", "FR-AUTH-002"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0040"], "surface_tag": "Auth"},
+                {"leaf_id": "RULE-AUTH-001", "kind": "Rule", "parent_node_id": "FEAT-AUTH-LOGIN", "statement": "JWT TTL is 8 hours; refresh requires re-MFA.", "priority": "S", "owner_role": "security-juror", "acceptance_criteria": "Decode token: exp - iat == 28800. After exp, refresh requires MFA re-prompt.", "validation_method": "unit", "dependencies": ["FR-AUTH-002"], "risks": [], "trace_to_atom_ids": ["PRD-0097"], "trace_to_answer_ids": ["ANS-0043"], "surface_tag": "Auth"}
+              ]
+            },
+            {
+              "node_id": "FEAT-AUTH-RBAC",
+              "name": "RBAC roles + scopes",
+              "leaves": [
+                {"leaf_id": "FR-AUTH-003", "kind": "FR", "parent_node_id": "FEAT-AUTH-RBAC", "statement": "System defines 3 roles for MVP: advisor, paraplanner, admin; each has specific scope set (advisor:read_household, advisor:write_extraction_review, paraplanner:read_household, admin:read_audit).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Authorization middleware blocks paraplanner from PUT /households/:id with 403; admin can GET /audit-events with 200; advisor can GET /households with 200.", "validation_method": "integration", "dependencies": ["FR-AUTH-001"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0116", "PRD-0188"], "trace_to_answer_ids": ["ANS-0021", "ANS-0043"], "surface_tag": "Auth"},
+                {"leaf_id": "RULE-AUTH-002", "kind": "Rule", "parent_node_id": "FEAT-AUTH-RBAC", "statement": "MVP RBAC scope is intentionally reduced from PRD-0116's 40+ scopes to MVP minimum; full ABAC deferred (ASM-RBAC-001).", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "ADR documents scope reduction with rollback plan; MVP audit confirms only 3 roles defined and tested.", "validation_method": "manual_review", "dependencies": ["FR-AUTH-003"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0116"], "trace_to_answer_ids": ["ANS-0043"], "surface_tag": "Auth"}
+              ]
+            },
+            {
+              "node_id": "FEAT-AUTH-TENANT-ISO",
+              "name": "Postgres RLS Tenant Isolation",
+              "leaves": [
+                {"leaf_id": "RULE-DATA-001", "kind": "Rule", "parent_node_id": "FEAT-AUTH-TENANT-ISO", "statement": "Every tenant-owned table has RLS enabled with policy USING (tenant_id = current_setting('app.current_tenant')::uuid); SET LOCAL app.current_tenant on each request transaction.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "psql query against households table without setting app.current_tenant returns 0 rows; with current_tenant=A returns tenant A rows only; attempting to INSERT a row with tenant_id != current_tenant raises policy violation.", "validation_method": "integration", "dependencies": [], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0116"], "trace_to_answer_ids": ["ANS-0021", "ANS-0030"], "surface_tag": "Auth"},
+                {"leaf_id": "FR-AUTH-004", "kind": "FR", "parent_node_id": "FEAT-AUTH-TENANT-ISO", "statement": "API middleware extracts tenant_id from JWT and SET LOCAL app.current_tenant before any DB query.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Forge request with tampered tenant_id in path returns 403; valid tenant_id auto-applied to all queries (verified by SQL trace).", "validation_method": "integration", "dependencies": ["RULE-DATA-001", "FR-AUTH-001"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0116"], "trace_to_answer_ids": ["ANS-0030"], "surface_tag": "Auth"},
+                {"leaf_id": "FR-AUTH-005", "kind": "FR", "parent_node_id": "FEAT-AUTH-TENANT-ISO", "statement": "Negative tenant-isolation scenario test: tenant B credential querying GET /households returns only tenant B records (not tenant A).", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Tenant A seeded with 3 households, tenant B with 2; advisor B sees exactly 2; advisor A sees exactly 3; row count assertions hold.", "validation_method": "scenario_bdd", "dependencies": ["FR-AUTH-004", "RULE-DATA-001"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0116"], "trace_to_answer_ids": ["ANS-0030"], "surface_tag": "Auth"},
+                {"leaf_id": "NFR-SEC-001", "kind": "NFR", "parent_node_id": "FEAT-AUTH-TENANT-ISO", "statement": "Security abuse test: IDOR attempt — request /households/:id where id belongs to other tenant returns 404 (not 403, to avoid existence leak).", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Forge request with foreign household UUID returns 404; audit-event logged with action='auth.idor_attempt'.", "validation_method": "security_abuse", "dependencies": ["FR-AUTH-004"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0116", "PRD-0117"], "trace_to_answer_ids": ["ANS-0030"], "surface_tag": "Auth"}
+              ]
+            },
+            {
+              "node_id": "FEAT-AUTH-AUDIT-EVENTS",
+              "name": "Auth-related audit events",
+              "leaves": [
+                {"leaf_id": "EVENT-AUTH-001", "kind": "Event", "parent_node_id": "FEAT-AUTH-AUDIT-EVENTS", "statement": "Auth events emitted: auth.login_success, auth.login_failed, auth.mfa_failed, auth.idor_attempt, auth.role_denied — written to WORM audit log.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "After each login attempt, exactly one row in audit_events with action ∈ {auth.login_success, auth.login_failed} and actor_id, tenant_id, ts, request_id populated.", "validation_method": "integration", "dependencies": ["FR-AUTH-001", "FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0104", "PRD-0180"], "trace_to_answer_ids": ["ANS-0044"], "surface_tag": "Auth"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-HOUSEHOLD-MODEL",
+      "name": "Household, Person, Entity (Trust types) Domain Model",
+      "statement": "Domain model for Household → Persons → Entities (Trust placeholders: Revocable, GRAT, Dynasty) with relationships and basic CRUD via authenticated API.",
+      "owner_role": "backend-engineer + domain-juror",
+      "trace_to_atom_ids": ["PRD-0063", "PRD-0085", "PRD-0086", "PRD-0087", "PRD-0189"],
+      "trace_to_answer_ids": ["ANS-0010", "ANS-0051"],
+      "completeness_score": 88,
+      "contradiction_score": 5,
+      "validation_readiness_score": 88,
+      "owner_clarity_score": 95,
+      "user_journeys": [
+        {
+          "node_id": "UJ-HH-001",
+          "name": "Advisor browses household → person → entity hierarchy",
+          "statement": "Advisor opens dashboard, selects household, drills into people and entities.",
+          "completeness_score": 88,
+          "validation_readiness_score": 88,
+          "features": [
+            {
+              "node_id": "FEAT-HH-DASHBOARD",
+              "name": "Tenant-scoped Household List",
+              "leaves": [
+                {"leaf_id": "FR-HH-001", "kind": "FR", "parent_node_id": "FEAT-HH-DASHBOARD", "statement": "GET /api/households returns array of households where tenant_id = current_tenant; each row includes id, name, totalAssetsUSD, headOfHouseholdName.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Tenant A request returns exactly 3 households (Ellison, Sharma, Kline); tenant B request returns exactly 2; response time p95 < 200ms.", "validation_method": "integration", "dependencies": ["FR-AUTH-004"], "risks": [], "trace_to_atom_ids": ["PRD-0063"], "trace_to_answer_ids": ["ANS-0030", "ANS-0051"], "surface_tag": "Households"},
+                {"leaf_id": "DATA-HH-001", "kind": "Data", "parent_node_id": "FEAT-HH-DASHBOARD", "statement": "Household table schema: id (uuid PK), tenant_id (uuid FK), name (text), total_assets_usd (numeric), created_at, updated_at.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "SQL inspection shows table created with RLS policy and FK constraints; migration test green.", "validation_method": "unit", "dependencies": ["RULE-DATA-001"], "risks": [], "trace_to_atom_ids": ["PRD-0063"], "trace_to_answer_ids": [], "surface_tag": "Households"}
+              ]
+            },
+            {
+              "node_id": "FEAT-HH-DETAIL",
+              "name": "Household Detail with Persons + Entities",
+              "leaves": [
+                {"leaf_id": "FR-HH-002", "kind": "FR", "parent_node_id": "FEAT-HH-DETAIL", "statement": "GET /api/households/:id returns household + persons[] + entities[] + assets[]; tenant scoped; 404 if foreign tenant.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "GET /households/{Ellison-uuid} as tenant A returns {persons:[4], entities:[3], assets:[5+]}; same id as tenant B returns 404.", "validation_method": "integration", "dependencies": ["FR-AUTH-004", "DATA-HH-001"], "risks": ["RSK-004"], "trace_to_atom_ids": ["PRD-0063", "PRD-0189"], "trace_to_answer_ids": ["ANS-0010"], "surface_tag": "Households"},
+                {"leaf_id": "DATA-HH-002", "kind": "Data", "parent_node_id": "FEAT-HH-DETAIL", "statement": "Person table: id, tenant_id, household_id, first_name, last_name, date_of_birth, role (e.g., GRANTOR, SPOUSE, BENEFICIARY).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Migration creates table with FK to households and RLS; seed inserts 4 persons for Ellison household.", "validation_method": "unit", "dependencies": ["DATA-HH-001"], "risks": [], "trace_to_atom_ids": ["PRD-0063"], "trace_to_answer_ids": ["ANS-0051"], "surface_tag": "Households"},
+                {"leaf_id": "DATA-HH-003", "kind": "Data", "parent_node_id": "FEAT-HH-DETAIL", "statement": "Entity table: id, tenant_id, household_id, type (enum REVOCABLE_TRUST, GRAT, DYNASTY_TRUST), name, allocated_exemption_usd, gst_inclusion_ratio (numeric 4dp).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Type enum includes only the 3 MVP trust types; gst_inclusion_ratio constrained 0.0000-1.0000; sample row gstInclusionRatio:0 + allocatedExemption:13500000 (per PRD-0189).", "validation_method": "unit", "dependencies": ["DATA-HH-001"], "risks": [], "trace_to_atom_ids": ["PRD-0086", "PRD-0087", "PRD-0189"], "trace_to_answer_ids": [], "surface_tag": "Households"},
+                {"leaf_id": "DATA-HH-004", "kind": "Data", "parent_node_id": "FEAT-HH-DETAIL", "statement": "Asset table: id, tenant_id, household_id, owning_entity_id (nullable), titling (enum INDIVIDUAL, JTWROS, REVOCABLE_TRUST, GRAT, DYNASTY_TRUST), asset_class (enum CASH, PUBLIC_EQUITY, REAL_ESTATE, PRIVATE_EQUITY), value_usd (numeric).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Sum of assets per household equals household.total_assets_usd; for Ellison: $20,000,000.", "validation_method": "unit", "dependencies": ["DATA-HH-003"], "risks": [], "trace_to_atom_ids": ["PRD-0063", "PRD-0189"], "trace_to_answer_ids": ["ANS-0033"], "surface_tag": "Households"},
+                {"leaf_id": "RULE-HH-001", "kind": "Rule", "parent_node_id": "FEAT-HH-DETAIL", "statement": "Trust types restricted to {REVOCABLE_TRUST, GRAT, DYNASTY_TRUST} for MVP; SLAT/ILIT/CLAT/CRT/QPRT/IDGT explicitly excluded per CC-001 narrowing.", "priority": "M", "owner_role": "domain-juror", "acceptance_criteria": "Schema constraint rejects insertion of any other type; ADR records out-of-scope trust types.", "validation_method": "unit", "dependencies": ["DATA-HH-003"], "risks": [], "trace_to_atom_ids": ["PRD-0069", "PRD-0087", "CC-001"], "trace_to_answer_ids": [], "surface_tag": "Households"},
+                {"leaf_id": "EVENT-HH-001", "kind": "Event", "parent_node_id": "FEAT-HH-DETAIL", "statement": "Read events 'household.viewed' emitted on GET /households/:id with tenant_id, actor_id, household_id.", "priority": "S", "owner_role": "backend-engineer", "acceptance_criteria": "Audit table has matching row after each detail view.", "validation_method": "integration", "dependencies": ["FR-HH-002", "FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0104"], "trace_to_answer_ids": ["ANS-0044"], "surface_tag": "Households"}
+              ]
+            },
+            {
+              "node_id": "FEAT-HH-SEED",
+              "name": "Synthetic Seed Data",
+              "leaves": [
+                {"leaf_id": "DATA-SEED-001", "kind": "Data", "parent_node_id": "FEAT-HH-SEED", "statement": "Seed script populates tenant A with 3 synthetic households (Ellison $20M, Sharma $5M, Kline $22M) and tenant B with 2 synthetic households; all data fabricated, no real PII.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Post `docker compose up`, SELECT count from households returns 5 total (3 tenant A + 2 tenant B); spot-check that no SSN-shaped or real-looking name appears in seed.", "validation_method": "integration", "dependencies": ["DATA-HH-001", "DATA-HH-002", "DATA-HH-003", "DATA-HH-004"], "risks": [], "trace_to_atom_ids": ["PRD-0050", "PRD-0051", "PRD-0052", "PRD-0189"], "trace_to_answer_ids": ["ANS-0051"], "surface_tag": "Households"},
+                {"leaf_id": "RULE-DATA-002", "kind": "Rule", "parent_node_id": "FEAT-HH-SEED", "statement": "Synthetic-data-only rule: no leaf may load real PII/PHI; brand_substitution_validator + synthetic_data_only_validator runtime gates apply.", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Static check on seed files plus regex scan for SSN/credit-card patterns returns zero hits.", "validation_method": "manual_review", "dependencies": ["DATA-SEED-001"], "risks": ["RSK-009"], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0024"], "surface_tag": "Cross-cutting"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-DOCUMENT-VAULT",
+      "name": "Document Upload + WORM Audit + Encryption-at-Rest",
+      "statement": "Secure document upload flow with object-store storage, encryption-at-rest, and WORM (write-once-read-many) audit log capturing immutable state-change events.",
+      "owner_role": "backend-engineer + security-juror",
+      "trace_to_atom_ids": ["PRD-0080", "PRD-0104", "PRD-0106", "PRD-0113", "PRD-0180", "PRD-0188"],
+      "trace_to_answer_ids": ["ANS-0010", "ANS-0031", "ANS-0044"],
+      "completeness_score": 90,
+      "contradiction_score": 0,
+      "validation_readiness_score": 92,
+      "owner_clarity_score": 95,
+      "user_journeys": [
+        {
+          "node_id": "UJ-DOC-001",
+          "name": "Advisor uploads a document and audit captures the event",
+          "statement": "Advisor uploads sample-will.pdf via drag-drop on household detail; system stores PDF, creates document row, writes WORM audit row.",
+          "completeness_score": 90,
+          "validation_readiness_score": 92,
+          "features": [
+            {
+              "node_id": "FEAT-DOC-UPLOAD",
+              "name": "Drag-drop Document Upload",
+              "leaves": [
+                {"leaf_id": "FR-DOC-001", "kind": "FR", "parent_node_id": "FEAT-DOC-UPLOAD", "statement": "POST /api/households/:id/documents accepts multipart PDF up to 25MB; stores raw bytes in object store; creates documents row with sha256_hash, raw_storage_key, status='UPLOADED'.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Curl-equivalent multipart POST returns 201 with documentId; SQL shows documents row with sha256 matching file; object-store key exists.", "validation_method": "integration", "dependencies": ["FR-AUTH-004", "FR-HH-002"], "risks": [], "trace_to_atom_ids": ["PRD-0080", "PRD-0156"], "trace_to_answer_ids": ["ANS-0031"], "surface_tag": "Documents"},
+                {"leaf_id": "DATA-DOC-001", "kind": "Data", "parent_node_id": "FEAT-DOC-UPLOAD", "statement": "documents table: id, tenant_id, household_id, document_type (e.g., REVOCABLE_TRUST), raw_storage_key, sha256_hash, status, version, created_at, updated_at, audit_hash.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Schema matches PRD-0063 EstateDocument shape (subset for MVP); RLS enabled; sha256 NOT NULL.", "validation_method": "unit", "dependencies": ["DATA-HH-001"], "risks": [], "trace_to_atom_ids": ["PRD-0063"], "trace_to_answer_ids": [], "surface_tag": "Documents"},
+                {"leaf_id": "NFR-SEC-002", "kind": "NFR", "parent_node_id": "FEAT-DOC-UPLOAD", "statement": "Documents stored encrypted-at-rest using AES-256 via tenant-level KMS key; per-document key deferred (ASM-SEC-001).", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Object-store inspection shows ciphertext (not plaintext PDF); ADR records ASM-SEC-001 deferral.", "validation_method": "manual_review", "dependencies": ["FR-DOC-001"], "risks": [], "trace_to_atom_ids": ["PRD-0113"], "trace_to_answer_ids": ["ANS-0043"], "surface_tag": "Documents"},
+                {"leaf_id": "RULE-DOC-001", "kind": "Rule", "parent_node_id": "FEAT-DOC-UPLOAD", "statement": "Allowed MIME types: application/pdf only at MVP; other types rejected with 415.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Upload of .docx returns 415; upload of malformed .pdf returns 400 with error 'invalid PDF'.", "validation_method": "integration", "dependencies": ["FR-DOC-001"], "risks": [], "trace_to_atom_ids": ["PRD-0080"], "trace_to_answer_ids": ["ANS-0031"], "surface_tag": "Documents"}
+              ]
+            },
+            {
+              "node_id": "FEAT-DOC-WORM-AUDIT",
+              "name": "WORM Audit Log",
+              "leaves": [
+                {"leaf_id": "FR-AUDIT-001", "kind": "FR", "parent_node_id": "FEAT-DOC-WORM-AUDIT", "statement": "All state-changing operations write a row to audit_events with id, tenant_id, actor_user_id, action, resource_type, resource_id, ts, request_id, prev_audit_hash, audit_hash, payload_json.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "After upload + extraction + calc + scenario operations, audit_events count increases by exactly the expected number; chain validation: each row.prev_audit_hash == previous row.audit_hash.", "validation_method": "integration", "dependencies": ["FR-DOC-001"], "risks": [], "trace_to_atom_ids": ["PRD-0104", "PRD-0180"], "trace_to_answer_ids": ["ANS-0031", "ANS-0044"], "surface_tag": "Documents"},
+                {"leaf_id": "RULE-AUDIT-001", "kind": "Rule", "parent_node_id": "FEAT-DOC-WORM-AUDIT", "statement": "audit_events table is append-only via DB trigger that RAISES EXCEPTION on UPDATE or DELETE; minimum retention 7 years (PRD-0104).", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Attempt UPDATE audit_events SET action='X' raises exception; attempt DELETE FROM audit_events WHERE id=... raises exception; retention column or row_lock_until_ts set to now()+7y.", "validation_method": "integration", "dependencies": ["FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0104", "PRD-0106"], "trace_to_answer_ids": ["ANS-0031"], "surface_tag": "Documents"},
+                {"leaf_id": "RULE-AUDIT-002", "kind": "Rule", "parent_node_id": "FEAT-DOC-WORM-AUDIT", "statement": "audit_events.payload_json for AI operations includes promptHash, modelVersion, citations[], guardrailStatus, deterministicValidation per PRD-0180 shape.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "After extraction operation, audit row's payload_json validates against ai-audit-event JSON schema with all 5 required fields populated.", "validation_method": "integration", "dependencies": ["FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0180"], "trace_to_answer_ids": ["ANS-0044"], "surface_tag": "Documents"},
+                {"leaf_id": "EVENT-DOC-001", "kind": "Event", "parent_node_id": "FEAT-DOC-WORM-AUDIT", "statement": "Document events emitted: document.uploaded, document.viewed, document.extraction_started, document.extraction_completed.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Each event written to audit_events with correct action and resource_id; verified by integration test.", "validation_method": "integration", "dependencies": ["FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0104", "PRD-0180"], "trace_to_answer_ids": [], "surface_tag": "Documents"},
+                {"leaf_id": "RULE-DATA-003", "kind": "Rule", "parent_node_id": "FEAT-DOC-WORM-AUDIT", "statement": "AI prompt logs anonymize PII at ingestion (PRD-0190) — at MVP we store promptHash only and not the raw prompt unless explicitly enabled by admin debug flag.", "priority": "S", "owner_role": "security-juror", "acceptance_criteria": "audit_events.payload_json.promptHash present; raw prompt absent unless debug flag set; debug flag check is itself audited.", "validation_method": "integration", "dependencies": ["RULE-AUDIT-002"], "risks": [], "trace_to_atom_ids": ["PRD-0190"], "trace_to_answer_ids": [], "surface_tag": "Documents"}
+              ]
+            },
+            {
+              "node_id": "FEAT-DOC-VAULT-RBAC",
+              "name": "Vault Access Control",
+              "leaves": [
+                {"leaf_id": "RULE-VAULT-001", "kind": "Rule", "parent_node_id": "FEAT-DOC-VAULT-RBAC", "statement": "Vault RBAC at MVP: advisor read+upload; paraplanner read-only; admin read+audit-export. Client/Attorney/Family roles deferred (CC-001 — Client Portal/Document Creation out of scope).", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Paraplanner POST upload returns 403; advisor returns 201; admin GET /audit-events returns 200 with WORM rows.", "validation_method": "integration", "dependencies": ["FR-AUTH-003", "FR-DOC-001"], "risks": [], "trace_to_atom_ids": ["PRD-0188"], "trace_to_answer_ids": [], "surface_tag": "Documents"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-EXTRACTION",
+      "name": "Ester-substitute Extractor (Layout-aware OCR + LLM + Deterministic Calc Validation + Citation Grounding)",
+      "statement": "End-to-end document extraction pipeline producing structured JSON with per-field confidence, citations to source spans, and deterministic-calc validation. Architecture documented as ADR; one extraction flow implemented for sample will/trust document.",
+      "owner_role": "ai-engineer + tax-domain-juror",
+      "trace_to_atom_ids": ["PRD-0072", "PRD-0073", "PRD-0074", "PRD-0078", "PRD-0079", "PRD-0124", "PRD-0165", "PRD-0166", "PRD-0167", "PRD-0168", "PRD-0170", "PRD-0173", "PRD-0174", "PRD-0182", "PRD-0200", "PRD-0207", "FACT-EXTRACT-COMPUTE-NARRATE-001"],
+      "trace_to_answer_ids": ["ANS-0032", "ANS-0040", "ANS-0041"],
+      "completeness_score": 88,
+      "contradiction_score": 10,
+      "validation_readiness_score": 86,
+      "owner_clarity_score": 90,
+      "re_interrogation_rationale": "Branch is at 86 validation_readiness which is above 80 threshold; no re-interrogation triggered. Holdout-corpus selection (OQ-INTAKE-005) is the one open item but is implementation-time, not spec-time.",
+      "user_journeys": [
+        {
+          "node_id": "UJ-EXT-001",
+          "name": "Advisor uploads will → reviews extracted JSON with citations + confidence",
+          "statement": "Advisor uploads sample-will.pdf, system extracts ≥10 structured fields with citations and confidence scores, advisor reviews and confirms.",
+          "completeness_score": 88,
+          "validation_readiness_score": 86,
+          "features": [
+            {
+              "node_id": "FEAT-EXT-PIPELINE",
+              "name": "Extraction Pipeline (OCR → LLM → Deterministic-Calc-Validation)",
+              "leaves": [
+                {"leaf_id": "FR-EXTRACT-001", "kind": "FR", "parent_node_id": "FEAT-EXT-PIPELINE", "statement": "Extraction service runs 4-stage pipeline per PRD-0009: (1) pre-process PDF (text extraction + page index), (2) layout-aware OCR fallback for image regions (mocked at MVP via a deterministic stub OCR returning ground-truth for sample), (3) LLM extraction call producing structured JSON, (4) deterministic post-processing applying numerical validation per PRD-0165.", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "POST /api/extractions starts pipeline; on completion, /api/extractions/:id returns status='COMPLETED' with structured fields; pipeline logs each stage timestamp.", "validation_method": "integration", "dependencies": ["FR-DOC-001"], "risks": ["RSK-001", "RSK-002"], "trace_to_atom_ids": ["PRD-0072", "PRD-0073", "PRD-0074"], "trace_to_answer_ids": ["ANS-0032"], "surface_tag": "Ester"},
+                {"leaf_id": "FR-EXTRACT-002", "kind": "FR", "parent_node_id": "FEAT-EXT-PIPELINE", "statement": "Each extracted field has shape {name, value, confidence (0-100), citation: {pageIndex, spanStart, spanEnd, snippet}, deterministicValidation (boolean)}.", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "Sample-will.pdf extraction produces ≥10 fields each with all 5 properties populated; spans must contain text actually present in the PDF page (verified by reading raw text and substring-checking).", "validation_method": "integration", "dependencies": ["FR-EXTRACT-001"], "risks": ["RSK-001"], "trace_to_atom_ids": ["PRD-0073", "PRD-0078", "PRD-0170"], "trace_to_answer_ids": ["ANS-0032"], "surface_tag": "Ester"},
+                {"leaf_id": "FR-EXTRACT-003", "kind": "FR", "parent_node_id": "FEAT-EXT-PIPELINE", "statement": "Deterministic-calc validation: for any numeric field (e.g., dollar amount, percentage, date), the deterministic post-processor recomputes from raw span text and accepts only if within 0.0001 tolerance vs LLM-proposed value.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Field 'principalAmount: $5,000,000' parsed from snippet '$5,000,000.00' yields deterministicValidation:true; LLM-hallucinated $5,500,000 with snippet $5M yields deterministicValidation:false and field rejected.", "validation_method": "unit", "dependencies": ["FR-EXTRACT-002"], "risks": ["RSK-001", "RSK-002"], "trace_to_atom_ids": ["PRD-0165", "PRD-0207"], "trace_to_answer_ids": ["ANS-0032"], "surface_tag": "Ester"},
+                {"leaf_id": "RULE-EXTRACT-001", "kind": "Rule", "parent_node_id": "FEAT-EXT-PIPELINE", "statement": "Per-field confidence routing: fields with confidence <85 are flagged status='REVIEW_NEEDED' (PRD-0078); MVP renders flag in UI but does not implement HITL queue.", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "Test fixture with 1 field at 80% confidence shows status='REVIEW_NEEDED'; field at 90% shows status='ACCEPTED'.", "validation_method": "unit", "dependencies": ["FR-EXTRACT-002"], "risks": [], "trace_to_atom_ids": ["PRD-0078"], "trace_to_answer_ids": ["ANS-0041"], "surface_tag": "Ester"},
+                {"leaf_id": "RULE-EXTRACT-002", "kind": "Rule", "parent_node_id": "FEAT-EXT-PIPELINE", "statement": "Threshold: aggregate field-level accuracy on holdout ≥95% (PRD-0079); aggregate hallucination rate <0.5% (looser PRD-0124 figure adopted per ANS-0061).", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "Holdout test on 5 public-corpus wills: (correct fields / total fields) ≥ 0.95; (fabricated fields / total fields) < 0.005.", "validation_method": "holdout", "dependencies": ["FR-EXTRACT-002"], "risks": ["RSK-001"], "trace_to_atom_ids": ["PRD-0073", "PRD-0079", "PRD-0124"], "trace_to_answer_ids": ["ANS-0041", "ANS-0061"], "surface_tag": "Ester"},
+                {"leaf_id": "DATA-EXTRACT-001", "kind": "Data", "parent_node_id": "FEAT-EXT-PIPELINE", "statement": "extractions table: id, tenant_id, document_id, status, fields_json, confidence_overall, started_at, completed_at, model_version, prompt_hash.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Schema present with RLS; one row per extraction; fields_json validates against extraction-result JSON schema.", "validation_method": "unit", "dependencies": ["DATA-DOC-001"], "risks": [], "trace_to_atom_ids": ["PRD-0170"], "trace_to_answer_ids": ["ANS-0024"], "surface_tag": "Ester"}
+              ]
+            },
+            {
+              "node_id": "FEAT-EXT-CITATIONS",
+              "name": "Citation Grounding",
+              "leaves": [
+                {"leaf_id": "FR-EXTRACT-004", "kind": "FR", "parent_node_id": "FEAT-EXT-CITATIONS", "statement": "Every extracted field must have a citation pointing to a (pageIndex, spanStart, spanEnd) tuple in the source PDF; citation field must be non-null at the schema level.", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "JSON-schema validation rejects extraction result missing citation; integration test passes citation snippet through PDF.text(pageIndex)[spanStart:spanEnd] and asserts equality.", "validation_method": "integration", "dependencies": ["FR-EXTRACT-002"], "risks": ["RSK-001"], "trace_to_atom_ids": ["PRD-0072", "PRD-0073", "PRD-0180"], "trace_to_answer_ids": [], "surface_tag": "Ester"}
+              ]
+            },
+            {
+              "node_id": "FEAT-EXT-NFRS",
+              "name": "Extraction NFRs",
+              "leaves": [
+                {"leaf_id": "NFR-EXTRACT-001", "kind": "NFR", "parent_node_id": "FEAT-EXT-NFRS", "statement": "Extraction end-to-end p95 latency <60s on a 5-page sample will (relaxed from PRD-0200 <20s; ASM-EXTRACT-LATENCY-001).", "priority": "S", "owner_role": "ai-engineer", "acceptance_criteria": "20 sequential extraction runs measured; p95 < 60s.", "validation_method": "performance_reliability", "dependencies": ["FR-EXTRACT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0065", "PRD-0200"], "trace_to_answer_ids": ["ANS-0040"], "surface_tag": "Ester"},
+                {"leaf_id": "NFR-EXTRACT-002", "kind": "NFR", "parent_node_id": "FEAT-EXT-NFRS", "statement": "Field-level extraction accuracy ≥95% on public-corpus holdout (5 sample wills/trusts).", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "Holdout evaluation script reports accuracy ≥0.95.", "validation_method": "holdout", "dependencies": ["FR-EXTRACT-002", "RULE-EXTRACT-002"], "risks": ["RSK-001"], "trace_to_atom_ids": ["PRD-0079"], "trace_to_answer_ids": ["ANS-0041"], "surface_tag": "Ester"},
+                {"leaf_id": "NFR-EXTRACT-003", "kind": "NFR", "parent_node_id": "FEAT-EXT-NFRS", "statement": "Hallucination rate <0.5% on holdout (fields fabricated where source span doesn't support).", "priority": "M", "owner_role": "ai-engineer", "acceptance_criteria": "Holdout evaluation script categorizes each field as supported/fabricated; fabricated/total < 0.005.", "validation_method": "holdout", "dependencies": ["FR-EXTRACT-002"], "risks": ["RSK-001"], "trace_to_atom_ids": ["PRD-0124"], "trace_to_answer_ids": ["ANS-0041"], "surface_tag": "Ester"},
+                {"leaf_id": "NFR-EXTRACT-004", "kind": "NFR", "parent_node_id": "FEAT-EXT-NFRS", "statement": "Calculation determinism on numeric fields: 100% match against deterministic recompute within 0.0001 tolerance.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "All numeric fields in holdout have deterministicValidation=true OR are flagged REVIEW_NEEDED; no silently-accepted mismatches.", "validation_method": "golden_dataset", "dependencies": ["FR-EXTRACT-003"], "risks": ["RSK-002"], "trace_to_atom_ids": ["PRD-0124", "PRD-0165", "PRD-0207"], "trace_to_answer_ids": [], "surface_tag": "Ester"}
+              ]
+            },
+            {
+              "node_id": "FEAT-EXT-ARCHITECTURE",
+              "name": "Architecture Decision Records",
+              "leaves": [
+                {"leaf_id": "RULE-ARCH-001", "kind": "Rule", "parent_node_id": "FEAT-EXT-ARCHITECTURE", "statement": "ADR-001 LOCKED: Deterministic-calc layer architecturally separated from LLM. LLM extracts and narrates; deterministic engine validates and computes. Refusal rule: any leaf using LLM for tax/estate calc without deterministic fallback is rejected.", "priority": "M", "owner_role": "system-theorist", "acceptance_criteria": "ADR-001 file exists in 05_artifacts/adrs/; references PRD-0072, PRD-0124, PRD-0165, FACT-EXTRACT-COMPUTE-NARRATE-001; Hawkeye check that no leaf violates rule.", "validation_method": "manual_review", "dependencies": [], "risks": ["RSK-001", "RSK-002"], "trace_to_atom_ids": ["PRD-0072", "PRD-0124", "PRD-0165", "FACT-EXTRACT-COMPUTE-NARRATE-001"], "trace_to_answer_ids": [], "surface_tag": "Ester"},
+                {"leaf_id": "RULE-ARCH-002", "kind": "Rule", "parent_node_id": "FEAT-EXT-ARCHITECTURE", "statement": "ADR-002: extraction memory at MVP is session-scoped only (no per-household long-term embeddings; PRD-0173 long-term memory deferred).", "priority": "S", "owner_role": "ai-engineer", "acceptance_criteria": "ADR-002 file exists; deferred items recorded.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0173"], "trace_to_answer_ids": [], "surface_tag": "Ester"}
+              ]
+            },
+            {
+              "node_id": "FEAT-EXT-DISCLAIMER",
+              "name": "UPL Boundary",
+              "leaves": [
+                {"leaf_id": "RULE-UPL-001", "kind": "Rule", "parent_node_id": "FEAT-EXT-DISCLAIMER", "statement": "Every extraction-review UI screen renders disclaimer: 'This is not legal or tax advice; consult your licensed professional.' (PRD-0182).", "priority": "M", "owner_role": "compliance-juror", "acceptance_criteria": "Playwright test asserts disclaimer text present on extraction-review and estate-tax and scenario screens.", "validation_method": "playwright", "dependencies": [], "risks": ["RSK-003"], "trace_to_atom_ids": ["PRD-0148", "PRD-0169", "PRD-0182"], "trace_to_answer_ids": ["ANS-0023"], "surface_tag": "Cross-cutting"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-ESTATE-TAX-CALC",
+      "name": "Federal Estate Tax Baseline Calc under OBBBA $15M Permanent (One Scenario)",
+      "statement": "Deterministic engine computing federal estate tax baseline for ONE scenario (Ellison $20M household) under OBBBA $15M permanent exemption with simplified 40% top rate. Validated against golden dataset.",
+      "owner_role": "tax-domain-juror + backend-engineer",
+      "trace_to_atom_ids": ["PRD-0094", "PRD-0165", "PRD-0181", "PRD-0207", "PRD-0208", "FACT-OBBBA-001"],
+      "trace_to_answer_ids": ["ANS-0022", "ANS-0033", "ANS-0060"],
+      "completeness_score": 92,
+      "contradiction_score": 0,
+      "validation_readiness_score": 95,
+      "owner_clarity_score": 95,
+      "user_journeys": [
+        {
+          "node_id": "UJ-CALC-001",
+          "name": "Advisor opens Estate-Tax view → sees $20M baseline calc",
+          "statement": "Advisor on Ellison Household opens /households/:id/estate-tax view; deterministic engine runs and renders exemption / taxable / tax / net-to-heirs.",
+          "completeness_score": 92,
+          "validation_readiness_score": 95,
+          "features": [
+            {
+              "node_id": "FEAT-CALC-ENGINE",
+              "name": "Deterministic Estate-Tax Engine",
+              "leaves": [
+                {"leaf_id": "FR-CALC-001", "kind": "FR", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "Function computeFederalEstateTax(totalAssetsUSD, exemptionUSD, topRate) returns {exemption, taxableEstate=max(0, total-exemption), federalTax=taxableEstate*topRate, netToHeirs=total-federalTax}.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "computeFederalEstateTax(20_000_000, 15_000_000, 0.40) === {exemption:15000000, taxableEstate:5000000, federalTax:2000000, netToHeirs:18000000}; pure function (no I/O); deterministic on 1000 repeats.", "validation_method": "unit", "dependencies": [], "risks": ["RSK-002"], "trace_to_atom_ids": ["FACT-OBBBA-001"], "trace_to_answer_ids": ["ANS-0033"], "surface_tag": "Calc"},
+                {"leaf_id": "RULE-CALC-001", "kind": "Rule", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "OBBBA 2026 individual exemption = $15,000,000 (FACT-OBBBA-001); top federal estate-tax rate = 40%; bracket simplified to flat top rate per ASM-CALC-001.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Constants module exports OBBBA_2026_INDIVIDUAL_EXEMPTION_USD=15_000_000 and FEDERAL_ESTATE_TAX_TOP_RATE=0.40; tax-domain juror sign-off recorded in ADR.", "validation_method": "unit", "dependencies": [], "risks": ["RSK-002"], "trace_to_atom_ids": ["FACT-OBBBA-001", "PRD-0042", "PRD-0043"], "trace_to_answer_ids": ["ANS-0022", "ANS-0060"], "surface_tag": "Calc"},
+                {"leaf_id": "RULE-CALC-002", "kind": "Rule", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "Recompute tolerance: result must match golden-dataset entry within 0.0001 absolute tolerance (PRD-0165).", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "abs(computed - golden) < 0.0001 for every golden case.", "validation_method": "golden_dataset", "dependencies": ["FR-CALC-001"], "risks": ["RSK-002"], "trace_to_atom_ids": ["PRD-0165", "PRD-0207"], "trace_to_answer_ids": ["ANS-0033"], "surface_tag": "Calc"},
+                {"leaf_id": "DATA-CALC-001", "kind": "Data", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "Golden dataset 'OBBBA-15M-baseline' includes ≥3 cases: total=20M→tax=2M; total=15M→tax=0; total=10M→tax=0.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "JSON file 05_artifacts/golden-datasets/estate-tax-obbba.json contains ≥3 cases with explicit expected outputs and OBBBA citation.", "validation_method": "manual_review", "dependencies": ["RULE-CALC-001"], "risks": [], "trace_to_atom_ids": ["FACT-OBBBA-001", "PRD-0208"], "trace_to_answer_ids": ["ANS-0022"], "surface_tag": "Calc"},
+                {"leaf_id": "FR-CALC-002", "kind": "FR", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "POST /api/households/:id/estate-tax-baseline triggers calc + writes calc_runs row + returns full result JSON; idempotent (same input yields same output, same calc_run_id reused if no input changes).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Two consecutive calls return same calc_run_id; result includes deterministicValidation:true + citation to RULE-CALC-001 + disclaimer.", "validation_method": "integration", "dependencies": ["FR-CALC-001", "FR-HH-002"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0033"], "surface_tag": "Calc"},
+                {"leaf_id": "DATA-CALC-002", "kind": "Data", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "calc_runs table: id, tenant_id, household_id, scenario_type ('FEDERAL_ESTATE_TAX_BASELINE'), inputs_json, outputs_json, deterministic_validation, created_at, model_version='deterministic-v1.0'.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Schema present with RLS; outputs_json validates against estate-tax-result JSON schema.", "validation_method": "unit", "dependencies": ["DATA-HH-001"], "risks": [], "trace_to_atom_ids": ["PRD-0063", "PRD-0180"], "trace_to_answer_ids": ["ANS-0044"], "surface_tag": "Calc"},
+                {"leaf_id": "EVENT-CALC-001", "kind": "Event", "parent_node_id": "FEAT-CALC-ENGINE", "statement": "Event 'calc.estate_tax_baseline.completed' written to audit_events with payload {household_id, exemption, federalTax, deterministicValidation, citations:['FACT-OBBBA-001']}.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Audit row present after each calc run; payload validates.", "validation_method": "integration", "dependencies": ["FR-CALC-002", "FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0180"], "trace_to_answer_ids": [], "surface_tag": "Calc"}
+              ]
+            },
+            {
+              "node_id": "FEAT-CALC-NFRS",
+              "name": "Calc NFRs",
+              "leaves": [
+                {"leaf_id": "NFR-CALC-001", "kind": "NFR", "parent_node_id": "FEAT-CALC-NFRS", "statement": "Estate-tax baseline calc p95 latency <500ms.", "priority": "S", "owner_role": "backend-engineer", "acceptance_criteria": "100 sequential calc runs; p95 < 500ms.", "validation_method": "performance_reliability", "dependencies": ["FR-CALC-002"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0040"], "surface_tag": "Calc"},
+                {"leaf_id": "NFR-CALC-002", "kind": "NFR", "parent_node_id": "FEAT-CALC-NFRS", "statement": "Calc determinism: 100% — same input always yields same output across 1000 iterations and across server restarts.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Determinism test runs 1000 iterations and asserts identical bytes-of-output.", "validation_method": "unit", "dependencies": ["FR-CALC-001"], "risks": ["RSK-002"], "trace_to_atom_ids": ["PRD-0124"], "trace_to_answer_ids": ["ANS-0041"], "surface_tag": "Calc"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-SCENARIO-MODELING",
+      "name": "Scenario Builder — GRAT vs Do-Nothing for $20M Household (One Scenario)",
+      "statement": "Side-by-side scenario comparison of GRAT vs do-nothing strategies for $20M household under OBBBA. Section 7520 rate slider; deterministic projection of estate-tax delta; GRAT remainder validated within 0.0001 tolerance.",
+      "owner_role": "tax-domain-juror + ai-engineer",
+      "trace_to_atom_ids": ["PRD-0069", "PRD-0096", "PRD-0157", "PRD-0181", "PRD-0207", "PRD-0208", "FACT-OBBBA-001"],
+      "trace_to_answer_ids": ["ANS-0034", "ANS-0062"],
+      "completeness_score": 88,
+      "contradiction_score": 0,
+      "validation_readiness_score": 90,
+      "owner_clarity_score": 95,
+      "user_journeys": [
+        {
+          "node_id": "UJ-SCEN-001",
+          "name": "Advisor opens scenario view → side-by-side GRAT vs do-nothing",
+          "statement": "Advisor on Ellison Household selects 'Run Scenario: GRAT vs do-nothing'; UI renders two columns with projection and tax delta; Section 7520 rate slider re-runs calc.",
+          "completeness_score": 88,
+          "validation_readiness_score": 90,
+          "features": [
+            {
+              "node_id": "FEAT-SCEN-INPUTS",
+              "name": "Scenario Inputs",
+              "leaves": [
+                {"leaf_id": "DATA-SCEN-001", "kind": "Data", "parent_node_id": "FEAT-SCEN-INPUTS", "statement": "Scenario inputs default to PRD-0157 sample defaults: assetGrowthPct=7%, gratTermYears=5, section7520RatePct=4.8%, gratFundingUSD=$5,000,000; advisor can override via slider/input.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "UI renders defaults; user changes slider 4.8→6.0%, recomputed result reflects new 7520 rate within <1.5s.", "validation_method": "playwright", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0157", "PRD-0181"], "trace_to_answer_ids": ["ANS-0034"], "surface_tag": "Scenario"},
+                {"leaf_id": "RULE-SCEN-001", "kind": "Rule", "parent_node_id": "FEAT-SCEN-INPUTS", "statement": "Scenario uses OBBBA $15M exemption (not PRD-0157's repealed $7M); explicit obbba_correction_applied:true marker.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Output JSON includes 'obbba_correction_applied: true' and reference to FACT-OBBBA-001; PRD-0157 repealed assumption documented as superseded.", "validation_method": "unit", "dependencies": ["RULE-CALC-001"], "risks": ["RSK-002"], "trace_to_atom_ids": ["FACT-OBBBA-001", "PRD-0157"], "trace_to_answer_ids": ["ANS-0022", "ANS-0060", "ANS-0062"], "surface_tag": "Scenario"}
+              ]
+            },
+            {
+              "node_id": "FEAT-SCEN-PROJECTION",
+              "name": "Scenario Projection Engine",
+              "leaves": [
+                {"leaf_id": "FR-SCEN-001", "kind": "FR", "parent_node_id": "FEAT-SCEN-PROJECTION", "statement": "Function projectGratVsDoNothing(inputs) returns {pathA_doNothing: {projectedAssetsAtTermEnd, projectedFederalEstateTax, netToHeirs}, pathB_grat: {gratRemainderToBeneficiary, projectedAssetsAtTermEnd, projectedFederalEstateTax, netToHeirs}, taxDelta}.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Pure function on synthetic inputs returns finite numbers; pathA tax delta vs pathB delta computed deterministically.", "validation_method": "unit", "dependencies": ["FR-CALC-001"], "risks": ["RSK-002"], "trace_to_atom_ids": ["PRD-0157", "PRD-0207"], "trace_to_answer_ids": ["ANS-0034"], "surface_tag": "Scenario"},
+                {"leaf_id": "FR-SCEN-002", "kind": "FR", "parent_node_id": "FEAT-SCEN-PROJECTION", "statement": "GRAT remainder computed using IRS Section 7520 annuity-formula: remainder = funded - PV(annuity@7520Rate, term); validated within 0.0001 vs golden case (PRD-0207).", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Golden case: $5M funded, 5y term, 4.8% 7520 rate, qualified annuity at 100% → remainder ≈ expected golden value within 0.0001.", "validation_method": "golden_dataset", "dependencies": ["FR-SCEN-001", "RULE-CALC-002"], "risks": ["RSK-002"], "trace_to_atom_ids": ["PRD-0207"], "trace_to_answer_ids": ["ANS-0034"], "surface_tag": "Scenario"},
+                {"leaf_id": "DATA-SCEN-002", "kind": "Data", "parent_node_id": "FEAT-SCEN-PROJECTION", "statement": "Golden dataset 'GRAT-OBBBA-20M' includes ≥3 cases at different 7520 rates (3.0%, 4.8%, 6.0%) and term lengths (3, 5, 10 years).", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "JSON file 05_artifacts/golden-datasets/grat-scenario.json contains ≥3 cases with expected remainder + projected estate tax.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0157", "PRD-0181"], "trace_to_answer_ids": [], "surface_tag": "Scenario"},
+                {"leaf_id": "FR-SCEN-003", "kind": "FR", "parent_node_id": "FEAT-SCEN-PROJECTION", "statement": "POST /api/households/:id/scenarios/grat-vs-do-nothing accepts inputs, returns projection JSON, writes calc_runs + audit event.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Endpoint returns 200 with full projection; calc_runs row exists; audit event 'scenario.grat_vs_donothing.completed' present.", "validation_method": "integration", "dependencies": ["FR-SCEN-001", "FR-AUDIT-001"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0034"], "surface_tag": "Scenario"},
+                {"leaf_id": "EVENT-SCEN-001", "kind": "Event", "parent_node_id": "FEAT-SCEN-PROJECTION", "statement": "Audit event 'scenario.grat_vs_donothing.completed' carries deterministicValidation:true + citations to FACT-OBBBA-001 and PRD-0207.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Verified by integration test reading audit_events.payload_json.", "validation_method": "integration", "dependencies": ["FR-SCEN-003"], "risks": [], "trace_to_atom_ids": ["PRD-0180"], "trace_to_answer_ids": [], "surface_tag": "Scenario"}
+              ]
+            },
+            {
+              "node_id": "FEAT-SCEN-NFRS",
+              "name": "Scenario NFRs",
+              "leaves": [
+                {"leaf_id": "NFR-SCEN-001", "kind": "NFR", "parent_node_id": "FEAT-SCEN-NFRS", "statement": "Slider re-render p95 latency <1.5s after input change.", "priority": "S", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright timing test: change slider, await UI update; p95 over 20 changes <1.5s.", "validation_method": "performance_reliability", "dependencies": ["FR-SCEN-003"], "risks": [], "trace_to_atom_ids": ["PRD-0177"], "trace_to_answer_ids": ["ANS-0040"], "surface_tag": "Scenario"},
+                {"leaf_id": "NFR-SCEN-002", "kind": "NFR", "parent_node_id": "FEAT-SCEN-NFRS", "statement": "Scenario determinism: same inputs yield same outputs across 1000 iterations.", "priority": "M", "owner_role": "tax-domain-juror", "acceptance_criteria": "Determinism test passes.", "validation_method": "unit", "dependencies": ["FR-SCEN-001"], "risks": ["RSK-002"], "trace_to_atom_ids": ["PRD-0124"], "trace_to_answer_ids": [], "surface_tag": "Scenario"}
+              ]
+            },
+            {
+              "node_id": "FEAT-SCEN-OUT-OF-SCOPE",
+              "name": "Out-of-Scope Strategies (explicit deferrals)",
+              "leaves": [
+                {"leaf_id": "RULE-SCEN-002", "kind": "Rule", "parent_node_id": "FEAT-SCEN-OUT-OF-SCOPE", "statement": "Strategies SLAT, ILIT, CLAT, Dynasty, Revocable, QPRT, IDGT, CRT/CRUT explicitly out-of-scope per CC-001; only GRAT-vs-do-nothing implemented at MVP.", "priority": "M", "owner_role": "domain-juror", "acceptance_criteria": "Scenario type enum contains only 'GRAT_VS_DO_NOTHING'; ADR records deferral list with rollback path.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0069", "PRD-0096", "CC-001"], "trace_to_answer_ids": [], "surface_tag": "Scenario"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-ADVISOR-UI",
+      "name": "Minimal Advisor Walkable UI",
+      "statement": "Web UI for advisor demo flow: login → dashboard → household list → household detail → document upload → extraction review → estate-tax view → scenario view. Desktop-first, WCAG 2.1 AA, AI-Trust heuristics applied.",
+      "owner_role": "frontend-engineer + accessibility-juror",
+      "trace_to_atom_ids": ["PRD-0046", "PRD-0049", "PRD-0083", "PRD-0084", "PRD-0126", "PRD-0127", "PRD-0128", "PRD-0182"],
+      "trace_to_answer_ids": ["ANS-0010", "ANS-0042"],
+      "completeness_score": 88,
+      "contradiction_score": 0,
+      "validation_readiness_score": 90,
+      "owner_clarity_score": 92,
+      "user_journeys": [
+        {
+          "node_id": "UJ-UI-001",
+          "name": "Advisor walkable demo flow end-to-end",
+          "statement": "Sarah-archetype advisor logs in, navigates dashboard → household → upload → extraction review → estate-tax → scenario; every screen Playwright-evidenced with WCAG-AA pass.",
+          "completeness_score": 88,
+          "validation_readiness_score": 90,
+          "features": [
+            {
+              "node_id": "FEAT-UI-LOGIN",
+              "name": "Login + MFA UI",
+              "leaves": [
+                {"leaf_id": "FR-UI-001", "kind": "FR", "parent_node_id": "FEAT-UI-LOGIN", "statement": "/login page renders form with email + password + 'Sign In' button; on submit calls POST /api/auth/login; on success navigates to /mfa-verify; on failure renders inline error.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: navigate, fill, click; failure path shows error message; success path navigates to /mfa-verify.", "validation_method": "playwright", "dependencies": ["FR-AUTH-001"], "risks": [], "trace_to_atom_ids": ["PRD-0097"], "trace_to_answer_ids": ["ANS-0010"], "surface_tag": "UI"},
+                {"leaf_id": "FR-UI-002", "kind": "FR", "parent_node_id": "FEAT-UI-LOGIN", "statement": "/mfa-verify page renders 6-digit code input + 'Verify' button; on success navigates to /dashboard.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright completes MFA flow with seed code 123456 and lands on /dashboard.", "validation_method": "playwright", "dependencies": ["FR-AUTH-002", "FR-UI-001"], "risks": [], "trace_to_atom_ids": ["PRD-0097"], "trace_to_answer_ids": [], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-DASHBOARD",
+              "name": "Dashboard",
+              "leaves": [
+                {"leaf_id": "FR-UI-003", "kind": "FR", "parent_node_id": "FEAT-UI-DASHBOARD", "statement": "/dashboard renders household list table with name + total assets; each row links to /households/:id.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: as tenant A, table has 3 rows; as tenant B, 2 rows; clicking Ellison row navigates to detail.", "validation_method": "playwright", "dependencies": ["FR-HH-001", "FR-UI-002"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0030"], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-HOUSEHOLD-DETAIL",
+              "name": "Household Detail",
+              "leaves": [
+                {"leaf_id": "FR-UI-004", "kind": "FR", "parent_node_id": "FEAT-UI-HOUSEHOLD-DETAIL", "statement": "/households/:id renders persons table, entities table (with Trust types badges), assets table, documents list, and 4 action buttons: Upload Document, View Estate Tax, Run Scenario, View Audit.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: page shows expected counts of persons/entities/assets per seed; action buttons navigate to correct routes.", "validation_method": "playwright", "dependencies": ["FR-HH-002"], "risks": [], "trace_to_atom_ids": ["PRD-0083"], "trace_to_answer_ids": [], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-DOC-UPLOAD",
+              "name": "Document Upload UI",
+              "leaves": [
+                {"leaf_id": "FR-UI-005", "kind": "FR", "parent_node_id": "FEAT-UI-DOC-UPLOAD", "statement": "Upload modal supports drag-drop and click-to-browse for PDF; shows progress bar; on success renders document row in list and navigates to extraction-review.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: setInputFiles with sample-will.pdf; await progress 100%; document appears in list.", "validation_method": "playwright", "dependencies": ["FR-DOC-001"], "risks": [], "trace_to_atom_ids": ["PRD-0080"], "trace_to_answer_ids": ["ANS-0010"], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-EXTRACTION-REVIEW",
+              "name": "Extraction Review UI",
+              "leaves": [
+                {"leaf_id": "FR-UI-006", "kind": "FR", "parent_node_id": "FEAT-UI-EXTRACTION-REVIEW", "statement": "Extraction-review page renders fields table with columns: name, value, confidence (color-coded), citation snippet, deterministicValidation badge. Fields with REVIEW_NEEDED status visually distinguished.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: page shows ≥10 field rows; rows with confidence <85 have yellow 'review needed' badge; clicking citation snippet opens PDF at correct page (mock viewer at MVP).", "validation_method": "playwright", "dependencies": ["FR-EXTRACT-002", "RULE-EXTRACT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0078"], "trace_to_answer_ids": ["ANS-0010"], "surface_tag": "UI"},
+                {"leaf_id": "FR-UI-DISCLAIMER-001", "kind": "FR", "parent_node_id": "FEAT-UI-EXTRACTION-REVIEW", "statement": "Every extraction-review, estate-tax, and scenario screen renders the disclaimer 'This is not legal or tax advice; consult your licensed professional.' in a footer banner.", "priority": "M", "owner_role": "compliance-juror", "acceptance_criteria": "Playwright getByText() finds disclaimer on each screen.", "validation_method": "playwright", "dependencies": [], "risks": ["RSK-003"], "trace_to_atom_ids": ["PRD-0182"], "trace_to_answer_ids": ["ANS-0023"], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-ESTATE-TAX",
+              "name": "Estate-Tax View UI",
+              "leaves": [
+                {"leaf_id": "FR-UI-007", "kind": "FR", "parent_node_id": "FEAT-UI-ESTATE-TAX", "statement": "/households/:id/estate-tax renders 4-tile summary (Total Assets, Exemption $15M (OBBBA), Taxable Estate, Federal Tax) plus a 'View Calculation Trace' expandable section with deterministic calc trace + citations + disclaimer.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: tiles show {$20M, $15M, $5M, $2M}; expand trace shows formula with citations to FACT-OBBBA-001 and PRD-0207.", "validation_method": "playwright", "dependencies": ["FR-CALC-002"], "risks": [], "trace_to_atom_ids": ["FACT-OBBBA-001"], "trace_to_answer_ids": ["ANS-0010", "ANS-0033"], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-SCENARIO",
+              "name": "Scenario View UI",
+              "leaves": [
+                {"leaf_id": "FR-UI-008", "kind": "FR", "parent_node_id": "FEAT-UI-SCENARIO", "statement": "/households/:id/scenarios/grat-vs-do-nothing renders side-by-side cards (Path A: Do Nothing, Path B: Fund GRAT) with key metrics, Section 7520 rate slider, term-years dropdown, asset-growth slider, and a 'Tax Delta' headline.", "priority": "M", "owner_role": "frontend-engineer", "acceptance_criteria": "Playwright: change 7520 slider 4.8→6.0; both cards re-render with new numbers; tax delta updates; assertion holds.", "validation_method": "playwright", "dependencies": ["FR-SCEN-003"], "risks": [], "trace_to_atom_ids": ["PRD-0181"], "trace_to_answer_ids": ["ANS-0034"], "surface_tag": "UI"}
+              ]
+            },
+            {
+              "node_id": "FEAT-UI-NFRS",
+              "name": "UI NFRs (a11y, design tokens, AI-Trust)",
+              "leaves": [
+                {"leaf_id": "NFR-UI-001", "kind": "NFR", "parent_node_id": "FEAT-UI-NFRS", "statement": "Every advisor screen passes WCAG 2.1 AA via axe-core; zero AA violations.", "priority": "M", "owner_role": "accessibility-juror", "acceptance_criteria": "Playwright + axe-core on each route reports 0 AA violations.", "validation_method": "playwright", "dependencies": ["FR-UI-001", "FR-UI-003", "FR-UI-004", "FR-UI-005", "FR-UI-006", "FR-UI-007", "FR-UI-008"], "risks": [], "trace_to_atom_ids": ["PRD-0084"], "trace_to_answer_ids": ["ANS-0042"], "surface_tag": "UI"},
+                {"leaf_id": "NFR-UI-002", "kind": "NFR", "parent_node_id": "FEAT-UI-NFRS", "statement": "Keyboard navigation works on all interactive elements (Tab, Shift+Tab, Enter, Esc); focus indicator visible.", "priority": "M", "owner_role": "accessibility-juror", "acceptance_criteria": "Playwright keyboard-only walkthrough completes the entire demo flow without mouse.", "validation_method": "playwright", "dependencies": ["NFR-UI-001"], "risks": [], "trace_to_atom_ids": ["PRD-0084"], "trace_to_answer_ids": ["ANS-0042"], "surface_tag": "UI"},
+                {"leaf_id": "RULE-UI-001", "kind": "Rule", "parent_node_id": "FEAT-UI-NFRS", "statement": "Design tokens: deep navy #0A2540 + soft sage #E8F0E8 (PRD-0126); Tailwind+Radix primitives.", "priority": "S", "owner_role": "frontend-engineer", "acceptance_criteria": "tailwind.config.js exports the two tokens; component spot-check confirms usage.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0126"], "trace_to_answer_ids": [], "surface_tag": "UI"},
+                {"leaf_id": "RULE-UI-002", "kind": "Rule", "parent_node_id": "FEAT-UI-NFRS", "statement": "AI-Trust heuristics applied: Transparency (every AI-derived value shows confidence + citation), Control (advisor can override field values; not implemented but UI affordance present), Emotional Safety (no aggressive 'sell more' nudges), Consistency (same disclaimer text everywhere) per PRD-0128.", "priority": "S", "owner_role": "ux-juror", "acceptance_criteria": "Manual review checklist signed off; spot-check on extraction and scenario screens confirms.", "validation_method": "manual_review", "dependencies": ["FR-UI-006", "FR-UI-008"], "risks": [], "trace_to_atom_ids": ["PRD-0128"], "trace_to_answer_ids": [], "surface_tag": "UI"},
+                {"leaf_id": "RULE-UI-003", "kind": "Rule", "parent_node_id": "FEAT-UI-NFRS", "statement": "Brand substitution: no use of 'Wealth.com', 'Ester®', 'Heritage Map', 'Family Office Suite™', 'EstateFlow™', 'Plan for Every Tomorrow™'. Working title 'EstateCompass' / internal 'Sage'.", "priority": "M", "owner_role": "compliance-juror", "acceptance_criteria": "grep across UI source for forbidden terms returns 0 matches; only 'EstateCompass'/'Sage' used.", "validation_method": "manual_review", "dependencies": [], "risks": ["RSK-007"], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0025"], "surface_tag": "Cross-cutting"},
+                {"leaf_id": "RULE-BRAND-001", "kind": "Rule", "parent_node_id": "FEAT-UI-NFRS", "statement": "Brand validator runs as a runtime gate per generated-meta-skill-contract; CI failure if forbidden term appears.", "priority": "M", "owner_role": "compliance-juror", "acceptance_criteria": "CI script scans /app/web /app/api /app/ai for forbidden brand terms; fails build if any found.", "validation_method": "manual_review", "dependencies": ["RULE-UI-003"], "risks": ["RSK-007"], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0025"], "surface_tag": "Cross-cutting"}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_id": "CAP-INTEGRATION-MOCKS",
+      "name": "Two Integration Adapter Mocks (Plaid-shape + Schwab-shape)",
+      "statement": "Contract-tested mock adapters for Plaid (account aggregation) and Schwab (custodial holdings). Demonstrates anti-corruption layer pattern; no real partner endpoints called.",
+      "owner_role": "backend-engineer + integration-juror",
+      "trace_to_atom_ids": ["PRD-0091", "PRD-0107", "PRD-0110", "PRD-0155", "PRD-0156"],
+      "trace_to_answer_ids": ["ANS-0035"],
+      "completeness_score": 86,
+      "contradiction_score": 0,
+      "validation_readiness_score": 88,
+      "owner_clarity_score": 92,
+      "user_journeys": [
+        {
+          "node_id": "UJ-INT-001",
+          "name": "Demo invokes Plaid-shape and Schwab-shape adapters; verified by contract tests",
+          "statement": "Demo orchestrator calls adapter.fetchAccounts(Plaid-shape) and adapter.fetchHoldings(Schwab-shape); responses validated against published partner JSON Schemas.",
+          "completeness_score": 86,
+          "validation_readiness_score": 88,
+          "features": [
+            {
+              "node_id": "FEAT-INT-PLAID",
+              "name": "Plaid-shape Adapter",
+              "leaves": [
+                {"leaf_id": "FR-INT-001", "kind": "FR", "parent_node_id": "FEAT-INT-PLAID", "statement": "Plaid-shape adapter: function fetchAccounts({tenantId, householdId, accessToken}) returns array of account objects matching Plaid /accounts/get response shape (subset: account_id, name, type, subtype, balances:{available, current}).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Calling adapter returns recorded golden response (synthetic accounts only) shaped to Plaid contract; never makes outbound HTTP to plaid.com.", "validation_method": "contract_api", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0107"], "trace_to_answer_ids": ["ANS-0035"], "surface_tag": "Integrations"},
+                {"leaf_id": "RULE-INT-001", "kind": "Rule", "parent_node_id": "FEAT-INT-PLAID", "statement": "Plaid adapter base URL is config-bound to a mock server URL; production-URL safeguard: any URL containing 'plaid.com' rejected at runtime.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Setting config to https://api.plaid.com fails startup with explicit error; setting to http://mock-plaid:8081 succeeds.", "validation_method": "integration", "dependencies": ["FR-INT-001"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0035"], "surface_tag": "Integrations"},
+                {"leaf_id": "DATA-INT-001", "kind": "Data", "parent_node_id": "FEAT-INT-PLAID", "statement": "Recorded golden response file 05_artifacts/integration-mocks/plaid-accounts-get.golden.json contains synthetic Ellison household accounts.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "File present; JSON-schema validation against published Plaid OpenAPI for /accounts/get passes.", "validation_method": "contract_api", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0107", "PRD-0155"], "trace_to_answer_ids": ["ANS-0035"], "surface_tag": "Integrations"}
+              ]
+            },
+            {
+              "node_id": "FEAT-INT-SCHWAB",
+              "name": "Schwab-shape Adapter",
+              "leaves": [
+                {"leaf_id": "FR-INT-002", "kind": "FR", "parent_node_id": "FEAT-INT-SCHWAB", "statement": "Schwab-shape adapter: function fetchHoldings({tenantId, householdId, accountToken}) returns array of holding objects shaped to Schwab Custodial API (account, securities[]:{symbol, quantity, marketValue, costBasis}).", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Calling adapter returns recorded golden response (synthetic holdings); contract test green.", "validation_method": "contract_api", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0110"], "trace_to_answer_ids": ["ANS-0035"], "surface_tag": "Integrations"},
+                {"leaf_id": "RULE-INT-002", "kind": "Rule", "parent_node_id": "FEAT-INT-SCHWAB", "statement": "Schwab adapter base URL is config-bound to mock; any 'schwab.com' or 'schwabapi.com' URL rejected at runtime.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "Production URL fails startup; mock URL succeeds.", "validation_method": "integration", "dependencies": ["FR-INT-002"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0035"], "surface_tag": "Integrations"},
+                {"leaf_id": "DATA-INT-002", "kind": "Data", "parent_node_id": "FEAT-INT-SCHWAB", "statement": "Recorded golden response file 05_artifacts/integration-mocks/schwab-holdings.golden.json contains synthetic Ellison custodial holdings.", "priority": "M", "owner_role": "backend-engineer", "acceptance_criteria": "File present; JSON-schema validation passes.", "validation_method": "contract_api", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0110"], "trace_to_answer_ids": [], "surface_tag": "Integrations"}
+              ]
+            },
+            {
+              "node_id": "FEAT-INT-NFRS",
+              "name": "Integration NFRs",
+              "leaves": [
+                {"leaf_id": "NFR-INT-001", "kind": "NFR", "parent_node_id": "FEAT-INT-NFRS", "statement": "Tenant-isolation in adapter: passing tenant A token but householdId from tenant B returns 403; adapter call audited.", "priority": "M", "owner_role": "security-juror", "acceptance_criteria": "Forge attempt rejected with 403; audit_events row created.", "validation_method": "security_abuse", "dependencies": ["FR-INT-001", "FR-INT-002", "FR-AUTH-004"], "risks": ["RSK-004"], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0035"], "surface_tag": "Integrations"},
+                {"leaf_id": "NFR-INT-002", "kind": "NFR", "parent_node_id": "FEAT-INT-NFRS", "statement": "Adapter response time (mock): p95 <300ms.", "priority": "S", "owner_role": "backend-engineer", "acceptance_criteria": "100 sequential calls; p95 <300ms.", "validation_method": "performance_reliability", "dependencies": ["FR-INT-001", "FR-INT-002"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0040"], "surface_tag": "Integrations"}
+              ]
+            },
+            {
+              "node_id": "FEAT-INT-OUT-OF-SCOPE",
+              "name": "Out-of-scope partners (deferrals)",
+              "leaves": [
+                {"leaf_id": "RULE-INT-003", "kind": "Rule", "parent_node_id": "FEAT-INT-OUT-OF-SCOPE", "statement": "Other 17+ PRD partners (Salesforce FSC, Redtail, Wealthbox, Orion, Black Diamond, Addepar, eMoney, MoneyGuidePro, RightCapital, Holistiplan, Fidelity, Pershing, Carta, Coinbase, Anchorage, Zillow, DocuSign, Notarize, M365, Google, Snowflake, Advyzon, Goldman, Arch, Zocks/Jump) explicitly out of MVP per CC-001.", "priority": "M", "owner_role": "integration-juror", "acceptance_criteria": "ADR records deferral list; no leaf cites those partners as in-scope.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": ["PRD-0107", "PRD-0108", "PRD-0109", "PRD-0192"], "trace_to_answer_ids": [], "surface_tag": "Integrations"}
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cross_cutting_capabilities": {
+    "node_id": "CAP-CROSS-CUTTING",
+    "name": "Cross-cutting Concerns (Compliance, Brand, Anti-Overfit, Operability)",
+    "statement": "Concerns spanning multiple capabilities: compliance disclaimer/UPL, brand substitution, synthetic-data-only, transfer-test, operability runbook for demo.",
+    "owner_role": "compliance-juror + system-theorist + platform-engineer",
+    "completeness_score": 86,
+    "validation_readiness_score": 88,
+    "leaves": [
+      {"leaf_id": "NFR-COMPLIANCE-001", "kind": "NFR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "All in-scope leaves comply with SEC Rule 204-2 (5-year minimum records) and FINRA 17a-4(f) WORM via audit_events 7-year retention.", "priority": "M", "owner_role": "compliance-juror", "acceptance_criteria": "Compliance review confirms audit_events retention=7y, immutable; matches SEC 204-2 and FINRA 17a-4(f).", "validation_method": "manual_review", "dependencies": ["RULE-AUDIT-001"], "risks": [], "trace_to_atom_ids": ["PRD-0104", "PRD-0106"], "trace_to_answer_ids": ["ANS-0025"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "NFR-COMPLIANCE-002", "kind": "NFR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "GLBA + state privacy posture for synthetic data; ADMT (CCPA/CPRA Jan 1, 2027) flagged as forward risk; NYDFS Part 500 noted but production_surface=false defers control implementation.", "priority": "S", "owner_role": "compliance-juror", "acceptance_criteria": "Compliance ADR records posture and forward risks.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": ["FACT-NYDFS-PART500-2025", "FACT-ADMT-CCPA-2027", "FACT-MT-CT-GLBA-2025", "PRD-0115"], "trace_to_answer_ids": ["ANS-0025"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "FR-OPS-001", "kind": "FR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "Operator runs `docker compose up` from runs/wealth-com/app/ to start demo; `docker compose down -v` to reset; README.md documents both commands.", "priority": "M", "owner_role": "platform-engineer", "acceptance_criteria": "Fresh checkout: docker compose up succeeds; demo flow accessible at http://localhost:3000; docker compose down -v removes all volumes.", "validation_method": "manual_review", "dependencies": ["DATA-SEED-001"], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0050", "ANS-0052"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "NFR-OPS-001", "kind": "NFR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "production_surface=false at MVP (HD-004); release plan + runbook + outage drill deferred.", "priority": "M", "owner_role": "platform-engineer", "acceptance_criteria": "ATTR + tailoring profile flags production_surface=false; deferral recorded.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0040", "ANS-0050"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "NFR-OBS-001", "kind": "NFR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "OpenTelemetry traces enabled on every API route + extraction job + calc + scenario; exported to local OTel collector logged to file.", "priority": "S", "owner_role": "platform-engineer", "acceptance_criteria": "Trace file shows spans for the demo flow; tenant_id and request_id present.", "validation_method": "integration", "dependencies": [], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0044"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "FR-TRANSFER-001", "kind": "FR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "Transfer test: a Holistiplan-style mini-app (single-input tax-baseline calc surface) is implemented using factory-reusable scaffolding (no wealth.com nouns leaking); tests pass and Hawkeye anti-overfit auditor signs off.", "priority": "M", "owner_role": "system-theorist", "acceptance_criteria": "Mini-app builds + tests green; factory rubric inspection finds 0 wealth.com noun leaks; Hawkeye anti-overfit issues PASS.", "validation_method": "holdout", "dependencies": ["FR-CALC-001", "RULE-DATA-001", "FR-AUDIT-001"], "risks": ["RSK-005"], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0053"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "RULE-OVERFIT-001", "kind": "Rule", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "Anti-overfit: no wealth.com noun (Ester, GRAT, Heritage Map, Family Office Suite, EstateFlow) appears in factory-reusable rubrics or templates. They are allowed only in product-specific runs/wealth-com/* artifacts.", "priority": "M", "owner_role": "system-theorist", "acceptance_criteria": "Hawkeye Stage-1 runs grep across factory-template directories and factory-rubric files for forbidden tokens; 0 matches.", "validation_method": "manual_review", "dependencies": [], "risks": ["RSK-005"], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0053"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "RULE-EVD-001", "kind": "Rule", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "Evidence rule: every Must leaf in this decomposition must have ≥1 of {unit, integration, scenario_bdd, holdout, golden_dataset, playwright, contract_api} test record before claim of 'pass'. No documents-only completion.", "priority": "M", "owner_role": "verification-safety-critic", "acceptance_criteria": "Trace matrix shows every M leaf has ≥1 test artifact reference; Hawkeye verifies.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0070"], "surface_tag": "Cross-cutting"},
+      {"leaf_id": "NFR-EVD-001", "kind": "NFR", "parent_node_id": "CAP-CROSS-CUTTING", "statement": "Trace coverage: ≥95% of in-scope MVP atoms cited by ≥1 leaf; 100% of leaves cite ≥1 atom OR ≥1 answer OR ≥1 explicit ASM.", "priority": "M", "owner_role": "df-traceability-evidence", "acceptance_criteria": "intake-validation-report.json reports trace coverage values meeting thresholds.", "validation_method": "manual_review", "dependencies": [], "risks": [], "trace_to_atom_ids": [], "trace_to_answer_ids": ["ANS-0011", "ANS-0070"], "surface_tag": "Cross-cutting"}
+    ]
+  },
+  "totals": {
+    "total_capabilities": 8,
+    "total_user_journeys": 8,
+    "total_features": 26,
+    "total_leaves": 73
+  },
+  "branch_summary": [
+    {"branch": "CAP-AUTH-MULTITENANT", "completeness": 90, "validation_readiness": 92, "status": "PASS"},
+    {"branch": "CAP-HOUSEHOLD-MODEL", "completeness": 88, "validation_readiness": 88, "status": "PASS"},
+    {"branch": "CAP-DOCUMENT-VAULT", "completeness": 90, "validation_readiness": 92, "status": "PASS"},
+    {"branch": "CAP-EXTRACTION", "completeness": 88, "validation_readiness": 86, "status": "PASS"},
+    {"branch": "CAP-ESTATE-TAX-CALC", "completeness": 92, "validation_readiness": 95, "status": "PASS"},
+    {"branch": "CAP-SCENARIO-MODELING", "completeness": 88, "validation_readiness": 90, "status": "PASS"},
+    {"branch": "CAP-ADVISOR-UI", "completeness": 88, "validation_readiness": 90, "status": "PASS"},
+    {"branch": "CAP-INTEGRATION-MOCKS", "completeness": 86, "validation_readiness": 88, "status": "PASS"},
+    {"branch": "CAP-CROSS-CUTTING", "completeness": 86, "validation_readiness": 88, "status": "PASS"}
+  ],
+  "verdict": "decomposition_complete",
+  "verdict_rationale": "All 8 in-scope capabilities decomposed to atomic, testable leaves. Branch-level completeness and validation_readiness scores all ≥80. Every leaf has parent, owner, AC, validation method, dependencies, risks, and trace targets. OBBBA correction applied to all tax-related leaves. Cross-cutting concerns covered. No re-interrogation required."
+}

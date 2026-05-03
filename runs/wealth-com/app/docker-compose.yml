@@ -1,0 +1,104 @@
+# EstateCompass Demo MVP — local-only Docker Compose per HD-004
+# production_surface=false at v0; this file is the entire "deployment".
+# Do NOT copy this file to production posture without ADR-005 (release).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ec-postgres
+    environment:
+      POSTGRES_USER: estatecompass
+      POSTGRES_PASSWORD: dev_only_synthetic_data
+      POSTGRES_DB: estatecompass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./apps/api/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U estatecompass -d estatecompass"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: ec-api
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://estatecompass:dev_only_synthetic_data@postgres:5432/estatecompass
+      AI_EXTRACT_URL: http://ai-extract:8000
+      CALC_ENGINE_URL: http://calc-engine:8001
+      KMS_MODE: local-substitute
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./apps/api:/app/apps/api:ro
+      - ./packages:/app/packages:ro
+
+  ai-extract:
+    build:
+      context: .
+      dockerfile: apps/ai-extract/Dockerfile
+    container_name: ec-ai-extract
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      MODEL: claude-opus-4-7
+      EXTRACTION_SCHEMA_PATH: /schemas/extraction.json
+      GROUNDING_VALIDATOR: enabled
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./packages/contracts:/schemas:ro
+
+  calc-engine:
+    build:
+      context: .
+      dockerfile: apps/calc-engine/Dockerfile
+    container_name: ec-calc-engine
+    environment:
+      OBBBA_EXEMPTION_2026: "15000000"
+      FEDERAL_ESTATE_TAX_TOP_RATE: "0.40"
+      RULES_VERSION: "2026.05.03-OBBBA-baseline"
+    ports:
+      - "8001:8001"
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: ec-web
+    environment:
+      VITE_API_URL: http://localhost:3000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: ec-otel
+    command: ["--config=/etc/otel-config.yaml"]
+    volumes:
+      - ./apps/observability/otel-config.yaml:/etc/otel-config.yaml:ro
+    ports:
+      - "4318:4318"
+
+volumes:
+  pgdata:
+    driver: local
+
+# Demo MVP boot sequence:
+# 1. cp .env.example .env  (and fill ANTHROPIC_API_KEY)
+# 2. docker compose up --build
+# 3. Postgres health-checks; migrations run; seed data loads
+# 4. api waits for postgres; serves on :3000
+# 5. ai-extract serves on :8000; calc-engine on :8001
+# 6. web serves Vite dev on :5173
+# 7. open http://localhost:5173 → login as advisor@acme-ria.demo / synthetic-pwd

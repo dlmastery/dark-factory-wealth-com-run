@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://estatecompass.local/schemas/extraction.json",
+  "title": "Sage Extraction Output Schema",
+  "description": "Schema enforced on every output of apps/ai-extract per ADR-003. Every fact carries provenance, confidence, and tier. Grounding validator (apps/ai-extract/validators/grounding.ts) rejects outputs where source_excerpt cannot be matched in the document.",
+  "type": "object",
+  "required": ["document_id", "tenant_id", "extracted_at", "model_version", "facts"],
+  "additionalProperties": false,
+  "properties": {
+    "document_id": {"type": "string", "format": "uuid"},
+    "tenant_id": {"type": "string", "format": "uuid"},
+    "extracted_at": {"type": "string", "format": "date-time"},
+    "model_version": {"type": "string"},
+    "extraction_method": {"type": "string", "enum": ["ocr_layout", "llm_grounded", "rule_based", "human"]},
+    "facts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/extractedFact"},
+      "minItems": 0
+    },
+    "refusals": {
+      "type": "array",
+      "description": "Fields the extractor was asked to find but could not ground in the document. NOT a fact list — these are explicit refusals per ADR-003 refusal-honesty rule.",
+      "items": {
+        "type": "object",
+        "required": ["field_path", "reason"],
+        "properties": {
+          "field_path": {"type": "string"},
+          "reason": {"type": "string"}
+        }
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "description": "Per-extraction calibration metadata for the eval harness.",
+      "properties": {
+        "elapsed_ms": {"type": "number"},
+        "input_tokens": {"type": "integer"},
+        "output_tokens": {"type": "integer"}
+      }
+    }
+  },
+  "$defs": {
+    "extractedFact": {
+      "type": "object",
+      "required": ["fact_id", "field_path", "value", "provenance", "confidence", "confidence_tier"],
+      "additionalProperties": false,
+      "properties": {
+        "fact_id": {"type": "string", "description": "ULID or UUID"},
+        "field_path": {"type": "string", "description": "JSON-path-like key into the household domain model. Examples: trust.name, trust.successor_trustee[0].name, beneficiaries[2].distribution_rule"},
+        "value": {"description": "Extracted value. May be string/number/null. NEVER computed; per ADR-001 calc-engine performs arithmetic."},
+        "provenance": {"$ref": "#/$defs/provenance"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "confidence_tier": {"type": "string", "enum": ["high", "medium", "low", "requires_human_review"]},
+        "extraction_method": {"type": "string", "enum": ["ocr_layout", "llm_grounded", "rule_based", "human"]},
+        "model_version": {"type": "string"},
+        "ambiguity_notes": {"type": "array", "items": {"type": "string"}},
+        "candidate_alternatives": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["value", "confidence"],
+            "properties": {
+              "value": {},
+              "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          }
+        },
+        "attorney_review_required": {"type": "boolean", "description": "When true, fact must be at least medium confidence to surface; never silent auto-accept."}
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["document_id", "page", "source_excerpt", "excerpt_hash"],
+      "properties": {
+        "document_id": {"type": "string", "format": "uuid"},
+        "page": {"type": "integer", "minimum": 1},
+        "bbox": {
+          "type": "object",
+          "properties": {
+            "x": {"type": "number"},
+            "y": {"type": "number"},
+            "w": {"type": "number"},
+            "h": {"type": "number"}
+          }
+        },
+        "source_excerpt": {"type": "string", "maxLength": 300, "description": "Verbatim slice from the document. Grounding validator runs grep(source_excerpt, document_text) — failure downgrades tier to requires_human_review."},
+        "excerpt_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$", "description": "sha256 of source_excerpt; tamper-evident for audit log."}
+      }
+    }
+  }
+}
