@@ -8,7 +8,7 @@
  * aggregate, calls calc-engine, and persists a ComputationTrace.
  */
 
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { CalcEngineClient } from "../clients/calc-engine.client.js";
 import { loadConfig } from "../config.js";
@@ -25,13 +25,10 @@ export default async function scenarioRoutes(app: FastifyInstance) {
   const cfg = loadConfig();
   const calc = new CalcEngineClient(cfg.CALC_ENGINE_URL);
 
-  app.get(
+  app.get<{ Params: { id: string } }>(
     "/v1/households/:id/tax-baseline",
     { preHandler: app.requireAuth },
-    async (
-      req: FastifyRequest<{ Params: { id: string } }>,
-      reply: FastifyReply,
-    ) => {
+    async (req, reply) => {
       const totals = await req.withTenantDb(async (db) => {
         const sumResult = await db.query<{ total: string }>(
           "SELECT COALESCE(SUM(fair_market_value), 0)::text AS total FROM assets WHERE household_id = $1",
@@ -77,13 +74,10 @@ export default async function scenarioRoutes(app: FastifyInstance) {
     },
   );
 
-  app.post(
+  app.post<{ Params: { id: string } }>(
     "/v1/households/:id/scenarios/grat-vs-donothing",
     { preHandler: app.requireAuth },
-    async (
-      req: FastifyRequest<{ Params: { id: string } }>,
-      reply: FastifyReply,
-    ) => {
+    async (req, reply) => {
       const parsed = GRATBody.safeParse(req.body);
       if (!parsed.success) {
         return reply.code(400).send({ error: "invalid_body", issues: parsed.error.issues });
@@ -103,9 +97,11 @@ export default async function scenarioRoutes(app: FastifyInstance) {
       });
       if (total === null) return reply.code(404).send({ error: "not_found" });
 
+      const { dsue_amount, ...rest } = parsed.data;
       const result = await calc.gratVsDoNothing({
         total_estate_at_year_zero: total,
-        ...parsed.data,
+        ...rest,
+        ...(dsue_amount !== undefined ? { dsue_amount } : {}),
       });
 
       await req.withTenantDb(async (db) => {

@@ -10,7 +10,7 @@
  */
 
 import multipart from "@fastify/multipart";
-import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { LocalSubstituteKms } from "@estatecompass/kms";
 import { LocalBlobStore } from "../storage/local-blob-store.js";
@@ -39,13 +39,10 @@ export default async function documentRoutes(app: FastifyInstance) {
   const docs = new DocumentService(kms, blobs);
 
   // POST /v1/households/:id/documents
-  app.post(
+  app.post<{ Params: { id: string } }>(
     "/v1/households/:id/documents",
     { preHandler: app.requireAuth },
-    async (
-      req: FastifyRequest<{ Params: { id: string } }>,
-      reply: FastifyReply,
-    ) => {
+    async (req, reply) => {
       const householdId = req.params.id;
       const data = await req.file();
       if (!data) {
@@ -89,13 +86,10 @@ export default async function documentRoutes(app: FastifyInstance) {
   );
 
   // GET /v1/households/:id/documents
-  app.get(
+  app.get<{ Params: { id: string } }>(
     "/v1/households/:id/documents",
     { preHandler: app.requireAuth },
-    async (
-      req: FastifyRequest<{ Params: { id: string } }>,
-      reply: FastifyReply,
-    ) => {
+    async (req, reply) => {
       const rows = await req.withTenantDb(async (db) => {
         const result = await db.query<{
           id: string;
@@ -118,13 +112,10 @@ export default async function documentRoutes(app: FastifyInstance) {
   );
 
   // GET /v1/documents/:id — metadata only; plaintext requires explicit retrieval flow.
-  app.get(
+  app.get<{ Params: { id: string } }>(
     "/v1/documents/:id",
     { preHandler: app.requireAuth },
-    async (
-      req: FastifyRequest<{ Params: { id: string } }>,
-      reply: FastifyReply,
-    ) => {
+    async (req, reply) => {
       const result = await req.withTenantDb(async (db) => {
         const { rows } = await db.query<{
           id: string;

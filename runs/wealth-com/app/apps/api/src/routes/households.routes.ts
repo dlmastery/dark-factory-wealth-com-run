@@ -31,13 +31,10 @@ export default async function householdRoutes(app: FastifyInstance) {
     },
   );
 
-  app.get(
+  app.get<{ Params: { id: string } }>(
     "/v1/households/:id",
     { preHandler: app.requireAuth },
-    async (
-      req: FastifyRequest<{ Params: { id: string } }>,
-      reply: FastifyReply,
-    ) => {
+    async (req, reply) => {
       const id = req.params.id;
       const result = await req.withTenantDb(async (db) => {
         const householdResult = await db.query<{
